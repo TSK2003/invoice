@@ -1,7 +1,4 @@
 // AESCION Document Studio Authentication Service
-// Credentials:
-// Username: contact.aescion@gmail.com
-// Password: Aescion#@2025
 
 export interface AuthSession {
   email: string;

@@ -70,7 +70,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
             {/* Username / Email */}
             <div>
               <label className="block text-[11px] font-semibold text-secondary mb-1">
-                Email Address / Username
+                Username / Email
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-secondary">
@@ -83,7 +83,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
                   autoComplete="off"
                   value={username}
                   onChange={e => setUsername(e.target.value)}
-                  placeholder="contact.aescion@gmail.com"
+                  placeholder="username"
                   className="w-full h-10 pl-9 pr-3 border border-line rounded-sm bg-surface text-primary text-xs focus:border-brand transition-colors"
                 />
               </div>
@@ -92,7 +92,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
             {/* Password */}
             <div>
               <label className="block text-[11px] font-semibold text-secondary mb-1">
-                Security Password
+                Password
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-secondary">
@@ -104,7 +104,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
                   autoComplete="new-password"
                   value={password}
                   onChange={e => setPassword(e.target.value)}
-                  placeholder="••••••••••••"
+                  placeholder="password"
                   className="w-full h-10 pl-9 pr-10 border border-line rounded-sm bg-surface text-primary text-xs font-medium focus:border-brand transition-colors"
                 />
                 <button
