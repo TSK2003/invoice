@@ -25,7 +25,7 @@ export const LivePreview: React.FC<LivePreviewProps> = ({
   return (
     <div className="flex flex-col h-full bg-[#EEF0F4] border-l border-line">
       {/* Sticky Preview Action Bar */}
-      <div className="sticky top-15 z-20 bg-surface text-primary px-4 py-2 flex items-center justify-between border-b border-line shadow-subtle">
+      <div className="sticky top-[72px] z-20 bg-surface text-primary px-4 py-2 flex items-center justify-between border-b border-line shadow-subtle">
         <div className="flex items-center space-x-2">
           <span className="text-xs font-bold uppercase tracking-wider text-primary">
             A4 Document Preview

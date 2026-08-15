@@ -227,9 +227,9 @@ export const DocumentBuilder: React.FC<BuilderProps> = ({
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 min-h-[calc(100vh-3.75rem)]">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 min-h-[calc(100vh-72px)]">
       {/* LEFT PANEL (~42% width on desktop) */}
-      <div className="lg:col-span-5 p-4 sm:p-5 space-y-3.5 overflow-y-auto max-h-[calc(100vh-3.75rem)] bg-page border-r border-line">
+      <div className="lg:col-span-5 p-4 sm:p-5 space-y-3.5 overflow-y-auto max-h-[calc(100vh-72px)] bg-page border-r border-line">
         <div className="flex items-center justify-between pb-1">
           <h2 className="text-xs font-bold text-primary uppercase tracking-wider">
             Document Form & Parameters
