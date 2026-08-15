@@ -1,11 +1,12 @@
 import React from 'react';
-import { Plus, LayoutDashboard, Settings, Building2, FileText, CheckCircle2 } from 'lucide-react';
+import { Plus, LayoutDashboard, Settings, Building2, FileText, CheckCircle2, LogOut } from 'lucide-react';
 import { LOGO_BASE64 } from '../../constants/imageAssets';
 
 interface HeaderProps {
   currentView: 'dashboard' | 'builder' | 'company' | 'template';
   onNavigate: (view: 'dashboard' | 'builder' | 'company' | 'template') => void;
   onCreateNew: () => void;
+  onLogout?: () => void;
   autoSaveTime?: string | null;
 }
 
@@ -13,6 +14,7 @@ export const Header: React.FC<HeaderProps> = ({
   currentView,
   onNavigate,
   onCreateNew,
+  onLogout,
   autoSaveTime,
 }) => {
   return (
@@ -86,8 +88,8 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
         </nav>
 
-        {/* Right: Autosave status & Create New Button */}
-        <div className="flex items-center space-x-3.5">
+        {/* Right: Autosave status & Create New Button & Logout */}
+        <div className="flex items-center space-x-3">
           {autoSaveTime && currentView === 'builder' && (
             <div className="hidden lg:flex items-center gap-1.5 text-xs text-secondary font-medium px-2.5 py-1.5 bg-page rounded-xs border border-line">
               <CheckCircle2 className="w-4 h-4 text-brand" />
@@ -102,10 +104,22 @@ export const Header: React.FC<HeaderProps> = ({
             <Plus className="w-4 h-4" />
             Create Document
           </button>
+
+          {onLogout && (
+            <button
+              onClick={onLogout}
+              title="Log out of session"
+              className="flex items-center gap-1.5 text-secondary hover:text-primary hover:bg-page border border-line px-3 py-2 rounded-sm text-[13px] font-medium transition-colors shadow-subtle"
+            >
+              <LogOut className="w-4 h-4" />
+              <span className="hidden sm:inline">Logout</span>
+            </button>
+          )}
         </div>
       </div>
     </header>
   );
 };
+
 
 

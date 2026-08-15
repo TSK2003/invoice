@@ -11,6 +11,8 @@ import { DocumentBuilder } from './components/builder/DocumentBuilder';
 import { DocumentCreationHub } from './components/builder/DocumentCreationHub';
 import { CompanyForm } from './components/builder/CompanyForm';
 import { TemplateSettingsEditor } from './components/builder/TemplateSettingsEditor';
+import { LoginPage } from './components/auth/LoginPage';
+import { authService } from './services/authService';
 import { DEFAULT_COMPANY_PROFILE } from './constants/defaultCompany';
 import { AESCION_PROFESSIONAL_TEMPLATE } from './constants/initialTemplates';
 import { AESCION_PACKAGES } from './constants/packages';
@@ -19,6 +21,10 @@ import { DEFAULT_QUOTATION_TERMS, DEFAULT_INVOICE_TERMS, DEFAULT_RECEIPT_TERMS }
 import { SEAL_BASE64, SIGNATURE_BASE64 } from './constants/imageAssets';
 
 export const App: React.FC = () => {
+  // Authentication & Inactivity State
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => authService.isAuthenticated());
+  const [sessionExpiredReason, setSessionExpiredReason] = useState<string | null>(null);
+
   const [currentView, setCurrentView] = useState<'dashboard' | 'builder' | 'company' | 'template'>('dashboard');
   const [documents, setDocuments] = useState<DocumentData[]>([]);
   const [stats, setStats] = useState<DashboardStats>({
@@ -43,6 +49,49 @@ export const App: React.FC = () => {
       title,
       type,
     });
+  };
+
+  // 15-Minute Inactivity Auto-Logout Listener
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    const handleUserActivity = () => {
+      authService.touchActivity();
+    };
+
+    const activityEvents = ['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll', 'click'];
+    activityEvents.forEach(event => {
+      window.addEventListener(event, handleUserActivity, { passive: true });
+    });
+
+    // Check expiration every 5 seconds
+    const intervalId = setInterval(() => {
+      if (!authService.isAuthenticated()) {
+        setIsAuthenticated(false);
+        setSessionExpiredReason('Session expired due to 15 minutes of inactivity. Please sign in again.');
+      }
+    }, 5000);
+
+    return () => {
+      activityEvents.forEach(event => {
+        window.removeEventListener(event, handleUserActivity);
+      });
+      clearInterval(intervalId);
+    };
+  }, [isAuthenticated]);
+
+  const handleLoginSuccess = () => {
+    setIsAuthenticated(true);
+    setSessionExpiredReason(null);
+    refreshData();
+    showToast('Signed in to AESCION Document Studio');
+  };
+
+  const handleLogout = () => {
+    authService.logout();
+    setIsAuthenticated(false);
+    setSessionExpiredReason(null);
+    showToast('Logged out successfully', 'info');
   };
 
   // Load all documents & stats
@@ -296,6 +345,18 @@ export const App: React.FC = () => {
     }
   };
 
+  if (!isAuthenticated) {
+    return (
+      <>
+        <LoginPage
+          onLoginSuccess={handleLoginSuccess}
+          sessionExpiredReason={sessionExpiredReason}
+        />
+        <Toast toast={toast} onClose={() => setToast(null)} />
+      </>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-page flex flex-col font-sans text-primary">
       {/* Header Navbar */}
@@ -303,6 +364,7 @@ export const App: React.FC = () => {
         currentView={currentView}
         onNavigate={view => setCurrentView(view)}
         onCreateNew={() => createNewDocument('quotation')}
+        onLogout={handleLogout}
         autoSaveTime={autoSaveTime}
       />
 
@@ -364,3 +426,4 @@ export const App: React.FC = () => {
     </div>
   );
 };
+
