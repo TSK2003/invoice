@@ -377,17 +377,17 @@ export const DocumentRenderer: React.FC<DocumentRendererProps> = ({
       {/* SIGNATURE & SEAL SECTION */}
       <div className="grid grid-cols-2 gap-8 mt-12 items-end break-inside-avoid">
         {/* Customer Signatory */}
-        <div className="relative min-h-[110px] flex flex-col justify-end">
+        <div className="relative min-h-[125px] flex flex-col justify-end">
           <div className="border-t border-line pt-1.5 text-[10.5px] text-secondary font-medium">
             {customerSignatoryTitle}
           </div>
         </div>
 
         {/* Supplier Signatory & Seal */}
-        <div className="relative min-h-[110px] flex flex-col justify-end">
-          {/* Official Round Seal Image (Big, centered on line) */}
+        <div className="relative min-h-[125px] flex flex-col justify-end">
+          {/* Official Round Seal Image (Larger size, positioned in upper section) */}
           {showSeal && (
-            <div className="absolute left-1/2 -translate-x-1/2 -bottom-2 w-36 h-36 pointer-events-none z-10 flex items-center justify-center">
+            <div className="absolute left-1/2 -translate-x-1/2 bottom-3 w-44 h-44 pointer-events-none z-10 flex items-center justify-center">
               <img
                 src={sealSrc}
                 alt="Company Seal"
@@ -396,9 +396,9 @@ export const DocumentRenderer: React.FC<DocumentRendererProps> = ({
             </div>
           )}
 
-          {/* Official Signature Image (Centered on the seal stamp) */}
+          {/* Official Signature Image (Positioned downward, resting on/above the line) */}
           {showSignature && (
-            <div className="absolute left-1/2 -translate-x-1/2 bottom-5 h-8 max-h-9 pointer-events-none z-20 flex items-center justify-center">
+            <div className="absolute left-1/2 -translate-x-1/2 bottom-2 h-8 max-h-9 pointer-events-none z-20 flex items-center justify-center">
               <img
                 src={signatureSrc}
                 alt="Signature"
