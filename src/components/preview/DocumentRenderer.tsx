@@ -377,19 +377,19 @@ export const DocumentRenderer: React.FC<DocumentRendererProps> = ({
       {/* SIGNATURE & SEAL SECTION */}
       <div className="grid grid-cols-2 gap-8 mt-12 items-end break-inside-avoid">
         {/* Customer Signatory */}
-        <div className="relative min-h-[100px] flex flex-col justify-end">
+        <div className="relative min-h-[120px] flex flex-col justify-end">
           <div className="border-t border-line pt-1.5 text-[10.5px] text-secondary font-medium">
             {customerSignatoryTitle}
           </div>
         </div>
 
         {/* Supplier Signatory & Seal */}
-        <div className="relative min-h-[100px] flex flex-col justify-end">
-          {/* Official Round Seal Image (Big realistic stamp straddling the line) */}
+        <div className="relative min-h-[120px] flex flex-col justify-end">
+          {/* Official Round Seal Image (Enlarged by 50px to 226px, moved 25px higher) */}
           {showSeal && (
             <div
-              className="absolute left-1/2 -translate-x-1/2 pointer-events-none z-10 flex items-center justify-center w-44 h-44"
-              style={{ bottom: '-28px' }}
+              className="absolute left-1/2 -translate-x-1/2 pointer-events-none z-10 flex items-center justify-center w-[226px] h-[226px]"
+              style={{ bottom: '-3px' }}
             >
               <img
                 src={sealSrc}
