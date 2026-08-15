@@ -186,13 +186,77 @@ Edit `src/constants/defaultTerms.ts` to alter standard terms for Quotations, Inv
 
 ---
 
+## 🔥 Firebase Hosting & Live Deployment
+
+The project is pre-configured with **Firebase Hosting** and initialized with project `invoice-88bba`.
+
+### Firebase Configuration
+
+The Firebase SDK is initialized in `src/services/firebase.ts` with environment variables support (`.env`):
+
+- **Project ID**: `invoice-88bba`
+- **Hosting URL**: `https://invoice-88bba.web.app` / `https://invoice-88bba.firebaseapp.com`
+- **Auth Domain**: `invoice-88bba.firebaseapp.com`
+- **Storage Bucket**: `invoice-88bba.firebasestorage.app`
+
+### 🚀 Direct CLI Deployment
+
+To deploy directly to Firebase from your local machine:
+
+1. Install Firebase CLI globally (if not installed):
+   ```bash
+   npm install -g firebase-tools
+   ```
+2. Login to your Google / Firebase account:
+   ```bash
+   firebase login
+   ```
+3. Build and deploy:
+   ```bash
+   npm run build
+   firebase deploy --only hosting
+   ```
+
+---
+
+## 🤖 Automated GitHub Actions CI/CD Pipeline
+
+Continuous Integration & Continuous Deployment is pre-configured with two automated GitHub Actions workflows:
+
+### 1. Production Deployment (`.github/workflows/firebase-hosting-merge.yml`)
+- Triggers on every `push` or merge to the `main` branch.
+- Installs dependencies (`npm ci`), runs TypeScript compiler check & Vite build (`npm run build`).
+- Deploys the built `dist/` directory to the live Firebase Hosting channel.
+
+### 2. Pull Request Preview Channel (`.github/workflows/firebase-hosting-pull-request.yml`)
+- Triggers on pull requests to the `main` branch.
+- Generates a temporary preview URL for testing before merging.
+
+### ⚙️ Setting Up GitHub Secrets
+
+To allow GitHub Actions to deploy to Firebase Hosting automatically:
+
+1. Open your GitHub Repository: `https://github.com/TSK2003/invoice`
+2. Navigate to **Settings** > **Secrets and variables** > **Actions**.
+3. Click **New repository secret**.
+4. Generate a Firebase Service Account key:
+   - Run `firebase init hosting:github` locally (select `TSK2003/invoice`), **OR**
+   - In Google Cloud Console / Firebase Console, go to **Project Settings > Service Accounts**, click **Generate new private key**, copy the JSON content.
+5. Name the secret: `FIREBASE_SERVICE_ACCOUNT_INVOICE_88BBA` and paste the Service Account JSON.
+6. Push to `main`:
+   ```bash
+   git push -u origin main
+   ```
+
+---
+
 ## 🔌 Future Backend Integration Roadmap
 
-The storage architecture is built using clean TypeScript interfaces (`IDocumentStorageService`). To integrate a REST or GraphQL backend (Node.js/Express, NestJS, Next.js, or PostgreSQL):
+The storage architecture is built using clean TypeScript interfaces (`IDocumentStorageService`). To integrate Firebase Firestore or a REST backend:
 
-1. Create a new service file `src/services/storage/APIDocumentService.ts` implementing `IDocumentStorageService`.
-2. Map the methods (`getAllDocuments`, `saveDocument`, `generateNextDocumentNumber`) to your backend endpoints.
-3. Replace the exported `storageService` instance in `LocalStorageService.ts`.
+1. Use the exported `db` Firestore instance from `src/services/firebase.ts`.
+2. Implement `IDocumentStorageService` for Cloud Firestore.
+3. Replace the exported `storageService` instance with Firestore storage service.
 
 ---
 
