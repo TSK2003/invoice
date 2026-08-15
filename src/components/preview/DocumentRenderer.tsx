@@ -384,10 +384,10 @@ export const DocumentRenderer: React.FC<DocumentRendererProps> = ({
         </div>
 
         {/* Supplier Signatory & Seal */}
-        <div className="relative min-h-[85px] flex flex-col justify-end">
-          {/* Official Round Seal Image */}
+        <div className="relative min-h-[95px] flex flex-col justify-end">
+          {/* Official Round Seal Image (Left-aligned, bigger size) */}
           {showSeal && (
-            <div className="absolute right-0 bottom-2 w-28 h-28 pointer-events-none z-10 flex items-center justify-center">
+            <div className="absolute left-0 bottom-1 w-32 h-32 pointer-events-none z-10 flex items-center justify-center">
               <img
                 src={sealSrc}
                 alt="Company Seal"
@@ -396,9 +396,9 @@ export const DocumentRenderer: React.FC<DocumentRendererProps> = ({
             </div>
           )}
 
-          {/* Official Signature Image */}
+          {/* Official Signature Image (Right-aligned, small size) */}
           {showSignature && (
-            <div className="absolute left-0 bottom-4 h-8 max-h-9 pointer-events-none z-10">
+            <div className="absolute right-0 bottom-4 h-6 max-h-6.5 pointer-events-none z-10 flex items-center justify-end">
               <img
                 src={signatureSrc}
                 alt="Signature"
