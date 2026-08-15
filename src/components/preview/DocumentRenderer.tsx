@@ -377,28 +377,34 @@ export const DocumentRenderer: React.FC<DocumentRendererProps> = ({
       {/* SIGNATURE & SEAL SECTION */}
       <div className="grid grid-cols-2 gap-8 mt-12 items-end break-inside-avoid">
         {/* Customer Signatory */}
-        <div className="relative min-h-[125px] flex flex-col justify-end">
+        <div className="relative min-h-[100px] flex flex-col justify-end">
           <div className="border-t border-line pt-1.5 text-[10.5px] text-secondary font-medium">
             {customerSignatoryTitle}
           </div>
         </div>
 
         {/* Supplier Signatory & Seal */}
-        <div className="relative min-h-[125px] flex flex-col justify-end">
-          {/* Official Round Seal Image (Larger size, positioned in upper section) */}
+        <div className="relative min-h-[100px] flex flex-col justify-end">
+          {/* Official Round Seal Image (Big realistic stamp straddling the line) */}
           {showSeal && (
-            <div className="absolute left-1/2 -translate-x-1/2 bottom-3 w-44 h-44 pointer-events-none z-10 flex items-center justify-center">
+            <div
+              className="absolute left-1/2 -translate-x-1/2 pointer-events-none z-10 flex items-center justify-center w-44 h-44"
+              style={{ bottom: '-28px' }}
+            >
               <img
                 src={sealSrc}
                 alt="Company Seal"
-                className="max-w-full max-h-full object-contain opacity-90"
+                className="max-w-full max-h-full object-contain opacity-90 mix-blend-multiply"
               />
             </div>
           )}
 
-          {/* Official Signature Image (Positioned downward, resting on/above the line) */}
+          {/* Official Signature Image (Layered directly across the seal and line) */}
           {showSignature && (
-            <div className="absolute left-1/2 -translate-x-1/2 bottom-2 h-8 max-h-9 pointer-events-none z-20 flex items-center justify-center">
+            <div
+              className="absolute left-1/2 -translate-x-1/2 pointer-events-none z-20 flex items-center justify-center"
+              style={{ bottom: '16px', height: '34px' }}
+            >
               <img
                 src={signatureSrc}
                 alt="Signature"
