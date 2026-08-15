@@ -375,30 +375,30 @@ export const DocumentRenderer: React.FC<DocumentRendererProps> = ({
       )}
 
       {/* SIGNATURE & SEAL SECTION */}
-      <div className="grid grid-cols-2 gap-8 mt-10 items-end break-inside-avoid">
+      <div className="grid grid-cols-2 gap-8 mt-12 items-end break-inside-avoid">
         {/* Customer Signatory */}
-        <div className="relative min-h-[85px] flex flex-col justify-end">
+        <div className="relative min-h-[110px] flex flex-col justify-end">
           <div className="border-t border-line pt-1.5 text-[10.5px] text-secondary font-medium">
             {customerSignatoryTitle}
           </div>
         </div>
 
         {/* Supplier Signatory & Seal */}
-        <div className="relative min-h-[95px] flex flex-col justify-end">
-          {/* Official Round Seal Image (Left-aligned, bigger size) */}
+        <div className="relative min-h-[110px] flex flex-col justify-end">
+          {/* Official Round Seal Image (Big, centered on line) */}
           {showSeal && (
-            <div className="absolute left-0 bottom-1 w-32 h-32 pointer-events-none z-10 flex items-center justify-center">
+            <div className="absolute left-1/2 -translate-x-1/2 -bottom-2 w-36 h-36 pointer-events-none z-10 flex items-center justify-center">
               <img
                 src={sealSrc}
                 alt="Company Seal"
-                className="max-w-full max-h-full object-contain opacity-95"
+                className="max-w-full max-h-full object-contain opacity-90"
               />
             </div>
           )}
 
-          {/* Official Signature Image (Right-aligned, small size) */}
+          {/* Official Signature Image (Centered on the seal stamp) */}
           {showSignature && (
-            <div className="absolute right-0 bottom-4 h-6 max-h-6.5 pointer-events-none z-10 flex items-center justify-end">
+            <div className="absolute left-1/2 -translate-x-1/2 bottom-5 h-8 max-h-9 pointer-events-none z-20 flex items-center justify-center">
               <img
                 src={signatureSrc}
                 alt="Signature"
@@ -407,7 +407,7 @@ export const DocumentRenderer: React.FC<DocumentRendererProps> = ({
             </div>
           )}
 
-          <div className="border-t border-line pt-1.5 text-[10.5px] text-secondary font-medium relative z-20">
+          <div className="border-t border-line pt-1.5 text-[10.5px] text-secondary font-medium relative z-30">
             For {company.companyName} — {signatoryTitle}
           </div>
         </div>
