@@ -16,7 +16,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'npm'
 
       - name: Install Dependencies
@@ -33,9 +33,21 @@ jobs:
           VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID || '1:1084310681550:web:e1c399aa95ae68358ddd9f' }}
           VITE_FIREBASE_MEASUREMENT_ID: ${{ secrets.VITE_FIREBASE_MEASUREMENT_ID || 'G-S8NK6VC8EK' }}
 
-      - name: Deploy to Firebase Hosting (Preview Channel)
-        uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_INVOICE_88BBA }}
-          projectId: invoice-88bba
+      - name: Deploy Preview Channel
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_INVOICE_88BBA }}
+        run: |
+          CHANNEL="pr-${{ github.event.pull_request.number }}"
+          if [ -n "$FIREBASE_TOKEN" ]; then
+            npx firebase-tools hosting:channel:deploy "$CHANNEL" --project invoice-88bba --token "$FIREBASE_TOKEN"
+          elif [[ "$SERVICE_ACCOUNT" == 1//* ]]; then
+            npx firebase-tools hosting:channel:deploy "$CHANNEL" --project invoice-88bba --token "$SERVICE_ACCOUNT"
+          elif [ -n "$SERVICE_ACCOUNT" ]; then
+            echo "$SERVICE_ACCOUNT" > ./gcp-key.json
+            export GOOGLE_APPLICATION_CREDENTIALS=./gcp-key.json
+            npx firebase-tools hosting:channel:deploy "$CHANNEL" --project invoice-88bba
+          else
+            echo "Error: No Firebase credentials found."
+            exit 1
+          fi
