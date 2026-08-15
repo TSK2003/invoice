@@ -9,7 +9,7 @@ import { PaymentTermsEditor } from './PaymentTermsEditor';
 import { LivePreview } from '../preview/LivePreview';
 import { FormErrors, validateDocumentForm } from '../../utils/validator';
 import { ServicePackage } from '../../types/package';
-import { ChevronDown, ChevronUp, FileText, UserCheck, Package, ListOrdered, Percent, CreditCard } from 'lucide-react';
+import { ChevronDown, ChevronUp, FileText, UserCheck, Package, ListOrdered, Percent, CreditCard, Save } from 'lucide-react';
 
 interface BuilderProps {
   document: DocumentData;
@@ -227,35 +227,35 @@ export const DocumentBuilder: React.FC<BuilderProps> = ({
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 min-h-[calc(100vh-4rem)]">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 min-h-[calc(100vh-3.75rem)]">
       {/* LEFT PANEL (~42% width on desktop) */}
-      <div className="lg:col-span-5 p-4 sm:p-6 space-y-4 overflow-y-auto max-h-[calc(100vh-4rem)] bg-slate-100/70 border-r border-slate-200">
-        <div className="flex items-center justify-between">
-          <h2 className="text-sm font-black text-navy uppercase tracking-wider">
-            Document Form & Settings
+      <div className="lg:col-span-5 p-4 sm:p-5 space-y-3.5 overflow-y-auto max-h-[calc(100vh-3.75rem)] bg-page border-r border-line">
+        <div className="flex items-center justify-between pb-1">
+          <h2 className="text-xs font-bold text-primary uppercase tracking-wider">
+            Document Form & Parameters
           </h2>
-          <span className="text-[11px] text-slate-500 font-medium">
-            Live auto-preview enabled
+          <span className="text-[11px] text-secondary font-medium">
+            Live preview synced
           </span>
         </div>
 
         {/* SECTION 1: DOCUMENT TYPE & METADATA */}
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-panel overflow-hidden">
+        <div className="bg-surface rounded-md border border-line shadow-subtle overflow-hidden">
           <div
             onClick={() => toggleSection('typeAndMeta')}
-            className="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between cursor-pointer hover:bg-slate-100/80 transition-colors"
+            className="p-3 bg-surface border-b border-line flex items-center justify-between cursor-pointer hover:bg-page transition-colors"
           >
             <div className="flex items-center gap-2">
-              <FileText className="w-4 h-4 text-blue-brand" />
-              <span className="font-extrabold text-xs text-navy uppercase tracking-wider">
-                1. Document Type & Meta Info
+              <FileText className="w-3.5 h-3.5 text-brand" />
+              <span className="font-bold text-[11px] text-primary uppercase tracking-wider">
+                01  Document Type & Metadata
               </span>
             </div>
-            {openSections.typeAndMeta ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+            {openSections.typeAndMeta ? <ChevronUp className="w-3.5 h-3.5 text-secondary" /> : <ChevronDown className="w-3.5 h-3.5 text-secondary" />}
           </div>
 
           {openSections.typeAndMeta && (
-            <div className="p-4 space-y-4">
+            <div className="p-3.5 space-y-3.5">
               {/* Document Type Selector */}
               <DocumentTypeSelector
                 selectedType={doc.type}
@@ -263,49 +263,49 @@ export const DocumentBuilder: React.FC<BuilderProps> = ({
               />
 
               {/* Number, Date, Status */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs border-t border-slate-100 pt-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs border-t border-line pt-3">
                 <div>
-                  <label className="block font-bold text-slate-700 mb-1">Doc Number</label>
+                  <label className="block text-[11px] font-semibold text-secondary mb-1">Doc Number</label>
                   <input
                     type="text"
                     value={doc.documentNumber}
                     onChange={e => updateField('documentNumber', e.target.value)}
-                    className="w-full px-3 py-1.5 border border-slate-200 rounded-lg font-bold text-navy focus:ring-2 focus:ring-blue-brand/30"
+                    className="w-full h-9 px-2.5 border border-line rounded-sm font-mono font-bold text-primary text-xs focus:border-brand"
                   />
                   {errors.documentNumber && (
-                    <p className="text-[10px] text-rose-600 font-semibold mt-1">{errors.documentNumber}</p>
+                    <p className="text-[10px] text-primary font-medium mt-1">{errors.documentNumber}</p>
                   )}
                 </div>
 
                 <div>
-                  <label className="block font-bold text-slate-700 mb-1">Issue Date</label>
+                  <label className="block text-[11px] font-semibold text-secondary mb-1">Issue Date</label>
                   <input
                     type="date"
                     value={doc.date}
                     onChange={e => updateField('date', e.target.value)}
-                    className="w-full px-2 py-1.5 border border-slate-200 rounded-lg font-medium focus:ring-2 focus:ring-blue-brand/30"
+                    className="w-full h-9 px-2 border border-line rounded-sm text-primary text-xs focus:border-brand"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-bold text-slate-700 mb-1">
+                  <label className="block text-[11px] font-semibold text-secondary mb-1">
                     {doc.type === 'quotation' ? 'Valid Until' : doc.type === 'tax_invoice' ? 'Due Date' : 'Receipt Date'}
                   </label>
                   <input
                     type="date"
                     value={doc.validUntilOrDueDate}
                     onChange={e => updateField('validUntilOrDueDate', e.target.value)}
-                    className="w-full px-2 py-1.5 border border-slate-200 rounded-lg font-medium focus:ring-2 focus:ring-blue-brand/30"
+                    className="w-full h-9 px-2 border border-line rounded-sm text-primary text-xs focus:border-brand"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Document Status</label>
+                <label className="block text-[11px] font-semibold text-secondary mb-1">Status</label>
                 <select
                   value={doc.status}
                   onChange={e => updateField('status', e.target.value as DocumentStatus)}
-                  className="w-full px-3 py-1.5 border border-slate-200 rounded-lg text-xs font-bold bg-white focus:ring-2 focus:ring-blue-brand/30"
+                  className="w-full h-9 px-2.5 border border-line rounded-sm text-xs font-semibold bg-surface text-primary focus:border-brand"
                 >
                   {doc.type === 'quotation' && (
                     <>
@@ -341,22 +341,22 @@ export const DocumentBuilder: React.FC<BuilderProps> = ({
         </div>
 
         {/* SECTION 2: CLIENT DETAILS */}
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-panel overflow-hidden">
+        <div className="bg-surface rounded-md border border-line shadow-subtle overflow-hidden">
           <div
             onClick={() => toggleSection('client')}
-            className="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between cursor-pointer hover:bg-slate-100/80 transition-colors"
+            className="p-3 bg-surface border-b border-line flex items-center justify-between cursor-pointer hover:bg-page transition-colors"
           >
             <div className="flex items-center gap-2">
-              <UserCheck className="w-4 h-4 text-blue-brand" />
-              <span className="font-extrabold text-xs text-navy uppercase tracking-wider">
-                2. Client Information
+              <UserCheck className="w-3.5 h-3.5 text-brand" />
+              <span className="font-bold text-[11px] text-primary uppercase tracking-wider">
+                02  Client Information
               </span>
             </div>
-            {openSections.client ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+            {openSections.client ? <ChevronUp className="w-3.5 h-3.5 text-secondary" /> : <ChevronDown className="w-3.5 h-3.5 text-secondary" />}
           </div>
 
           {openSections.client && (
-            <div className="p-4">
+            <div className="p-3.5">
               <ClientForm
                 client={doc.client}
                 onChange={updateClientField}
@@ -368,22 +368,22 @@ export const DocumentBuilder: React.FC<BuilderProps> = ({
 
         {/* SECTION 3: PACKAGE SELECTOR (For Quotation) */}
         {doc.type === 'quotation' && (
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-panel overflow-hidden">
+          <div className="bg-surface rounded-md border border-line shadow-subtle overflow-hidden">
             <div
               onClick={() => toggleSection('package')}
-              className="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between cursor-pointer hover:bg-slate-100/80 transition-colors"
+              className="p-3 bg-surface border-b border-line flex items-center justify-between cursor-pointer hover:bg-page transition-colors"
             >
               <div className="flex items-center gap-2">
-                <Package className="w-4 h-4 text-blue-brand" />
-                <span className="font-extrabold text-xs text-navy uppercase tracking-wider">
-                  3. AESCION Package & Add-ons
+                <Package className="w-3.5 h-3.5 text-brand" />
+                <span className="font-bold text-[11px] text-primary uppercase tracking-wider">
+                  03  Package & Scope Configuration
                 </span>
               </div>
-              {openSections.package ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+              {openSections.package ? <ChevronUp className="w-3.5 h-3.5 text-secondary" /> : <ChevronDown className="w-3.5 h-3.5 text-secondary" />}
             </div>
 
             {openSections.package && (
-              <div className="p-4">
+              <div className="p-3.5">
                 <PackageSelector
                   selectedPackageId={doc.packageId}
                   onSelectPackage={handleSelectPackage}
@@ -396,22 +396,22 @@ export const DocumentBuilder: React.FC<BuilderProps> = ({
 
         {/* SECTION 4: ITEMS & SERVICES BUILDER */}
         {doc.type !== 'payment_receipt' && (
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-panel overflow-hidden">
+          <div className="bg-surface rounded-md border border-line shadow-subtle overflow-hidden">
             <div
               onClick={() => toggleSection('items')}
-              className="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between cursor-pointer hover:bg-slate-100/80 transition-colors"
+              className="p-3 bg-surface border-b border-line flex items-center justify-between cursor-pointer hover:bg-page transition-colors"
             >
               <div className="flex items-center gap-2">
-                <ListOrdered className="w-4 h-4 text-blue-brand" />
-                <span className="font-extrabold text-xs text-navy uppercase tracking-wider">
-                  4. Items & Services Builder ({doc.items.length})
+                <ListOrdered className="w-3.5 h-3.5 text-brand" />
+                <span className="font-bold text-[11px] text-primary uppercase tracking-wider">
+                  04  Items & Services ({doc.items.length})
                 </span>
               </div>
-              {openSections.items ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+              {openSections.items ? <ChevronUp className="w-3.5 h-3.5 text-secondary" /> : <ChevronDown className="w-3.5 h-3.5 text-secondary" />}
             </div>
 
             {openSections.items && (
-              <div className="p-4">
+              <div className="p-3.5">
                 <ItemEditor
                   items={doc.items}
                   onChangeItems={items => updateField('items', items)}
@@ -423,13 +423,13 @@ export const DocumentBuilder: React.FC<BuilderProps> = ({
 
         {/* RECEIPT SPECIFIC DETAILS */}
         {doc.type === 'payment_receipt' && (
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-panel overflow-hidden">
-            <div className="p-4 bg-slate-50 border-b border-slate-200 font-extrabold text-xs text-navy uppercase tracking-wider">
+          <div className="bg-surface rounded-md border border-line shadow-subtle overflow-hidden">
+            <div className="p-3 bg-surface border-b border-line font-bold text-[11px] text-primary uppercase tracking-wider">
               Payment Receipt Transaction Details
             </div>
-            <div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <div className="p-3.5 grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
               <div>
-                <label className="block font-semibold text-slate-700 mb-1">Invoice Ref Number</label>
+                <label className="block text-[11px] font-semibold text-secondary mb-1">Invoice Ref Number</label>
                 <input
                   type="text"
                   placeholder="e.g. AES-INV-2026-001"
@@ -440,12 +440,12 @@ export const DocumentBuilder: React.FC<BuilderProps> = ({
                       invoiceReference: e.target.value,
                     })
                   }
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg font-bold text-navy"
+                  className="w-full h-9 px-3 border border-line rounded-sm font-mono text-primary text-xs focus:border-brand"
                 />
               </div>
 
               <div>
-                <label className="block font-semibold text-slate-700 mb-1">Payment Method</label>
+                <label className="block text-[11px] font-semibold text-secondary mb-1">Payment Method</label>
                 <select
                   value={doc.receiptDetails?.paymentMethod || 'UPI'}
                   onChange={e =>
@@ -454,7 +454,7 @@ export const DocumentBuilder: React.FC<BuilderProps> = ({
                       paymentMethod: e.target.value,
                     })
                   }
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg font-bold bg-white"
+                  className="w-full h-9 px-2.5 border border-line rounded-sm bg-surface text-primary text-xs focus:border-brand"
                 >
                   <option value="UPI">UPI</option>
                   <option value="Bank Transfer">Bank Transfer (NEFT/RTGS/IMPS)</option>
@@ -465,7 +465,7 @@ export const DocumentBuilder: React.FC<BuilderProps> = ({
               </div>
 
               <div>
-                <label className="block font-semibold text-slate-700 mb-1">Amount Received ₹</label>
+                <label className="block text-[11px] font-semibold text-secondary mb-1">Amount Received ₹</label>
                 <input
                   type="number"
                   value={doc.receiptDetails?.amountReceived || 0}
@@ -475,12 +475,12 @@ export const DocumentBuilder: React.FC<BuilderProps> = ({
                       amountReceived: parseFloat(e.target.value) || 0,
                     })
                   }
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg font-extrabold text-emerald-700"
+                  className="w-full h-9 px-3 border border-line rounded-sm font-bold text-brand text-xs focus:border-brand"
                 />
               </div>
 
               <div>
-                <label className="block font-semibold text-slate-700 mb-1">Transaction Ref / Txn ID</label>
+                <label className="block text-[11px] font-semibold text-secondary mb-1">Transaction Ref / Txn ID</label>
                 <input
                   type="text"
                   placeholder="e.g. UPI/628491028471/HDFC"
@@ -491,7 +491,7 @@ export const DocumentBuilder: React.FC<BuilderProps> = ({
                       transactionReference: e.target.value,
                     })
                   }
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg font-mono"
+                  className="w-full h-9 px-3 border border-line rounded-sm font-mono text-primary text-xs focus:border-brand"
                 />
               </div>
             </div>
@@ -500,22 +500,22 @@ export const DocumentBuilder: React.FC<BuilderProps> = ({
 
         {/* SECTION 5: GST / TAX ENGINE */}
         {doc.type !== 'payment_receipt' && (
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-panel overflow-hidden">
+          <div className="bg-surface rounded-md border border-line shadow-subtle overflow-hidden">
             <div
               onClick={() => toggleSection('tax')}
-              className="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between cursor-pointer hover:bg-slate-100/80 transition-colors"
+              className="p-3 bg-surface border-b border-line flex items-center justify-between cursor-pointer hover:bg-page transition-colors"
             >
               <div className="flex items-center gap-2">
-                <Percent className="w-4 h-4 text-blue-brand" />
-                <span className="font-extrabold text-xs text-navy uppercase tracking-wider">
-                  5. GST & Tax Engine
+                <Percent className="w-3.5 h-3.5 text-brand" />
+                <span className="font-bold text-[11px] text-primary uppercase tracking-wider">
+                  05  GST & Tax Engine
                 </span>
               </div>
-              {openSections.tax ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+              {openSections.tax ? <ChevronUp className="w-3.5 h-3.5 text-secondary" /> : <ChevronDown className="w-3.5 h-3.5 text-secondary" />}
             </div>
 
             {openSections.tax && (
-              <div className="p-4">
+              <div className="p-3.5">
                 <TaxEditor
                   tax={doc.tax}
                   onChangeTax={tax => updateField('tax', tax)}
@@ -528,22 +528,22 @@ export const DocumentBuilder: React.FC<BuilderProps> = ({
 
         {/* SECTION 6: PAYMENT TERMS */}
         {doc.type === 'quotation' && (
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-panel overflow-hidden">
+          <div className="bg-surface rounded-md border border-line shadow-subtle overflow-hidden">
             <div
               onClick={() => toggleSection('payment')}
-              className="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between cursor-pointer hover:bg-slate-100/80 transition-colors"
+              className="p-3 bg-surface border-b border-line flex items-center justify-between cursor-pointer hover:bg-page transition-colors"
             >
               <div className="flex items-center gap-2">
-                <CreditCard className="w-4 h-4 text-blue-brand" />
-                <span className="font-extrabold text-xs text-navy uppercase tracking-wider">
-                  6. Payment Milestone Terms
+                <CreditCard className="w-3.5 h-3.5 text-brand" />
+                <span className="font-bold text-[11px] text-primary uppercase tracking-wider">
+                  06  Payment Milestone Terms
                 </span>
               </div>
-              {openSections.payment ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+              {openSections.payment ? <ChevronUp className="w-3.5 h-3.5 text-secondary" /> : <ChevronDown className="w-3.5 h-3.5 text-secondary" />}
             </div>
 
             {openSections.payment && (
-              <div className="p-4">
+              <div className="p-3.5">
                 <PaymentTermsEditor
                   terms={doc.paymentTerms}
                   onChangeTerms={terms => updateField('paymentTerms', terms)}
@@ -555,12 +555,13 @@ export const DocumentBuilder: React.FC<BuilderProps> = ({
         )}
 
         {/* SAVE & SUBMIT */}
-        <div className="pt-2">
+        <div className="pt-1">
           <button
             type="button"
             onClick={handleSave}
-            className="w-full bg-blue-brand hover:bg-blue-700 text-white font-extrabold text-xs py-3 rounded-xl shadow-md transition-all active:scale-[0.99] uppercase tracking-wider"
+            className="w-full bg-brand hover:bg-brand-600 text-white font-semibold text-xs py-2.5 rounded-sm shadow-subtle transition-colors flex items-center justify-center gap-1.5 uppercase tracking-wider"
           >
+            <Save className="w-3.5 h-3.5" />
             Save Document to System
           </button>
         </div>
@@ -578,3 +579,4 @@ export const DocumentBuilder: React.FC<BuilderProps> = ({
     </div>
   );
 };
+

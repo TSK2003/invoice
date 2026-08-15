@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { AESCION_PACKAGES } from '../../constants/packages';
 import { ServicePackage } from '../../types/package';
 import { formatCurrency } from '../../utils/currency';
-import { CheckCircle2, Sparkles } from 'lucide-react';
+import { Check, Plus } from 'lucide-react';
 
 interface PackageSelectorProps {
   selectedPackageId?: string;
@@ -34,18 +34,18 @@ export const PackageSelector: React.FC<PackageSelectorProps> = ({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3.5">
       <div>
         <div className="flex items-center justify-between mb-2">
-          <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
-            Select Pre-configured Package
+          <label className="block text-[11px] font-bold text-secondary uppercase tracking-wider">
+            Pre-configured Packages
           </label>
-          <span className="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-semibold border border-emerald-200">
-            Auto-adds 5 Standard Inclusions
+          <span className="text-[10px] text-secondary font-medium">
+            Includes standard deliverables
           </span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
           {AESCION_PACKAGES.map(pkg => {
             const isSelected = selectedPackageId === pkg.id;
 
@@ -53,22 +53,22 @@ export const PackageSelector: React.FC<PackageSelectorProps> = ({
               <div
                 key={pkg.id}
                 onClick={() => onSelectPackage(pkg)}
-                className={`p-3 rounded-xl border cursor-pointer transition-all ${
+                className={`p-3 rounded-md border cursor-pointer transition-colors ${
                   isSelected
-                    ? 'bg-blue-50/80 border-blue-brand ring-2 ring-blue-brand/20 shadow-sm'
-                    : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50'
+                    ? 'bg-brand-50 border-brand shadow-subtle'
+                    : 'bg-surface border-line hover:border-slate-300 hover:bg-page'
                 }`}
               >
                 <div className="flex items-start justify-between gap-2">
                   <div>
-                    <span className="font-extrabold text-xs text-navy leading-tight">{pkg.name}</span>
-                    <span className="block text-[10px] text-slate-500 font-medium">{pkg.maxPagesText}</span>
+                    <span className={`font-bold text-xs leading-tight ${isSelected ? 'text-brand' : 'text-primary'}`}>{pkg.name}</span>
+                    <span className="block text-[10px] text-secondary font-medium">{pkg.maxPagesText}</span>
                   </div>
-                  <span className="font-black text-xs text-blue-brand bg-white px-2 py-1 rounded border border-blue-200 shadow-2xs whitespace-nowrap">
+                  <span className="font-bold text-xs text-brand bg-surface px-2 py-0.5 rounded-xs border border-brand-200 whitespace-nowrap">
                     {formatCurrency(pkg.basePrice)}
                   </span>
                 </div>
-                <p className="text-[10.5px] text-slate-600 mt-2 line-clamp-2 leading-tight">
+                <p className="text-[11px] text-secondary mt-1.5 line-clamp-2 leading-tight">
                   {pkg.description}
                 </p>
               </div>
@@ -78,15 +78,14 @@ export const PackageSelector: React.FC<PackageSelectorProps> = ({
       </div>
 
       {/* Package Inclusions Preview Banner */}
-      <div className="bg-slate-50 border border-slate-200 rounded-xl p-3">
-        <div className="flex items-center gap-1.5 text-xs font-bold text-slate-700 mb-1.5">
-          <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-          <span>Standard Package Inclusions (Auto-added as Included)</span>
+      <div className="bg-page border border-line rounded-md p-2.5">
+        <div className="text-[11px] font-semibold text-primary mb-1">
+          Standard Package Deliverables (Included):
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 text-[11px] text-slate-600">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 text-[11px] text-secondary">
           {AESCION_PACKAGES[0].includedServices.map((inc, i) => (
             <div key={i} className="flex items-center gap-1">
-              <CheckCircle2 className="w-3 h-3 text-emerald-500 flex-shrink-0" />
+              <Check className="w-3 h-3 text-brand flex-shrink-0" />
               <span className="truncate">{inc}</span>
             </div>
           ))}
@@ -94,17 +93,17 @@ export const PackageSelector: React.FC<PackageSelectorProps> = ({
       </div>
 
       {/* Customize & Add-ons */}
-      <div className="border-t border-slate-200 pt-3">
-        <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-          Customize & Add Additional Requirements
+      <div className="border-t border-line pt-3">
+        <label className="block text-[11px] font-bold text-secondary uppercase tracking-wider mb-2">
+          Scope Customization & Add-ons
         </label>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
           {/* Quick Add Extra Pages */}
-          <div className="bg-white p-2.5 rounded-lg border border-slate-200 flex items-center justify-between gap-2">
+          <div className="bg-surface p-2.5 rounded-md border border-line flex items-center justify-between gap-2">
             <div>
-              <div className="text-xs font-bold text-slate-800">Additional Pages</div>
-              <div className="text-[10px] text-slate-500">₹1,500 per page</div>
+              <div className="text-xs font-semibold text-primary">Additional Pages</div>
+              <div className="text-[10px] text-secondary">₹1,500 per page</div>
             </div>
             <div className="flex items-center gap-1.5">
               <input
@@ -113,27 +112,27 @@ export const PackageSelector: React.FC<PackageSelectorProps> = ({
                 max="50"
                 value={extraPagesQty}
                 onChange={e => setExtraPagesQty(Math.max(1, parseInt(e.target.value) || 1))}
-                className="w-10 px-1 py-1 text-xs border border-slate-200 rounded text-center font-bold"
+                className="w-10 h-7 px-1 text-xs border border-line rounded-sm bg-surface text-center font-bold text-primary focus:border-brand"
               />
               <button
                 type="button"
                 onClick={handleAddExtraPages}
-                className="bg-blue-brand hover:bg-blue-700 text-white px-2.5 py-1 rounded text-xs font-bold transition-colors whitespace-nowrap"
+                className="bg-brand hover:bg-brand-600 text-white h-7 px-2.5 rounded-sm text-xs font-semibold transition-colors flex items-center gap-0.5"
               >
-                + Add
+                <Plus className="w-3 h-3" /> Add
               </button>
             </div>
           </div>
 
           {/* Quick Add Custom Module/Feature */}
-          <div className="bg-white p-2.5 rounded-lg border border-slate-200 space-y-1.5">
-            <div className="text-xs font-bold text-slate-800">Add Custom Feature / Integration</div>
+          <div className="bg-surface p-2.5 rounded-md border border-line space-y-1.5">
+            <div className="text-xs font-semibold text-primary">Add Custom Feature / Integration</div>
             <input
               type="text"
               placeholder="Feature description (e.g. Payment Gateway)"
               value={customAddonName}
               onChange={e => setCustomAddonName(e.target.value)}
-              className="w-full px-2 py-1 text-xs border border-slate-200 rounded"
+              className="w-full h-7 px-2 text-xs border border-line rounded-sm bg-surface text-primary focus:border-brand"
             />
             <div className="flex items-center gap-1.5">
               <input
@@ -141,14 +140,14 @@ export const PackageSelector: React.FC<PackageSelectorProps> = ({
                 placeholder="Price ₹"
                 value={customAddonPrice}
                 onChange={e => setCustomAddonPrice(e.target.value === '' ? '' : Number(e.target.value))}
-                className="flex-1 px-2 py-1 text-xs border border-slate-200 rounded font-semibold"
+                className="flex-1 h-7 px-2 text-xs border border-line rounded-sm bg-surface text-primary font-semibold focus:border-brand"
               />
               <button
                 type="button"
                 onClick={handleAddCustomFeature}
-                className="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1 rounded text-xs font-bold transition-colors whitespace-nowrap"
+                className="bg-brand hover:bg-brand-600 text-white h-7 px-2.5 rounded-sm text-xs font-semibold transition-colors flex items-center gap-0.5"
               >
-                + Add
+                <Plus className="w-3 h-3" /> Add
               </button>
             </div>
           </div>
@@ -157,3 +156,4 @@ export const PackageSelector: React.FC<PackageSelectorProps> = ({
     </div>
   );
 };
+

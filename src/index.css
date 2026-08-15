@@ -3,50 +3,56 @@
 @tailwind utilities;
 
 :root {
-  --navy: #20254a;
-  --blue: #2d36c9;
-  --cyan: #12b8ed;
-  --orange: #f87516;
-  --ink: #171717;
-  --muted: #666;
-  --line: #d9dce5;
-  --soft: #f6f7fb;
-  --white: #fff;
+  --brand: #2736C7;
+  --brand-hover: #202CB0;
+  --brand-tint: #F0F3FF;
+  --page: #F6F7F9;
+  --surface: #FFFFFF;
+  --line: #D9DEE7;
+  --primary: #1F2937;
+  --secondary: #667085;
+  --muted: #98A2B3;
 }
 
 body {
   margin: 0;
   padding: 0;
-  background-color: #f1f5f9;
-  color: #1e293b;
+  background-color: #F6F7F9;
+  color: #1F2937;
   font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Custom Scrollbar */
+/* Restrained Enterprise Focus Style */
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: #2736C7 !important;
+}
+
+/* Custom Scrollbar - Neutral & Minimal */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #F6F7F9;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #D9DEE7;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #98A2B3;
 }
 
 /* A4 Page Specifications */
 .a4-page {
   width: 210mm;
   min-height: 297mm;
-  background: white;
+  background: #ffffff;
   box-sizing: border-box;
 }
 
@@ -64,7 +70,7 @@ body {
 
   body {
     background: #ffffff !important;
-    color: #000000 !important;
+    color: #1F2937 !important;
     margin: 0 !important;
     padding: 0 !important;
   }
@@ -96,3 +102,4 @@ body {
     break-inside: avoid !important;
   }
 }
+

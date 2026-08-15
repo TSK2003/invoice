@@ -40,55 +40,55 @@ export const SignatureSealEditor: React.FC<SignatureSealEditorProps> = ({
   };
 
   return (
-    <div className="space-y-4 text-xs">
+    <div className="space-y-3.5 text-xs">
       {/* Toggles */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <label className="flex items-center gap-3 p-3 bg-white border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition-colors">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+        <label className="flex items-center gap-2.5 p-2.5 bg-surface border border-line rounded-sm cursor-pointer hover:bg-page transition-colors">
           <input
             type="checkbox"
             checked={config.showSeal}
             onChange={e => onChange({ ...config, showSeal: e.target.checked })}
-            className="w-4 h-4 text-blue-brand rounded focus:ring-blue-brand"
+            className="w-4 h-4 text-brand rounded-xs"
           />
           <div>
-            <div className="font-bold text-slate-800">Show Company Seal</div>
-            <div className="text-[10px] text-slate-500">Official stamp graphic on document</div>
+            <div className="font-semibold text-primary">Show Company Seal Stamp</div>
+            <div className="text-[10px] text-secondary">Official stamp graphic on document</div>
           </div>
         </label>
 
-        <label className="flex items-center gap-3 p-3 bg-white border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition-colors">
+        <label className="flex items-center gap-2.5 p-2.5 bg-surface border border-line rounded-sm cursor-pointer hover:bg-page transition-colors">
           <input
             type="checkbox"
             checked={config.showSignature}
             onChange={e => onChange({ ...config, showSignature: e.target.checked })}
-            className="w-4 h-4 text-blue-brand rounded focus:ring-blue-brand"
+            className="w-4 h-4 text-brand rounded-xs"
           />
           <div>
-            <div className="font-bold text-slate-800">Show Authorized Signature</div>
-            <div className="text-[10px] text-slate-500">Signatory line & signature graphic</div>
+            <div className="font-semibold text-primary">Show Authorized Signature</div>
+            <div className="text-[10px] text-secondary">Signatory line & signature graphic</div>
           </div>
         </label>
       </div>
 
-      {/* Image Uploader Fields with Clean Buttons */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      {/* Image Uploader Fields */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
         {/* Seal Upload */}
-        <div className="bg-slate-50 border border-slate-200 p-3 rounded-xl space-y-1.5">
-          <label className="block font-bold text-slate-700">Company Seal Image</label>
+        <div className="bg-page border border-line p-2.5 rounded-md space-y-1.5">
+          <label className="block text-[11px] font-semibold text-secondary">Company Seal Image</label>
           {config.sealImageUrl ? (
-            <div className="flex items-center justify-between bg-white p-2 border border-slate-200 rounded-lg">
+            <div className="flex items-center justify-between bg-surface p-2 border border-line rounded-sm">
               <img src={config.sealImageUrl} alt="Seal Preview" className="h-9 w-9 object-contain" />
               <button
                 type="button"
                 onClick={() => onChange({ ...config, sealImageUrl: undefined })}
-                className="text-rose-600 hover:text-rose-800 hover:bg-rose-50 px-2 py-1 rounded text-[11px] font-bold transition-colors flex items-center gap-1"
+                className="text-secondary hover:text-primary hover:bg-page px-2 py-1 rounded-xs text-[11px] font-medium transition-colors flex items-center gap-1"
               >
                 <X className="w-3.5 h-3.5" /> Remove
               </button>
             </div>
           ) : (
-            <label className="flex items-center justify-center gap-2 p-2 border-2 border-dashed border-slate-300 rounded-lg bg-white cursor-pointer hover:border-blue-brand text-slate-600 font-semibold text-[11px]">
-              <Upload className="w-3.5 h-3.5 text-slate-400" />
+            <label className="flex items-center justify-center gap-1.5 p-2 border border-dashed border-line rounded-sm bg-surface cursor-pointer hover:border-brand text-secondary font-medium text-[11px]">
+              <Upload className="w-3.5 h-3.5 text-secondary" />
               <span>Upload Custom Seal PNG</span>
               <input type="file" accept="image/*" onChange={handleSealImageUpload} className="hidden" />
             </label>
@@ -96,22 +96,22 @@ export const SignatureSealEditor: React.FC<SignatureSealEditorProps> = ({
         </div>
 
         {/* Signature Upload */}
-        <div className="bg-slate-50 border border-slate-200 p-3 rounded-xl space-y-1.5">
-          <label className="block font-bold text-slate-700">Authorized Signature Image</label>
+        <div className="bg-page border border-line p-2.5 rounded-md space-y-1.5">
+          <label className="block text-[11px] font-semibold text-secondary">Authorized Signature Image</label>
           {config.signatureImageUrl ? (
-            <div className="flex items-center justify-between bg-white p-2 border border-slate-200 rounded-lg">
+            <div className="flex items-center justify-between bg-surface p-2 border border-line rounded-sm">
               <img src={config.signatureImageUrl} alt="Signature Preview" className="h-8 max-w-[120px] object-contain" />
               <button
                 type="button"
                 onClick={() => onChange({ ...config, signatureImageUrl: undefined })}
-                className="text-rose-600 hover:text-rose-800 hover:bg-rose-50 px-2 py-1 rounded text-[11px] font-bold transition-colors flex items-center gap-1"
+                className="text-secondary hover:text-primary hover:bg-page px-2 py-1 rounded-xs text-[11px] font-medium transition-colors flex items-center gap-1"
               >
                 <X className="w-3.5 h-3.5" /> Remove
               </button>
             </div>
           ) : (
-            <label className="flex items-center justify-center gap-2 p-2 border-2 border-dashed border-slate-300 rounded-lg bg-white cursor-pointer hover:border-blue-brand text-slate-600 font-semibold text-[11px]">
-              <Upload className="w-3.5 h-3.5 text-slate-400" />
+            <label className="flex items-center justify-center gap-1.5 p-2 border border-dashed border-line rounded-sm bg-surface cursor-pointer hover:border-brand text-secondary font-medium text-[11px]">
+              <Upload className="w-3.5 h-3.5 text-secondary" />
               <span>Upload Signature PNG</span>
               <input type="file" accept="image/*" onChange={handleSignatureImageUpload} className="hidden" />
             </label>
@@ -120,27 +120,28 @@ export const SignatureSealEditor: React.FC<SignatureSealEditorProps> = ({
       </div>
 
       {/* Signatory Titles */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
         <div>
-          <label className="block font-semibold text-slate-700 mb-1">Company Signatory Title</label>
+          <label className="block text-[11px] font-semibold text-secondary mb-1">Company Signatory Title</label>
           <input
             type="text"
             value={config.signatoryTitle}
             onChange={e => onChange({ ...config, signatoryTitle: e.target.value })}
-            className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-brand/30"
+            className="w-full h-9 px-3 border border-line rounded-sm bg-surface text-primary text-xs focus:border-brand"
           />
         </div>
 
         <div>
-          <label className="block font-semibold text-slate-700 mb-1">Customer Signatory Title</label>
+          <label className="block text-[11px] font-semibold text-secondary mb-1">Customer Signatory Title</label>
           <input
             type="text"
             value={config.customerSignatoryTitle}
             onChange={e => onChange({ ...config, customerSignatoryTitle: e.target.value })}
-            className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-brand/30"
+            className="w-full h-9 px-3 border border-line rounded-sm bg-surface text-primary text-xs focus:border-brand"
           />
         </div>
       </div>
     </div>
   );
 };
+

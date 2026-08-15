@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { DocumentData, DocumentType } from '../../types/document';
 import { StatusBadge } from '../ui/Badge';
 import { formatCurrency } from '../../utils/currency';
-import { Search, Filter, Edit3, Copy, Download, Trash2, FileText, AlertTriangle, X } from 'lucide-react';
+import { Search, Filter, Edit3, Copy, Download, Trash2, FileText, AlertCircle, X } from 'lucide-react';
 
 interface TableProps {
   documents: DocumentData[];
@@ -23,7 +23,7 @@ export const DocumentTable: React.FC<TableProps> = ({
   const [typeFilter, setTypeFilter] = useState<'all' | DocumentType>('all');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   
-  // Custom Modal State for Delete Confirmation (avoids browser window.confirm blocks)
+  // Custom Modal State for Delete Confirmation
   const [deletingDoc, setDeletingDoc] = useState<DocumentData | null>(null);
 
   const filteredDocuments = useMemo(() => {
@@ -52,11 +52,11 @@ export const DocumentTable: React.FC<TableProps> = ({
   const getDocTypeLabel = (type: DocumentType) => {
     switch (type) {
       case 'quotation':
-        return <span className="text-blue-700 bg-blue-50 font-semibold px-2.5 py-0.5 rounded text-xs border border-blue-200">Quotation</span>;
+        return <span className="text-brand bg-brand-50 font-semibold px-2 py-0.5 rounded-xs text-[11px] border border-brand-200">Quotation</span>;
       case 'tax_invoice':
-        return <span className="text-purple-700 bg-purple-50 font-semibold px-2.5 py-0.5 rounded text-xs border border-purple-200">Tax Invoice</span>;
+        return <span className="text-primary bg-page font-semibold px-2 py-0.5 rounded-xs text-[11px] border border-line">Tax Invoice</span>;
       case 'payment_receipt':
-        return <span className="text-emerald-700 bg-emerald-50 font-semibold px-2.5 py-0.5 rounded text-xs border border-emerald-200">Receipt</span>;
+        return <span className="text-secondary bg-page font-semibold px-2 py-0.5 rounded-xs text-[11px] border border-line">Receipt</span>;
     }
   };
 
@@ -68,24 +68,24 @@ export const DocumentTable: React.FC<TableProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden relative">
+    <div className="bg-surface rounded-md border border-line shadow-subtle overflow-hidden relative">
       {/* Table Toolbar */}
-      <div className="p-4 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="p-3.5 border-b border-line flex flex-col md:flex-row md:items-center justify-between gap-3 bg-surface">
         {/* Search Bar */}
         <div className="relative flex-1 max-w-md">
-          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+          <Search className="w-4 h-4 absolute left-2.5 top-1/2 -translate-y-1/2 text-secondary" />
           <input
             type="text"
-            placeholder="Search by client, document no, or project..."
+            placeholder="Search by client, document number, or package..."
             value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-blue-brand/30 focus:border-blue-brand"
+            className="w-full pl-8 pr-3 py-1.5 bg-page border border-line rounded-sm text-xs text-primary focus:border-brand"
           />
         </div>
 
         {/* Filters */}
-        <div className="flex flex-wrap items-center gap-3">
-          <div className="flex items-center gap-1.5 text-xs text-slate-500">
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="flex items-center gap-1 text-xs text-secondary">
             <Filter className="w-3.5 h-3.5" />
             <span>Filter:</span>
           </div>
@@ -93,7 +93,7 @@ export const DocumentTable: React.FC<TableProps> = ({
           <select
             value={typeFilter}
             onChange={e => setTypeFilter(e.target.value as any)}
-            className="bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-brand/30"
+            className="bg-page border border-line rounded-sm px-2.5 py-1.5 text-xs text-primary focus:border-brand"
           >
             <option value="all">All Document Types</option>
             <option value="quotation">Quotations</option>
@@ -104,7 +104,7 @@ export const DocumentTable: React.FC<TableProps> = ({
           <select
             value={statusFilter}
             onChange={e => setStatusFilter(e.target.value)}
-            className="bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-brand/30"
+            className="bg-page border border-line rounded-sm px-2.5 py-1.5 text-xs text-primary focus:border-brand"
           >
             <option value="all">All Statuses</option>
             <option value="draft">Draft</option>
@@ -120,26 +120,26 @@ export const DocumentTable: React.FC<TableProps> = ({
 
       {/* Documents Table */}
       <div className="overflow-x-auto">
-        <table className="w-full text-left text-xs">
-          <thead className="bg-slate-50 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider">
+        <table className="w-full text-left text-xs border-collapse">
+          <thead className="bg-page border-b border-line text-secondary font-bold text-[11px] uppercase tracking-wider">
             <tr>
-              <th className="py-3 px-4">Document No</th>
-              <th className="py-3 px-4">Type</th>
-              <th className="py-3 px-4">Client / Company</th>
-              <th className="py-3 px-4">Date</th>
-              <th className="py-3 px-4 text-right">Amount</th>
-              <th className="py-3 px-4">Status</th>
-              <th className="py-3 px-4 text-center">Actions</th>
+              <th className="py-2.5 px-3.5">Document No</th>
+              <th className="py-2.5 px-3.5">Type</th>
+              <th className="py-2.5 px-3.5">Client / Company</th>
+              <th className="py-2.5 px-3.5">Date</th>
+              <th className="py-2.5 px-3.5 text-right">Amount</th>
+              <th className="py-2.5 px-3.5">Status</th>
+              <th className="py-2.5 px-3.5 text-center">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100 text-slate-700">
+          <tbody className="divide-y divide-line text-primary">
             {filteredDocuments.length === 0 ? (
               <tr>
-                <td colSpan={7} className="py-12 text-center text-slate-400">
+                <td colSpan={7} className="py-10 text-center text-muted">
                   <div className="flex flex-col items-center justify-center">
-                    <FileText className="w-10 h-10 mb-2 stroke-1 text-slate-300" />
-                    <p className="font-semibold text-sm text-slate-600">No documents found</p>
-                    <p className="text-xs text-slate-400 mt-1">Try adjusting search or filter criteria</p>
+                    <FileText className="w-8 h-8 mb-1.5 stroke-1 text-muted" />
+                    <p className="font-semibold text-xs text-secondary">No documents found</p>
+                    <p className="text-[11px] text-muted mt-0.5">Try adjusting search or filter criteria</p>
                   </div>
                 </td>
               </tr>
@@ -150,77 +150,77 @@ export const DocumentTable: React.FC<TableProps> = ({
                   : (doc.tax?.grandTotal || 0);
 
                 return (
-                  <tr key={doc.id} className="hover:bg-slate-50/80 transition-colors">
+                  <tr key={doc.id} className="hover:bg-page transition-colors">
                     {/* Doc No */}
-                    <td className="py-3.5 px-4 font-extrabold text-navy">
+                    <td className="py-2.5 px-3.5 font-bold text-primary font-mono text-[11.5px]">
                       {doc.documentNumber}
                     </td>
 
                     {/* Type */}
-                    <td className="py-3.5 px-4">
+                    <td className="py-2.5 px-3.5">
                       {getDocTypeLabel(doc.type)}
                     </td>
 
                     {/* Client */}
-                    <td className="py-3.5 px-4">
-                      <div className="font-semibold text-slate-900">{doc.client?.companyName || '[No Client Name]'}</div>
+                    <td className="py-2.5 px-3.5">
+                      <div className="font-semibold text-primary">{doc.client?.companyName || '—'}</div>
                       {doc.client?.contactPerson && (
-                        <div className="text-[11px] text-slate-500">{doc.client.contactPerson}</div>
+                        <div className="text-[11px] text-secondary">{doc.client.contactPerson}</div>
                       )}
                     </td>
 
                     {/* Date */}
-                    <td className="py-3.5 px-4 text-slate-600 font-medium">
+                    <td className="py-2.5 px-3.5 text-secondary">
                       {doc.date}
                     </td>
 
                     {/* Amount */}
-                    <td className="py-3.5 px-4 text-right font-extrabold text-slate-900">
+                    <td className="py-2.5 px-3.5 text-right font-bold text-primary">
                       {formatCurrency(totalAmount)}
                     </td>
 
                     {/* Status */}
-                    <td className="py-3.5 px-4">
+                    <td className="py-2.5 px-3.5">
                       <StatusBadge status={doc.status} />
                     </td>
 
                     {/* Actions */}
-                    <td className="py-3.5 px-4 text-center">
+                    <td className="py-2.5 px-3.5 text-center">
                       <div className="flex items-center justify-center space-x-1">
                         {/* Edit / View */}
                         <button
                           onClick={() => onEdit(doc)}
                           title="Edit Document"
-                          className="p-1.5 text-slate-600 hover:text-blue-brand hover:bg-blue-50 rounded-md transition-colors"
+                          className="p-1.5 text-secondary hover:text-brand hover:bg-brand-50 rounded-xs transition-colors"
                         >
-                          <Edit3 className="w-4 h-4" />
+                          <Edit3 className="w-3.5 h-3.5" />
                         </button>
 
                         {/* Duplicate */}
                         <button
                           onClick={() => onDuplicate(doc.id)}
                           title="Duplicate Document"
-                          className="p-1.5 text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-md transition-colors"
+                          className="p-1.5 text-secondary hover:text-brand hover:bg-brand-50 rounded-xs transition-colors"
                         >
-                          <Copy className="w-4 h-4" />
+                          <Copy className="w-3.5 h-3.5" />
                         </button>
 
                         {/* Download PDF */}
                         <button
                           onClick={() => onDownloadPDF(doc)}
                           title="Download PDF"
-                          className="p-1.5 text-slate-600 hover:text-emerald-600 hover:bg-emerald-50 rounded-md transition-colors"
+                          className="p-1.5 text-secondary hover:text-brand hover:bg-brand-50 rounded-xs transition-colors"
                         >
-                          <Download className="w-4 h-4" />
+                          <Download className="w-3.5 h-3.5" />
                         </button>
 
-                        {/* Delete Button (Opens custom in-app confirmation modal) */}
+                        {/* Delete Button */}
                         <button
                           onClick={() => setDeletingDoc(doc)}
                           title="Delete Document"
-                          className="p-1.5 text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded-md transition-colors"
+                          className="p-1.5 text-secondary hover:text-primary hover:bg-page rounded-xs transition-colors"
                         >
-                          <Trash2 className="w-4 h-4" />
+                          <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
                     </td>
@@ -234,46 +234,44 @@ export const DocumentTable: React.FC<TableProps> = ({
 
       {/* CUSTOM IN-APP DELETE CONFIRMATION MODAL */}
       {deletingDoc && (
-        <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl border border-slate-200 animate-in fade-in zoom-in duration-150">
+        <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
+          <div className="bg-surface rounded-lg p-5 max-w-md w-full shadow-subtle border border-line">
             <div className="flex items-start justify-between">
-              <div className="flex items-center gap-3">
-                <div className="p-3 bg-rose-100 rounded-full text-rose-600">
-                  <AlertTriangle className="w-6 h-6" />
-                </div>
+              <div className="flex items-center gap-2.5">
+                <AlertCircle className="w-5 h-5 text-primary" />
                 <div>
-                  <h3 className="text-base font-extrabold text-slate-900">Delete Document</h3>
-                  <p className="text-xs text-slate-500 mt-0.5">
+                  <h3 className="text-sm font-bold text-primary">Delete Document</h3>
+                  <p className="text-xs text-secondary mt-0.5">
                     Are you sure you want to permanently delete this document?
                   </p>
                 </div>
               </div>
               <button
                 onClick={() => setDeletingDoc(null)}
-                className="text-slate-400 hover:text-slate-600 p-1 rounded-md"
+                className="text-secondary hover:text-primary p-0.5 rounded-xs"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="my-4 p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs space-y-1">
-              <div>Document No: <b className="text-navy">{deletingDoc.documentNumber}</b></div>
-              <div>Type: <b className="capitalize">{deletingDoc.type.replace('_', ' ')}</b></div>
-              <div>Client: <b>{deletingDoc.client?.companyName || '—'}</b></div>
+            <div className="my-3.5 p-3 bg-page rounded-sm border border-line text-xs space-y-1">
+              <div>Document No: <b className="text-primary font-mono">{deletingDoc.documentNumber}</b></div>
+              <div>Type: <b className="capitalize text-primary">{deletingDoc.type.replace('_', ' ')}</b></div>
+              <div>Client: <b className="text-primary">{deletingDoc.client?.companyName || '—'}</b></div>
             </div>
 
-            <div className="flex items-center justify-end space-x-3 mt-6">
+            <div className="flex items-center justify-end space-x-2 mt-4">
               <button
                 type="button"
                 onClick={() => setDeletingDoc(null)}
-                className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg transition-colors"
+                className="px-3 py-1.5 bg-surface border border-line hover:bg-page text-primary text-xs font-medium rounded-sm transition-colors"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={handleConfirmDelete}
-                className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold rounded-lg shadow-sm transition-colors"
+                className="px-3 py-1.5 bg-brand hover:bg-brand-600 text-white text-xs font-semibold rounded-sm transition-colors shadow-subtle"
               >
                 Delete Document
               </button>
@@ -284,3 +282,4 @@ export const DocumentTable: React.FC<TableProps> = ({
     </div>
   );
 };
+

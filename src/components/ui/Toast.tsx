@@ -17,7 +17,7 @@ export const Toast: React.FC<ToastProps> = ({ toast, onClose }) => {
     if (toast) {
       const timer = setTimeout(() => {
         onClose();
-      }, 4000);
+      }, 3500);
       return () => clearTimeout(timer);
     }
   }, [toast, onClose]);
@@ -27,24 +27,25 @@ export const Toast: React.FC<ToastProps> = ({ toast, onClose }) => {
   const getIcon = () => {
     switch (toast.type) {
       case 'error':
-        return <AlertCircle className="w-5 h-5 text-rose-500" />;
+        return <AlertCircle className="w-4 h-4 text-primary" />;
       case 'info':
-        return <Info className="w-5 h-5 text-blue-500" />;
+        return <Info className="w-4 h-4 text-brand" />;
       default:
-        return <CheckCircle2 className="w-5 h-5 text-emerald-500" />;
+        return <CheckCircle2 className="w-4 h-4 text-brand" />;
     }
   };
 
   return (
-    <div className="fixed bottom-5 right-5 z-50 flex items-center gap-3 px-4 py-3 bg-slate-900 text-white rounded-lg shadow-xl border border-slate-700 animate-slide-up text-sm font-medium">
+    <div className="fixed bottom-5 right-5 z-50 flex items-center gap-2.5 px-3.5 py-2.5 bg-surface text-primary rounded-md shadow-subtle border border-line text-xs font-medium">
       {getIcon()}
       <span>{toast.title}</span>
       <button
         onClick={onClose}
-        className="ml-2 text-slate-400 hover:text-white p-1 rounded-md transition-colors"
+        className="ml-2 text-secondary hover:text-primary p-0.5 rounded-xs transition-colors"
       >
-        <X className="w-4 h-4" />
+        <X className="w-3.5 h-3.5" />
       </button>
     </div>
   );
 };
+

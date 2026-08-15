@@ -49,15 +49,16 @@ export const TemplateSettingsEditor: React.FC<TemplateProps> = ({
   };
 
   return (
-    <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
-      <div className="flex items-center justify-between border-b border-slate-200 pb-4">
+    <div className="bg-surface p-5 rounded-md border border-line shadow-subtle space-y-6">
+      {/* Page Header */}
+      <div className="flex items-center justify-between border-b border-line pb-3.5">
         <div>
-          <h2 className="text-lg font-extrabold text-navy flex items-center gap-2">
-            <Settings className="w-5 h-5 text-blue-brand" />
-            Document Template System
+          <h2 className="text-base font-bold text-primary flex items-center gap-2">
+            <Settings className="w-4 h-4 text-brand" />
+            Document Template Settings
           </h2>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Active Template: <b className="text-blue-brand">{template.name}</b>. Configures global styling and default business terms.
+          <p className="text-xs text-secondary mt-0.5">
+            Active: <span className="font-semibold text-primary">{template.name}</span>. Configure global default terms and document layout style.
           </p>
         </div>
 
@@ -65,32 +66,33 @@ export const TemplateSettingsEditor: React.FC<TemplateProps> = ({
           <button
             type="button"
             onClick={onSaveTemplate}
-            className="bg-blue-brand hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-xs font-bold transition-all shadow-sm"
+            className="bg-brand hover:bg-brand-600 text-white px-3.5 py-1.5 rounded-sm text-xs font-semibold transition-colors shadow-subtle"
           >
             Save Template Settings
           </button>
         )}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+      {/* Basic Settings */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
         <div>
-          <label className="block font-bold text-slate-700 mb-1">Template Name</label>
+          <label className="block text-[11px] font-semibold text-secondary mb-1">Template Name</label>
           <input
             type="text"
             value={template.name}
             onChange={e => onChangeTemplate({ ...template, name: e.target.value })}
-            className="w-full px-3 py-2 border border-slate-200 rounded-lg font-bold"
+            className="w-full h-9 px-3 border border-line rounded-sm bg-surface text-primary text-xs font-semibold focus:border-brand"
           />
         </div>
 
         <div>
-          <label className="block font-bold text-slate-700 mb-1">Header Style</label>
+          <label className="block text-[11px] font-semibold text-secondary mb-1">Header Style</label>
           <select
             value={template.headerStyle}
             onChange={e => onChangeTemplate({ ...template, headerStyle: e.target.value as any })}
-            className="w-full px-3 py-2 border border-slate-200 rounded-lg bg-white font-medium"
+            className="w-full h-9 px-3 border border-line rounded-sm bg-surface text-primary text-xs focus:border-brand"
           >
-            <option value="standard">Standard Corporate (Navy Bar)</option>
+            <option value="standard">Standard Corporate (Header Rule)</option>
             <option value="modern">Modern Minimal</option>
             <option value="compact">Compact Dense</option>
           </select>
@@ -98,19 +100,19 @@ export const TemplateSettingsEditor: React.FC<TemplateProps> = ({
       </div>
 
       {/* Quotation Terms Management */}
-      <div className="border-t border-slate-200 pt-4 text-xs space-y-2">
-        <label className="block font-extrabold text-navy uppercase tracking-wider">
+      <div className="border-t border-line pt-4 text-xs space-y-2">
+        <label className="block text-[11px] font-bold text-secondary uppercase tracking-wider">
           Default Quotation Terms & Conditions ({template.defaultTermsQuotation.length})
         </label>
 
-        <div className="space-y-1.5 max-h-52 overflow-auto bg-slate-50 p-3 border border-slate-200 rounded-xl">
+        <div className="space-y-1.5 max-h-52 overflow-auto bg-page p-2.5 border border-line rounded-md">
           {template.defaultTermsQuotation.map((term, i) => (
-            <div key={i} className="flex items-center justify-between gap-2 bg-white p-2 border border-slate-200 rounded-lg text-slate-700">
+            <div key={i} className="flex items-center justify-between gap-2 bg-surface p-2 border border-line rounded-sm text-primary text-xs">
               <span className="flex-1 font-medium">{term}</span>
               <button
                 type="button"
                 onClick={() => handleRemoveQuotationTerm(i)}
-                className="text-rose-500 hover:text-rose-700 p-1"
+                className="text-secondary hover:text-primary p-0.5 rounded-xs"
               >
                 <Trash2 className="w-3.5 h-3.5" />
               </button>
@@ -124,32 +126,32 @@ export const TemplateSettingsEditor: React.FC<TemplateProps> = ({
             placeholder="Add new quotation term..."
             value={newQuotationTerm}
             onChange={e => setNewQuotationTerm(e.target.value)}
-            className="flex-1 px-3 py-2 border border-slate-200 rounded-lg"
+            className="flex-1 h-9 px-3 border border-line rounded-sm bg-surface text-primary text-xs focus:border-brand"
           />
           <button
             type="button"
             onClick={handleAddQuotationTerm}
-            className="bg-blue-brand hover:bg-blue-700 text-white px-3 py-2 rounded-lg font-bold flex items-center gap-1"
+            className="bg-brand hover:bg-brand-600 text-white h-9 px-3.5 rounded-sm text-xs font-semibold flex items-center gap-1 transition-colors shadow-subtle"
           >
-            <Plus className="w-4 h-4" /> Add Term
+            <Plus className="w-3.5 h-3.5" /> Add Term
           </button>
         </div>
       </div>
 
       {/* Invoice Terms Management */}
-      <div className="border-t border-slate-200 pt-4 text-xs space-y-2">
-        <label className="block font-extrabold text-navy uppercase tracking-wider">
+      <div className="border-t border-line pt-4 text-xs space-y-2">
+        <label className="block text-[11px] font-bold text-secondary uppercase tracking-wider">
           Default Tax Invoice Terms & Conditions ({template.defaultTermsInvoice.length})
         </label>
 
-        <div className="space-y-1.5 max-h-52 overflow-auto bg-slate-50 p-3 border border-slate-200 rounded-xl">
+        <div className="space-y-1.5 max-h-52 overflow-auto bg-page p-2.5 border border-line rounded-md">
           {template.defaultTermsInvoice.map((term, i) => (
-            <div key={i} className="flex items-center justify-between gap-2 bg-white p-2 border border-slate-200 rounded-lg text-slate-700">
+            <div key={i} className="flex items-center justify-between gap-2 bg-surface p-2 border border-line rounded-sm text-primary text-xs">
               <span className="flex-1 font-medium">{term}</span>
               <button
                 type="button"
                 onClick={() => handleRemoveInvoiceTerm(i)}
-                className="text-rose-500 hover:text-rose-700 p-1"
+                className="text-secondary hover:text-primary p-0.5 rounded-xs"
               >
                 <Trash2 className="w-3.5 h-3.5" />
               </button>
@@ -163,17 +165,18 @@ export const TemplateSettingsEditor: React.FC<TemplateProps> = ({
             placeholder="Add new invoice term..."
             value={newInvoiceTerm}
             onChange={e => setNewInvoiceTerm(e.target.value)}
-            className="flex-1 px-3 py-2 border border-slate-200 rounded-lg"
+            className="flex-1 h-9 px-3 border border-line rounded-sm bg-surface text-primary text-xs focus:border-brand"
           />
           <button
             type="button"
             onClick={handleAddInvoiceTerm}
-            className="bg-blue-brand hover:bg-blue-700 text-white px-3 py-2 rounded-lg font-bold flex items-center gap-1"
+            className="bg-brand hover:bg-brand-600 text-white h-9 px-3.5 rounded-sm text-xs font-semibold flex items-center gap-1 transition-colors shadow-subtle"
           >
-            <Plus className="w-4 h-4" /> Add Term
+            <Plus className="w-3.5 h-3.5" /> Add Term
           </button>
         </div>
       </div>
     </div>
   );
 };
+

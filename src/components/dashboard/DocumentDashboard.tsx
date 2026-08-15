@@ -3,7 +3,7 @@ import { DocumentData, DocumentType } from '../../types/document';
 import { DashboardStats } from '../../services/storage/IDocumentStorage';
 import { StatsOverview } from './StatsOverview';
 import { DocumentTable } from './DocumentTable';
-import { Plus, FileCheck, FileSpreadsheet, Receipt } from 'lucide-react';
+import { Plus, FileText, FileSpreadsheet, Receipt } from 'lucide-react';
 
 interface DashboardProps {
   documents: DocumentData[];
@@ -27,37 +27,37 @@ export const DocumentDashboard: React.FC<DashboardProps> = ({
   return (
     <div className="space-y-6">
       {/* Top Banner & Quick Actions */}
-      <div className="bg-gradient-to-r from-navy via-navy-800 to-blue-brand text-white p-6 rounded-2xl shadow-lg flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+      <div className="bg-surface p-5 rounded-md border border-line shadow-subtle flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-black tracking-tight">AESCION Document Studio</h1>
-          <p className="text-slate-300 text-xs mt-1 max-w-xl">
-            Professional internal suite for creating, managing, and exporting A4 Quotations, Tax Invoices, and Payment Receipts.
+          <h1 className="text-lg font-bold text-primary tracking-tight">AESCION Document Studio</h1>
+          <p className="text-secondary text-xs mt-0.5">
+            Enterprise quotation, tax invoice, and payment receipt management system.
           </p>
         </div>
 
-        {/* Action Cards */}
-        <div className="flex flex-wrap items-center gap-3">
+        {/* Quick Action Buttons */}
+        <div className="flex flex-wrap items-center gap-2">
           <button
             onClick={() => onCreateNew('quotation')}
-            className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 px-4 py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm active:scale-95"
+            className="flex items-center gap-1.5 bg-brand hover:bg-brand-600 text-white px-3 py-1.5 rounded-sm text-xs font-semibold shadow-subtle transition-colors"
           >
-            <FileCheck className="w-4 h-4 text-cyan-400" />
+            <FileText className="w-3.5 h-3.5" />
             + New Quotation
           </button>
 
           <button
             onClick={() => onCreateNew('tax_invoice')}
-            className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 px-4 py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm active:scale-95"
+            className="flex items-center gap-1.5 bg-surface hover:bg-page text-primary border border-line px-3 py-1.5 rounded-sm text-xs font-medium transition-colors"
           >
-            <FileSpreadsheet className="w-4 h-4 text-purple-400" />
+            <FileSpreadsheet className="w-3.5 h-3.5 text-secondary" />
             + New Tax Invoice
           </button>
 
           <button
             onClick={() => onCreateNew('payment_receipt')}
-            className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 px-4 py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm active:scale-95"
+            className="flex items-center gap-1.5 bg-surface hover:bg-page text-primary border border-line px-3 py-1.5 rounded-sm text-xs font-medium transition-colors"
           >
-            <Receipt className="w-4 h-4 text-emerald-400" />
+            <Receipt className="w-3.5 h-3.5 text-secondary" />
             + New Receipt
           </button>
         </div>
@@ -68,12 +68,12 @@ export const DocumentDashboard: React.FC<DashboardProps> = ({
 
       {/* Recent Documents Section */}
       <div>
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-base font-extrabold text-navy uppercase tracking-wider">
+        <div className="flex items-center justify-between mb-2.5">
+          <h2 className="text-xs font-bold text-primary uppercase tracking-wider">
             Recent Documents
           </h2>
-          <span className="text-xs text-slate-500 font-medium">
-            Showing {documents.length} total records
+          <span className="text-xs text-secondary font-medium">
+            {documents.length} total records
           </span>
         </div>
 
@@ -88,3 +88,4 @@ export const DocumentDashboard: React.FC<DashboardProps> = ({
     </div>
   );
 };
+

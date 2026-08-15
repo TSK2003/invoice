@@ -23,24 +23,24 @@ export const LivePreview: React.FC<LivePreviewProps> = ({
   const handleResetZoom = () => setZoom(0.85);
 
   return (
-    <div className="flex flex-col h-full bg-slate-200 border-l border-slate-300">
+    <div className="flex flex-col h-full bg-[#EEF0F4] border-l border-line">
       {/* Sticky Preview Action Bar */}
-      <div className="sticky top-16 z-20 bg-slate-800 text-white px-4 py-2.5 flex items-center justify-between shadow-md">
+      <div className="sticky top-15 z-20 bg-surface text-primary px-4 py-2 flex items-center justify-between border-b border-line shadow-subtle">
         <div className="flex items-center space-x-2">
-          <span className="text-xs font-bold uppercase tracking-wider text-cyan-400">
-            Live A4 Preview
+          <span className="text-xs font-bold uppercase tracking-wider text-primary">
+            A4 Document Preview
           </span>
-          <span className="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded font-mono">
+          <span className="text-[10.5px] bg-page border border-line text-secondary px-1.5 py-0.5 rounded-xs font-mono font-medium">
             {Math.round(zoom * 100)}%
           </span>
         </div>
 
         {/* Zoom Controls */}
-        <div className="hidden sm:flex items-center space-x-1 bg-slate-900/80 px-2 py-1 rounded-lg border border-slate-700">
+        <div className="hidden sm:flex items-center space-x-0.5 bg-page px-1.5 py-0.5 rounded-sm border border-line">
           <button
             onClick={handleZoomOut}
             title="Zoom Out"
-            className="p-1 text-slate-400 hover:text-white rounded hover:bg-slate-800 transition-colors"
+            className="p-1 text-secondary hover:text-primary rounded-xs hover:bg-surface transition-colors"
           >
             <ZoomOut className="w-3.5 h-3.5" />
           </button>
@@ -48,7 +48,7 @@ export const LivePreview: React.FC<LivePreviewProps> = ({
           <button
             onClick={handleResetZoom}
             title="Reset Zoom"
-            className="p-1 text-slate-400 hover:text-white rounded hover:bg-slate-800 transition-colors"
+            className="p-1 text-secondary hover:text-primary rounded-xs hover:bg-surface transition-colors"
           >
             <RotateCcw className="w-3.5 h-3.5" />
           </button>
@@ -56,7 +56,7 @@ export const LivePreview: React.FC<LivePreviewProps> = ({
           <button
             onClick={handleZoomIn}
             title="Zoom In"
-            className="p-1 text-slate-400 hover:text-white rounded hover:bg-slate-800 transition-colors"
+            className="p-1 text-secondary hover:text-primary rounded-xs hover:bg-surface transition-colors"
           >
             <ZoomIn className="w-3.5 h-3.5" />
           </button>
@@ -66,23 +66,23 @@ export const LivePreview: React.FC<LivePreviewProps> = ({
         <div className="flex items-center space-x-2">
           <button
             onClick={onSaveDraft}
-            className="flex items-center gap-1.5 bg-slate-700 hover:bg-slate-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition-all shadow-sm"
+            className="flex items-center gap-1.5 bg-surface hover:bg-page text-primary border border-line px-3 py-1.5 rounded-sm text-xs font-medium transition-colors shadow-subtle"
           >
-            <Save className="w-3.5 h-3.5" />
+            <Save className="w-3.5 h-3.5 text-secondary" />
             Save Draft
           </button>
 
           <button
             onClick={onPrint}
-            className="flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition-all shadow-sm"
+            className="flex items-center gap-1.5 bg-surface hover:bg-page text-primary border border-line px-3 py-1.5 rounded-sm text-xs font-medium transition-colors shadow-subtle"
           >
-            <Printer className="w-3.5 h-3.5" />
+            <Printer className="w-3.5 h-3.5 text-secondary" />
             Print
           </button>
 
           <button
             onClick={onDownloadPDF}
-            className="flex items-center gap-1.5 bg-orange-brand hover:bg-orange-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition-all shadow-md active:scale-95"
+            className="flex items-center gap-1.5 bg-brand hover:bg-brand-600 text-white px-3.5 py-1.5 rounded-sm text-xs font-semibold transition-colors shadow-subtle"
           >
             <Download className="w-3.5 h-3.5" />
             Download PDF
@@ -93,7 +93,7 @@ export const LivePreview: React.FC<LivePreviewProps> = ({
       {/* Scrollable Canvas Container */}
       <div className="flex-1 overflow-auto p-6 flex justify-center items-start min-h-[600px] screen-only">
         <div
-          className="transition-transform duration-150 origin-top shadow-2xl rounded-sm"
+          className="transition-transform duration-100 origin-top shadow-a4"
           style={{
             transform: `scale(${zoom})`,
           }}
@@ -104,3 +104,4 @@ export const LivePreview: React.FC<LivePreviewProps> = ({
     </div>
   );
 };
+

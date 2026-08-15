@@ -1,6 +1,6 @@
 import React from 'react';
 import { DocumentType } from '../../types/document';
-import { FileCheck, FileSpreadsheet, Receipt } from 'lucide-react';
+import { FileText, FileSpreadsheet, Receipt } from 'lucide-react';
 
 interface SelectorProps {
   selectedType: DocumentType;
@@ -16,7 +16,7 @@ export const DocumentTypeSelector: React.FC<SelectorProps> = ({
       type: 'quotation',
       label: 'Quotation',
       desc: 'Project scope, package pricing, included services & terms.',
-      icon: FileCheck,
+      icon: FileText,
     },
     {
       type: 'tax_invoice',
@@ -33,9 +33,9 @@ export const DocumentTypeSelector: React.FC<SelectorProps> = ({
   ];
 
   return (
-    <div className="space-y-2">
-      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
-        Select Document Type
+    <div className="space-y-1.5">
+      <label className="block text-[11px] font-bold text-secondary uppercase tracking-wider">
+        Document Type
       </label>
       <div className="grid grid-cols-3 gap-2">
         {options.map(opt => {
@@ -47,17 +47,17 @@ export const DocumentTypeSelector: React.FC<SelectorProps> = ({
               key={opt.type}
               type="button"
               onClick={() => onChange(opt.type)}
-              className={`p-3 rounded-xl border text-left transition-all flex flex-col justify-between ${
+              className={`p-2.5 rounded-md border text-left transition-colors flex flex-col justify-between ${
                 isSelected
-                  ? 'bg-blue-50 border-blue-brand text-blue-brand ring-2 ring-blue-brand/20 shadow-sm'
-                  : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-50'
+                  ? 'bg-brand-50 border-brand text-brand shadow-subtle'
+                  : 'bg-surface border-line text-primary hover:border-slate-300 hover:bg-page'
               }`}
             >
-              <div className="flex items-center justify-between">
-                <span className="font-bold text-xs">{opt.label}</span>
-                <Icon className={`w-4 h-4 ${isSelected ? 'text-blue-brand' : 'text-slate-400'}`} />
+              <div className="flex items-center justify-between w-full">
+                <span className={`text-xs font-bold ${isSelected ? 'text-brand' : 'text-primary'}`}>{opt.label}</span>
+                <Icon className={`w-3.5 h-3.5 ${isSelected ? 'text-brand' : 'text-secondary'}`} />
               </div>
-              <p className="text-[10px] text-slate-500 mt-1 line-clamp-2 leading-tight">
+              <p className="text-[10px] text-secondary mt-1 line-clamp-2 leading-tight">
                 {opt.desc}
               </p>
             </button>
@@ -67,3 +67,4 @@ export const DocumentTypeSelector: React.FC<SelectorProps> = ({
     </div>
   );
 };
+

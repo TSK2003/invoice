@@ -66,39 +66,39 @@ export const PaymentTermsEditor: React.FC<PaymentTermsEditorProps> = ({
   return (
     <div className="space-y-3 text-xs">
       <div>
-        <label className="block font-bold text-slate-700 mb-1">Payment Terms Milestone</label>
+        <label className="block text-[11px] font-semibold text-secondary mb-1">Payment Milestone Split</label>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
           <button
             type="button"
             onClick={() => handlePresetChange('50_50')}
-            className={`p-2 rounded-lg border text-center font-bold transition-all ${
+            className={`p-2 rounded-sm border text-center font-medium text-xs transition-colors ${
               terms.preset === '50_50'
-                ? 'bg-blue-brand text-white border-blue-brand shadow-2xs'
-                : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+                ? 'bg-brand text-white border-brand shadow-subtle font-semibold'
+                : 'bg-surface text-primary border-line hover:bg-page'
             }`}
           >
-            50% Advance / 50% Balance
+            50% / 50% Split
           </button>
 
           <button
             type="button"
             onClick={() => handlePresetChange('40_60')}
-            className={`p-2 rounded-lg border text-center font-bold transition-all ${
+            className={`p-2 rounded-sm border text-center font-medium text-xs transition-colors ${
               terms.preset === '40_60'
-                ? 'bg-blue-brand text-white border-blue-brand shadow-2xs'
-                : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+                ? 'bg-brand text-white border-brand shadow-subtle font-semibold'
+                : 'bg-surface text-primary border-line hover:bg-page'
             }`}
           >
-            40% Advance / 60% Balance
+            40% / 60% Split
           </button>
 
           <button
             type="button"
             onClick={() => handlePresetChange('100_advance')}
-            className={`p-2 rounded-lg border text-center font-bold transition-all ${
+            className={`p-2 rounded-sm border text-center font-medium text-xs transition-colors ${
               terms.preset === '100_advance'
-                ? 'bg-blue-brand text-white border-blue-brand shadow-2xs'
-                : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+                ? 'bg-brand text-white border-brand shadow-subtle font-semibold'
+                : 'bg-surface text-primary border-line hover:bg-page'
             }`}
           >
             100% Advance
@@ -107,10 +107,10 @@ export const PaymentTermsEditor: React.FC<PaymentTermsEditorProps> = ({
           <button
             type="button"
             onClick={() => handlePresetChange('custom')}
-            className={`p-2 rounded-lg border text-center font-bold transition-all ${
+            className={`p-2 rounded-sm border text-center font-medium text-xs transition-colors ${
               terms.preset === 'custom'
-                ? 'bg-blue-brand text-white border-blue-brand shadow-2xs'
-                : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+                ? 'bg-brand text-white border-brand shadow-subtle font-semibold'
+                : 'bg-surface text-primary border-line hover:bg-page'
             }`}
           >
             Custom Split
@@ -119,10 +119,10 @@ export const PaymentTermsEditor: React.FC<PaymentTermsEditorProps> = ({
       </div>
 
       {/* Calculated Breakdown Cards */}
-      <div className="grid grid-cols-2 gap-3 bg-slate-50 border border-slate-200 p-3 rounded-xl">
-        <div className="bg-white p-2.5 rounded-lg border border-slate-200">
-          <div className="flex items-center justify-between text-slate-500 font-bold mb-1">
-            <span>Advance Amount ({terms.advancePercentage}%)</span>
+      <div className="grid grid-cols-2 gap-2.5 bg-page border border-line p-2.5 rounded-md">
+        <div className="bg-surface p-2.5 rounded-sm border border-line">
+          <div className="flex items-center justify-between text-secondary font-medium mb-1">
+            <span>Advance ({terms.advancePercentage}%)</span>
             {terms.preset === 'custom' && (
               <input
                 type="number"
@@ -130,20 +130,20 @@ export const PaymentTermsEditor: React.FC<PaymentTermsEditorProps> = ({
                 max="100"
                 value={terms.advancePercentage}
                 onChange={e => handleCustomAdvanceChange(parseFloat(e.target.value) || 0)}
-                className="w-12 px-1 border border-slate-200 rounded text-center"
+                className="w-12 h-6 px-1 border border-line rounded-sm text-center text-xs font-bold text-primary focus:border-brand"
               />
             )}
           </div>
-          <div className="text-base font-black text-blue-brand">
+          <div className="text-sm font-bold text-brand">
             {formatCurrency(Math.round(grandTotal * (terms.advancePercentage / 100)))}
           </div>
         </div>
 
-        <div className="bg-white p-2.5 rounded-lg border border-slate-200">
-          <div className="text-slate-500 font-bold mb-1">
-            Balance Due ({terms.balancePercentage}%)
+        <div className="bg-surface p-2.5 rounded-sm border border-line">
+          <div className="text-secondary font-medium mb-1">
+            Balance ({terms.balancePercentage}%)
           </div>
-          <div className="text-base font-black text-navy">
+          <div className="text-sm font-bold text-primary">
             {formatCurrency(grandTotal - Math.round(grandTotal * (terms.advancePercentage / 100)))}
           </div>
         </div>
@@ -151,15 +151,16 @@ export const PaymentTermsEditor: React.FC<PaymentTermsEditorProps> = ({
 
       {/* Delivery Timeline text */}
       <div>
-        <label className="block font-semibold text-slate-700 mb-1">Delivery / Project Timeline</label>
+        <label className="block text-[11px] font-semibold text-secondary mb-1">Delivery / Project Timeline</label>
         <input
           type="text"
-          placeholder="e.g. 7-10 working days from advance payment"
+          placeholder="e.g. 10-14 working days from advance payment"
           value={terms.deliveryTimelineText}
           onChange={e => onChangeTerms({ ...terms, deliveryTimelineText: e.target.value })}
-          className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-brand/30"
+          className="w-full h-9 px-3 border border-line rounded-sm bg-surface text-primary text-xs focus:border-brand"
         />
       </div>
     </div>
   );
 };
+
