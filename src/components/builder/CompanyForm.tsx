@@ -1,7 +1,7 @@
 import React from 'react';
 import { CompanyProfile, SignatureSealConfig } from '../../types/document';
 import { Building2, Landmark, Upload, ShieldCheck } from 'lucide-react';
-import { SEAL_BASE64, SIGNATURE_BASE64 } from '../../constants/imageAssets';
+import { LOGO_BASE64, SEAL_BASE64, SIGNATURE_BASE64 } from '../../constants/imageAssets';
 
 interface CompanyFormProps {
   company: CompanyProfile;
@@ -107,7 +107,7 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({
             <label className="block text-[11px] font-semibold text-secondary mb-1">Company Name</label>
             <input
               type="text"
-              value={company.companyName}
+              value={company.companyName || ''}
               onChange={e => handleChange('companyName', e.target.value)}
               className="w-full h-9 px-3 border border-line rounded-sm bg-surface text-primary text-xs font-bold focus:border-brand"
             />
@@ -118,7 +118,7 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({
             <label className="block text-[11px] font-semibold text-secondary mb-1">Sub-tagline</label>
             <input
               type="text"
-              value={company.tagline}
+              value={company.tagline || ''}
               onChange={e => handleChange('tagline', e.target.value)}
               className="w-full h-9 px-3 border border-line rounded-sm bg-surface text-primary text-xs focus:border-brand"
             />
@@ -129,7 +129,7 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({
             <label className="block text-[11px] font-semibold text-secondary mb-1">Full Company Address</label>
             <input
               type="text"
-              value={company.address}
+              value={company.address || ''}
               onChange={e => handleChange('address', e.target.value)}
               className="w-full h-9 px-3 border border-line rounded-sm bg-surface text-primary text-xs focus:border-brand"
             />
@@ -140,7 +140,7 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({
             <label className="block text-[11px] font-semibold text-secondary mb-1">Company GSTIN</label>
             <input
               type="text"
-              value={company.gstin}
+              value={company.gstin || ''}
               onChange={e => handleChange('gstin', e.target.value.toUpperCase())}
               className="w-full h-9 px-3 border border-line rounded-sm bg-surface text-primary text-xs uppercase font-mono focus:border-brand"
             />
@@ -151,7 +151,7 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({
             <label className="block text-[11px] font-semibold text-secondary mb-1">Company PAN</label>
             <input
               type="text"
-              value={company.pan}
+              value={company.pan || ''}
               onChange={e => handleChange('pan', e.target.value.toUpperCase())}
               className="w-full h-9 px-3 border border-line rounded-sm bg-surface text-primary text-xs uppercase font-mono focus:border-brand"
             />
@@ -162,7 +162,7 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({
             <label className="block text-[11px] font-semibold text-secondary mb-1">Official Email</label>
             <input
               type="email"
-              value={company.email}
+              value={company.email || ''}
               onChange={e => handleChange('email', e.target.value)}
               className="w-full h-9 px-3 border border-line rounded-sm bg-surface text-primary text-xs focus:border-brand"
             />
@@ -173,7 +173,7 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({
             <label className="block text-[11px] font-semibold text-secondary mb-1">Phone Number</label>
             <input
               type="text"
-              value={company.phone}
+              value={company.phone || ''}
               onChange={e => handleChange('phone', e.target.value)}
               className="w-full h-9 px-3 border border-line rounded-sm bg-surface text-primary text-xs focus:border-brand"
             />
@@ -184,7 +184,7 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({
             <label className="block text-[11px] font-semibold text-secondary mb-1">Website URL</label>
             <input
               type="text"
-              value={company.website}
+              value={company.website || ''}
               onChange={e => handleChange('website', e.target.value)}
               className="w-full h-9 px-3 border border-line rounded-sm bg-surface text-primary text-xs focus:border-brand"
             />
@@ -194,7 +194,7 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({
           <div>
             <label className="block text-[11px] font-semibold text-secondary mb-1">Company Logo</label>
             <div className="flex items-center gap-3 bg-page p-2 border border-line rounded-sm">
-              <img src={company.logoUrl} alt="Logo" className="h-7 max-w-[140px] object-contain" />
+              <img src={company.logoUrl || LOGO_BASE64} alt="Logo" className="h-7 max-w-[140px] object-contain" />
               <label className="cursor-pointer bg-surface px-2.5 py-1 rounded-xs border border-line text-[11px] font-semibold text-primary hover:bg-page flex items-center gap-1">
                 <Upload className="w-3 h-3" /> Change Logo
                 <input type="file" accept="image/*" onChange={handleLogoUpload} className="hidden" />
@@ -281,7 +281,7 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({
             <label className="block text-[11px] font-semibold text-secondary mb-1">Company Signatory Title</label>
             <input
               type="text"
-              value={currentSigSeal.signatoryTitle}
+              value={currentSigSeal.signatoryTitle || ''}
               onChange={e => handleSigSealChange('signatoryTitle', e.target.value)}
               className="w-full h-9 px-3 border border-line rounded-sm bg-surface text-primary text-xs focus:border-brand"
             />
@@ -291,7 +291,7 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({
             <label className="block text-[11px] font-semibold text-secondary mb-1">Customer Signatory Title</label>
             <input
               type="text"
-              value={currentSigSeal.customerSignatoryTitle}
+              value={currentSigSeal.customerSignatoryTitle || ''}
               onChange={e => handleSigSealChange('customerSignatoryTitle', e.target.value)}
               className="w-full h-9 px-3 border border-line rounded-sm bg-surface text-primary text-xs focus:border-brand"
             />
@@ -311,7 +311,7 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({
             <label className="block text-[11px] font-semibold text-secondary mb-1">Bank Name</label>
             <input
               type="text"
-              value={company.bankName}
+              value={company.bankName || ''}
               onChange={e => handleChange('bankName', e.target.value)}
               className="w-full h-9 px-3 border border-line rounded-sm bg-surface text-primary text-xs focus:border-brand"
             />
@@ -321,7 +321,7 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({
             <label className="block text-[11px] font-semibold text-secondary mb-1">Account Name</label>
             <input
               type="text"
-              value={company.accountName}
+              value={company.accountName || ''}
               onChange={e => handleChange('accountName', e.target.value)}
               className="w-full h-9 px-3 border border-line rounded-sm bg-surface text-primary text-xs font-semibold focus:border-brand"
             />
@@ -331,7 +331,7 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({
             <label className="block text-[11px] font-semibold text-secondary mb-1">Account Number</label>
             <input
               type="text"
-              value={company.accountNumber}
+              value={company.accountNumber || ''}
               onChange={e => handleChange('accountNumber', e.target.value)}
               className="w-full h-9 px-3 border border-line rounded-sm bg-surface text-primary text-xs font-mono font-semibold focus:border-brand"
             />
@@ -341,7 +341,7 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({
             <label className="block text-[11px] font-semibold text-secondary mb-1">IFSC Code</label>
             <input
               type="text"
-              value={company.ifsc}
+              value={company.ifsc || ''}
               onChange={e => handleChange('ifsc', e.target.value.toUpperCase())}
               className="w-full h-9 px-3 border border-line rounded-sm bg-surface text-primary text-xs uppercase font-mono font-semibold focus:border-brand"
             />
@@ -351,7 +351,7 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({
             <label className="block text-[11px] font-semibold text-secondary mb-1">UPI ID</label>
             <input
               type="text"
-              value={company.upiId}
+              value={company.upiId || ''}
               onChange={e => handleChange('upiId', e.target.value)}
               className="w-full h-9 px-3 border border-line rounded-sm bg-surface text-primary text-xs font-semibold focus:border-brand"
             />

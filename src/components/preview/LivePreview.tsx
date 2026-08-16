@@ -25,7 +25,7 @@ export const LivePreview: React.FC<LivePreviewProps> = ({
   return (
     <div className="flex flex-col h-full bg-[#EEF0F4] border-l border-line">
       {/* Sticky Preview Action Bar */}
-      <div className="sticky top-[72px] z-20 bg-surface text-primary px-4 py-2 flex items-center justify-between border-b border-line shadow-subtle">
+      <div className="no-print print:hidden sticky top-[72px] z-20 bg-surface text-primary px-4 py-2 flex items-center justify-between border-b border-line shadow-subtle">
         <div className="flex items-center space-x-2">
           <span className="text-xs font-bold uppercase tracking-wider text-primary">
             A4 Document Preview
@@ -91,9 +91,9 @@ export const LivePreview: React.FC<LivePreviewProps> = ({
       </div>
 
       {/* Scrollable Canvas Container */}
-      <div className="flex-1 overflow-auto p-6 flex justify-center items-start min-h-[600px] screen-only">
+      <div className="flex-1 overflow-auto p-4 sm:p-6 flex justify-center items-start min-h-[600px] print:p-0 print:overflow-visible print:bg-white">
         <div
-          className="transition-transform duration-100 origin-top shadow-a4"
+          className="transition-transform duration-100 origin-top shadow-a4 print:shadow-none print:transform-none"
           style={{
             transform: `scale(${zoom})`,
           }}

@@ -48,15 +48,23 @@ input:focus, select:focus, textarea:focus {
   background: #98A2B3;
 }
 
-/* A4 Page Specifications */
+/* A4 Page Canvas Specifications */
 .a4-page {
   width: 210mm;
   min-height: 297mm;
+  max-width: 210mm;
   background: #ffffff;
   box-sizing: border-box;
 }
 
-/* Print Specific Rules */
+/* Hidden by default on screen */
+#document-print-root {
+  display: none;
+}
+
+/* ==========================================================================
+   PRINT SPECIFIC RULES — STRICT ISOLATED A4 PRINT ROOT
+   ========================================================================== */
 @media print {
   @page {
     size: A4 portrait;
@@ -66,40 +74,85 @@ input:focus, select:focus, textarea:focus {
   * {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
+    box-sizing: border-box !important;
   }
 
-  body {
-    background: #ffffff !important;
-    color: #1F2937 !important;
+  /* Reset HTML and Body for print */
+  html, body {
     margin: 0 !important;
     padding: 0 !important;
+    background: #ffffff !important;
+    color: #1F2937 !important;
+    width: 210mm !important;
+    height: auto !important;
+    min-height: 297mm !important;
+    overflow: visible !important;
   }
 
-  /* Hide screen UI elements during printing */
-  header,
-  nav,
-  aside,
-  .screen-only,
-  button,
-  .sticky,
-  .no-print {
+  /* 1. HIDE THE ENTIRE APPLICATION ROOT (Editor, Navbar, Form, Sidebar, Buttons, etc.) */
+  #root {
     display: none !important;
   }
 
-  .a4-page {
-    margin: 0 !important;
-    width: 210mm !important;
-    min-height: 297mm !important;
-    box-shadow: none !important;
-    padding: 14mm 15mm 12mm 15mm !important;
-    page-break-after: always;
+  /* Hide any other direct body children except #document-print-root */
+  body > *:not(#document-print-root) {
+    display: none !important;
   }
 
-  /* Prevent awkward page splits */
+  /* 2. DISPLAY ONLY THE ISOLATED PRINT ROOT CONTAINER */
+  #document-print-root {
+    display: block !important;
+    position: static !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    width: 210mm !important;
+    min-height: 297mm !important;
+    max-width: 210mm !important;
+    background: #ffffff !important;
+    box-sizing: border-box !important;
+    visibility: visible !important;
+  }
+
+  #document-print-root * {
+    visibility: visible !important;
+  }
+
+  /* Strict physical A4 page rendering */
+  .a4-page {
+    display: block !important;
+    position: relative !important;
+    margin: 0 auto !important;
+    width: 210mm !important;
+    min-height: 297mm !important;
+    max-width: 210mm !important;
+    padding: 8mm 12mm 8mm 12mm !important;
+    box-sizing: border-box !important;
+    box-shadow: none !important;
+    border: none !important;
+    background: #ffffff !important;
+    transform: none !important;
+    overflow: visible !important;
+  }
+
+  /* Table and Row page-break rules */
+  table {
+    page-break-inside: auto !important;
+    width: 100% !important;
+  }
+
+  thead {
+    display: table-header-group !important;
+  }
+
   tr,
+  tbody tr,
   .break-inside-avoid {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
   }
-}
 
+  .page-break {
+    page-break-before: always !important;
+    break-before: page !important;
+  }
+}

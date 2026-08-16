@@ -9,7 +9,7 @@ import { PaymentTermsEditor } from './PaymentTermsEditor';
 import { LivePreview } from '../preview/LivePreview';
 import { FormErrors, validateDocumentForm } from '../../utils/validator';
 import { ServicePackage } from '../../types/package';
-import { ChevronDown, ChevronUp, FileText, UserCheck, Package, ListOrdered, Percent, CreditCard, Save } from 'lucide-react';
+import { ChevronDown, ChevronUp, FileText, UserCheck, Package, ListOrdered, Percent, CreditCard, Save, Eye, Edit3 } from 'lucide-react';
 
 interface BuilderProps {
   document: DocumentData;
@@ -29,6 +29,7 @@ export const DocumentBuilder: React.FC<BuilderProps> = ({
   onTypeChange,
 }) => {
   const [errors, setErrors] = useState<FormErrors>({});
+  const [mobileActiveTab, setMobileActiveTab] = useState<'form' | 'preview'>('form');
 
   // Accordion Section States
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
@@ -227,20 +228,51 @@ export const DocumentBuilder: React.FC<BuilderProps> = ({
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 min-h-[calc(100vh-72px)]">
-      {/* LEFT PANEL (~42% width on desktop) */}
-      <div className="lg:col-span-5 p-4 sm:p-5 space-y-3.5 overflow-y-auto max-h-[calc(100vh-72px)] bg-page border-r border-line">
-        <div className="flex items-center justify-between pb-1">
-          <h2 className="text-xs font-bold text-primary uppercase tracking-wider">
-            Document Form & Parameters
-          </h2>
-          <span className="text-[11px] text-secondary font-medium">
-            Live preview synced
-          </span>
-        </div>
+    <div className="flex flex-col min-h-[calc(100vh-72px)]">
+      {/* Mobile / Tablet Segmented Tab Switcher (< lg screens) */}
+      <div className="no-print print:hidden lg:hidden flex items-center bg-surface border-b border-line p-2 sticky top-[72px] z-30 shadow-subtle">
+        <button
+          type="button"
+          onClick={() => setMobileActiveTab('form')}
+          className={`flex-1 py-2 text-xs font-semibold rounded-sm transition-all flex items-center justify-center gap-1.5 ${
+            mobileActiveTab === 'form'
+              ? 'bg-brand text-white shadow-subtle'
+              : 'text-secondary hover:text-primary hover:bg-page'
+          }`}
+        >
+          <Edit3 className="w-3.5 h-3.5" />
+          <span>Edit Form</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setMobileActiveTab('preview')}
+          className={`flex-1 py-2 text-xs font-semibold rounded-sm transition-all flex items-center justify-center gap-1.5 ${
+            mobileActiveTab === 'preview'
+              ? 'bg-brand text-white shadow-subtle'
+              : 'text-secondary hover:text-primary hover:bg-page'
+          }`}
+        >
+          <Eye className="w-3.5 h-3.5" />
+          <span>Live A4 Preview</span>
+        </button>
+      </div>
 
-        {/* SECTION 1: DOCUMENT TYPE & METADATA */}
-        <div className="bg-surface rounded-md border border-line shadow-subtle overflow-hidden">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 flex-1">
+        {/* LEFT PANEL (50% width on desktop for roomy form inputs) */}
+        <div className={`no-print print:hidden lg:col-span-6 p-4 sm:p-6 space-y-4 overflow-y-auto max-h-[calc(100vh-72px)] bg-page border-r border-line ${
+          mobileActiveTab === 'form' ? 'block' : 'hidden lg:block'
+        }`}>
+          <div className="flex items-center justify-between pb-1">
+            <h2 className="text-xs font-bold text-primary uppercase tracking-wider">
+              Document Form & Parameters
+            </h2>
+            <span className="text-[11px] text-secondary font-medium">
+              Live preview synced
+            </span>
+          </div>
+
+          {/* SECTION 1: DOCUMENT TYPE & METADATA */}
+          <div className="bg-surface rounded-md border border-line shadow-subtle overflow-hidden">
           <div
             onClick={() => toggleSection('typeAndMeta')}
             className="p-3 bg-surface border-b border-line flex items-center justify-between cursor-pointer hover:bg-page transition-colors"
@@ -567,14 +599,17 @@ export const DocumentBuilder: React.FC<BuilderProps> = ({
         </div>
       </div>
 
-      {/* RIGHT PANEL (~58% width on desktop) - LIVE PREVIEW */}
-      <div className="lg:col-span-7 h-full">
-        <LivePreview
-          data={doc}
-          onDownloadPDF={onDownloadPDF}
-          onPrint={onPrint}
-          onSaveDraft={handleSave}
-        />
+        {/* RIGHT PANEL (50% width on desktop) - LIVE PREVIEW */}
+        <div className={`lg:col-span-6 h-full ${
+          mobileActiveTab === 'preview' ? 'block' : 'hidden lg:block'
+        }`}>
+          <LivePreview
+            data={doc}
+            onDownloadPDF={onDownloadPDF}
+            onPrint={onPrint}
+            onSaveDraft={handleSave}
+          />
+        </div>
       </div>
     </div>
   );

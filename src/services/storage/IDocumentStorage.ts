@@ -1,4 +1,5 @@
-import { DocumentData, DocumentType } from '../../types/document';
+import { DocumentData, DocumentType, CompanyProfile } from '../../types/document';
+import { DocumentTemplateConfig } from '../../types/template';
 
 export interface DashboardStats {
   totalQuotations: number;
@@ -17,4 +18,9 @@ export interface IDocumentStorageService {
   duplicateDocument(id: string): Promise<DocumentData | null>;
   getStats(): Promise<DashboardStats>;
   generateNextDocumentNumber(type: DocumentType): Promise<string>;
+  getCompanyProfile(): Promise<CompanyProfile>;
+  saveCompanyProfile(profile: CompanyProfile): Promise<CompanyProfile>;
+  getTemplateConfig(): Promise<DocumentTemplateConfig>;
+  saveTemplateConfig(config: DocumentTemplateConfig): Promise<DocumentTemplateConfig>;
 }
+

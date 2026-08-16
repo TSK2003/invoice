@@ -1,11 +1,15 @@
-import { DocumentData, DocumentType } from '../../types/document';
+import { DocumentData, DocumentType, CompanyProfile } from '../../types/document';
+import { DocumentTemplateConfig } from '../../types/template';
 import { DashboardStats, IDocumentStorageService } from './IDocumentStorage';
 import { DEFAULT_COMPANY_PROFILE } from '../../constants/defaultCompany';
+import { AESCION_PROFESSIONAL_TEMPLATE } from '../../constants/initialTemplates';
 import { DEFAULT_QUOTATION_TERMS, DEFAULT_INVOICE_TERMS, DEFAULT_RECEIPT_TERMS } from '../../constants/defaultTerms';
 import { SIGNATURE_BASE64, SEAL_BASE64 } from '../../constants/imageAssets';
 
 const STORAGE_KEY = 'aescion_documents_v2';
 const DRAFT_KEY = 'aescion_current_draft_v2';
+const COMPANY_KEY = 'aescion_company_profile_v2';
+const TEMPLATE_KEY = 'aescion_template_config_v2';
 
 const getInitialSeedDocuments = (): DocumentData[] => {
   const now = new Date().toISOString().split('T')[0];
@@ -464,6 +468,51 @@ export class LocalStorageService implements IDocumentStorageService {
   clearCurrentDraft(): void {
     localStorage.removeItem(DRAFT_KEY);
   }
+
+  // Company Profile Persistence
+  async getCompanyProfile(): Promise<CompanyProfile> {
+    try {
+      const raw = localStorage.getItem(COMPANY_KEY);
+      if (raw) {
+        return JSON.parse(raw) as CompanyProfile;
+      }
+    } catch (e) {
+      console.error('Failed to load company profile from localStorage', e);
+    }
+    return DEFAULT_COMPANY_PROFILE;
+  }
+
+  async saveCompanyProfile(profile: CompanyProfile): Promise<CompanyProfile> {
+    try {
+      localStorage.setItem(COMPANY_KEY, JSON.stringify(profile));
+    } catch (e) {
+      console.error('Failed to save company profile to localStorage', e);
+    }
+    return profile;
+  }
+
+  // Template Settings Persistence
+  async getTemplateConfig(): Promise<DocumentTemplateConfig> {
+    try {
+      const raw = localStorage.getItem(TEMPLATE_KEY);
+      if (raw) {
+        return JSON.parse(raw) as DocumentTemplateConfig;
+      }
+    } catch (e) {
+      console.error('Failed to load template config from localStorage', e);
+    }
+    return AESCION_PROFESSIONAL_TEMPLATE;
+  }
+
+  async saveTemplateConfig(config: DocumentTemplateConfig): Promise<DocumentTemplateConfig> {
+    try {
+      localStorage.setItem(TEMPLATE_KEY, JSON.stringify(config));
+    } catch (e) {
+      console.error('Failed to save template config to localStorage', e);
+    }
+    return config;
+  }
 }
 
 export const storageService = new LocalStorageService();
+

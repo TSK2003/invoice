@@ -131,23 +131,26 @@ export const ClientForm: React.FC<ClientFormProps> = ({
 
       {/* State */}
       <div>
-        <label className="block text-[11px] font-semibold text-secondary mb-1">State & State Code</label>
-        <div className="flex gap-2">
-          <input
-            type="text"
-            placeholder="e.g. Tamil Nadu"
-            value={client.state}
-            onChange={e => onChange('state', e.target.value)}
-            className="flex-1 h-9 px-3 border border-line rounded-sm bg-surface text-primary text-xs focus:border-brand"
-          />
-          <input
-            type="text"
-            placeholder="Code (33)"
-            value={client.stateCode}
-            onChange={e => onChange('stateCode', e.target.value)}
-            className="w-20 h-9 px-2 border border-line rounded-sm bg-surface text-primary text-xs text-center font-bold font-mono focus:border-brand"
-          />
-        </div>
+        <label className="block text-[11px] font-semibold text-secondary mb-1">State</label>
+        <input
+          type="text"
+          placeholder="e.g. Tamil Nadu"
+          value={client.state}
+          onChange={e => onChange('state', e.target.value)}
+          className="w-full h-9 px-3 border border-line rounded-sm bg-surface text-primary text-xs focus:border-brand"
+        />
+      </div>
+
+      {/* State Code */}
+      <div>
+        <label className="block text-[11px] font-semibold text-secondary mb-1">State Code (GST)</label>
+        <input
+          type="text"
+          placeholder="e.g. 33"
+          value={client.stateCode}
+          onChange={e => onChange('stateCode', e.target.value)}
+          className="w-full h-9 px-3 border border-line rounded-sm bg-surface text-primary text-xs font-mono font-semibold focus:border-brand"
+        />
       </div>
 
       {/* PAN */}
@@ -163,7 +166,7 @@ export const ClientForm: React.FC<ClientFormProps> = ({
       </div>
 
       {/* Place of Supply */}
-      <div>
+      <div className="sm:col-span-2">
         <label className="block text-[11px] font-semibold text-secondary mb-1">Place of Supply</label>
         <input
           type="text"

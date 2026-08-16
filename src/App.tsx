@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { DocumentData, DocumentType } from './types/document';
 import { CompanyProfile } from './types/document';
 import { DocumentTemplateConfig } from './types/template';
@@ -19,6 +20,7 @@ import { AESCION_PACKAGES } from './constants/packages';
 import { exportToPDF, printDocument } from './services/pdfExportService';
 import { DEFAULT_QUOTATION_TERMS, DEFAULT_INVOICE_TERMS, DEFAULT_RECEIPT_TERMS } from './constants/defaultTerms';
 import { SEAL_BASE64, SIGNATURE_BASE64 } from './constants/imageAssets';
+import { DocumentRenderer } from './components/preview/DocumentRenderer';
 
 export const App: React.FC = () => {
   // Authentication & Inactivity State
@@ -40,6 +42,7 @@ export const App: React.FC = () => {
   const [templateConfig, setTemplateConfig] = useState<DocumentTemplateConfig>(AESCION_PROFESSIONAL_TEMPLATE);
   
   const [currentDocument, setCurrentDocument] = useState<DocumentData | null>(null);
+  const [exportingDoc, setExportingDoc] = useState<DocumentData | null>(null);
   const [autoSaveTime, setAutoSaveTime] = useState<string | null>(null);
   const [toast, setToast] = useState<ToastMessage | null>(null);
 
@@ -94,17 +97,40 @@ export const App: React.FC = () => {
     showToast('Logged out successfully', 'info');
   };
 
-  // Load all documents & stats
+  // Load all documents, stats, company profile & template settings
   const refreshData = useCallback(async () => {
     const allDocs = await storageService.getAllDocuments();
     const currentStats = await storageService.getStats();
+    const loadedCompany = await storageService.getCompanyProfile();
+    const loadedTemplate = await storageService.getTemplateConfig();
     setDocuments(allDocs);
     setStats(currentStats);
+    setCompanyProfile(loadedCompany);
+    setTemplateConfig(loadedTemplate);
   }, []);
 
   useEffect(() => {
     refreshData();
   }, [refreshData]);
+
+  const handleSaveCompanyProfile = async (profileToSave?: CompanyProfile) => {
+    const target = profileToSave || companyProfile;
+    await storageService.saveCompanyProfile(target);
+    setCompanyProfile(target);
+    if (currentDocument) {
+      const updatedDoc = { ...currentDocument, company: target };
+      setCurrentDocument(updatedDoc);
+      storageService.saveCurrentDraft(updatedDoc);
+    }
+    showToast('Company profile settings saved successfully');
+  };
+
+  const handleSaveTemplateConfig = async (configToSave?: DocumentTemplateConfig) => {
+    const target = configToSave || templateConfig;
+    await storageService.saveTemplateConfig(target);
+    setTemplateConfig(target);
+    showToast('Template settings saved successfully');
+  };
 
   // Create a brand new document template
   const createNewDocument = async (type: DocumentType = 'quotation') => {
@@ -334,16 +360,31 @@ export const App: React.FC = () => {
 
     try {
       showToast(`Generating PDF for ${target.documentNumber}...`, 'info');
-      await exportToPDF({
-        elementId: 'live-preview-a4-canvas',
-        fileName: `${target.documentNumber}_${target.client.companyName || 'Document'}.pdf`,
-      });
+
+      if (currentDocument && (!docToExport || docToExport.id === currentDocument.id)) {
+        await exportToPDF({
+          elementId: 'document-print-canvas',
+          fileName: `${target.documentNumber}_${target.client?.companyName || 'Document'}.pdf`,
+        });
+      } else {
+        // Set exportingDoc to trigger portal render
+        setExportingDoc(target);
+        await new Promise(resolve => setTimeout(resolve, 200));
+        await exportToPDF({
+          elementId: 'document-print-canvas',
+          fileName: `${target.documentNumber}_${target.client?.companyName || 'Document'}.pdf`,
+        });
+        setExportingDoc(null);
+      }
       showToast('PDF downloaded successfully!');
     } catch (e) {
       console.error('PDF export failed, falling back to window.print()', e);
+      setExportingDoc(null);
       printDocument();
     }
   };
+
+  const activeDocumentForPrint = exportingDoc || currentDocument;
 
   if (!isAuthenticated) {
     return (
@@ -369,7 +410,7 @@ export const App: React.FC = () => {
       />
 
       {/* Main Content Router */}
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6">
+      <main className="flex-1 max-w-[1680px] w-full mx-auto p-4 sm:p-6 lg:p-8">
         {currentView === 'dashboard' && (
           <DocumentDashboard
             documents={documents}
@@ -407,19 +448,36 @@ export const App: React.FC = () => {
         {currentView === 'company' && (
           <CompanyForm
             company={companyProfile}
-            onChangeCompany={setCompanyProfile}
-            onSaveProfile={() => showToast('Company profile settings saved')}
+            onChangeCompany={updated => {
+              setCompanyProfile(updated);
+              storageService.saveCompanyProfile(updated);
+              if (currentDocument) {
+                setCurrentDocument(prev => prev ? { ...prev, company: updated } : null);
+              }
+            }}
+            onSaveProfile={() => handleSaveCompanyProfile()}
           />
         )}
 
         {currentView === 'template' && (
           <TemplateSettingsEditor
             template={templateConfig}
-            onChangeTemplate={setTemplateConfig}
-            onSaveTemplate={() => showToast('Template settings saved')}
+            onChangeTemplate={updated => {
+              setTemplateConfig(updated);
+              storageService.saveTemplateConfig(updated);
+            }}
+            onSaveTemplate={() => handleSaveTemplateConfig()}
           />
         )}
       </main>
+
+      {/* ISOLATED PRINT & PDF ROOT (Mounted outside #root via React Portal) */}
+      {activeDocumentForPrint && createPortal(
+        <div id="document-print-root">
+          <DocumentRenderer data={activeDocumentForPrint} containerId="document-print-canvas" />
+        </div>,
+        document.body
+      )}
 
       {/* Toast Notification Container */}
       <Toast toast={toast} onClose={() => setToast(null)} />

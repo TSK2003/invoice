@@ -36,7 +36,7 @@ export const Toast: React.FC<ToastProps> = ({ toast, onClose }) => {
   };
 
   return (
-    <div className="fixed bottom-5 right-5 z-50 flex items-center gap-2.5 px-3.5 py-2.5 bg-surface text-primary rounded-md shadow-subtle border border-line text-xs font-medium">
+    <div className="no-print print:hidden fixed bottom-5 right-5 z-50 flex items-center gap-2.5 px-3.5 py-2.5 bg-surface text-primary rounded-md shadow-subtle border border-line text-xs font-medium">
       {getIcon()}
       <span>{toast.title}</span>
       <button
