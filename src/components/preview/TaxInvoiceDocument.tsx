@@ -112,7 +112,7 @@ export const TaxInvoiceDocument: React.FC<TaxInvoiceDocumentProps> = ({
                 </div>
               )}
               <div>
-                State: <b className="text-primary">{company.state ? `${company.state} (${company.stateCode || ''})` : 'Tamil Nadu (33)'}</b>
+                State: <b className="text-primary">Tamil Nadu (33)</b>
               </div>
               <div>
                 Email: <b className="text-primary">{company.email}</b> | Phone:{' '}
@@ -299,7 +299,7 @@ export const TaxInvoiceDocument: React.FC<TaxInvoiceDocumentProps> = ({
             </div>
             <div className="border border-line rounded-xs p-2 bg-white text-[9.5px] leading-relaxed text-secondary">
               <ul className="list-disc pl-3.5 space-y-0.5 m-0">
-                {termsAndConditions.map((term, i) => (
+                {termsAndConditions.slice(0, 4).map((term, i) => (
                   <li key={i}>{term}</li>
                 ))}
               </ul>
@@ -329,10 +329,10 @@ export const TaxInvoiceDocument: React.FC<TaxInvoiceDocumentProps> = ({
             </p>
           </div>
 
-          {/* Supplier Signatory & Seal */}
+          {/* Supplier Signatory & Seal: Much Bigger Seal with Signature positioned closely beside/over */}
           <div className="relative min-h-[95px] flex flex-col justify-end">
             <div className="relative flex items-center justify-end pr-1 pb-1 h-[85px]">
-              {/* Official Round Seal */}
+              {/* Significantly Bigger Official Round Seal */}
               {showSeal && (
                 <div className="pointer-events-none z-10 flex items-center justify-center w-[190px] h-[190px] relative -bottom-2">
                   <img
@@ -344,7 +344,7 @@ export const TaxInvoiceDocument: React.FC<TaxInvoiceDocumentProps> = ({
                 </div>
               )}
 
-              {/* Official Signature Image */}
+              {/* Official Signature Image moved closer to Seal */}
               {showSignature && (
                 <div className="pointer-events-none z-20 flex items-center justify-center h-[42px] w-auto relative bottom-0 -ml-6">
                   <img
@@ -358,9 +358,7 @@ export const TaxInvoiceDocument: React.FC<TaxInvoiceDocumentProps> = ({
             </div>
 
             <div className="border-t border-line pt-1 text-[9.5px] text-secondary font-medium relative z-30 text-right">
-              <div>For <b className="text-primary">{company.companyName}</b></div>
-              {company.signatoryName && <div className="text-primary font-bold">{company.signatoryName}</div>}
-              <div className="text-muted text-[8.5px]">{company.signatoryDesignation || signatoryTitle}</div>
+              For {company.companyName} — {signatoryTitle}
             </div>
           </div>
         </div>

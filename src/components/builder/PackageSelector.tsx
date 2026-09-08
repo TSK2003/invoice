@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { AESCION_PACKAGES, STANDARD_PACKAGE_INCLUSIONS, PACKAGE_ADDONS } from '../../constants/packages';
+import { AESCION_PACKAGES, STANDARD_PACKAGE_INCLUSIONS } from '../../constants/packages';
 import { ServicePackage } from '../../types/package';
 import { formatCurrency } from '../../utils/currency';
 import { Check, Plus, Edit2, RotateCcw, X, CheckCircle2, Sparkles } from 'lucide-react';
-import { ConfirmDialog } from '../ui/ConfirmDialog';
 
 const PACKAGES_STORAGE_KEY = 'aescion_packages_catalog_v2';
 
@@ -117,13 +116,12 @@ export const PackageSelector: React.FC<PackageSelectorProps> = ({
     setIsCreatingCustom(false);
   };
 
-  const [showResetConfirm, setShowResetConfirm] = useState(false);
-
   // Reset to original default packages
-  const handleResetPackagesConfirmed = () => {
-    updatePackagesState(AESCION_PACKAGES);
-    localStorage.removeItem(PACKAGES_STORAGE_KEY);
-    setShowResetConfirm(false);
+  const handleResetPackages = () => {
+    if (window.confirm('Reset all packages back to standard AESCION presets?')) {
+      updatePackagesState(AESCION_PACKAGES);
+      localStorage.removeItem(PACKAGES_STORAGE_KEY);
+    }
   };
 
   // Find currently selected package for inclusions display
@@ -154,7 +152,7 @@ export const PackageSelector: React.FC<PackageSelectorProps> = ({
 
           <button
             type="button"
-            onClick={() => setShowResetConfirm(true)}
+            onClick={handleResetPackages}
             title="Reset to default packages"
             className="flex items-center gap-1 text-secondary hover:text-primary px-2 py-1 rounded-xs border border-line text-[11px] font-medium transition-colors bg-surface"
           >
@@ -238,32 +236,16 @@ export const PackageSelector: React.FC<PackageSelectorProps> = ({
       </div>
 
       {/* Scope Customization & Add-ons */}
-      <div className="border-t border-line pt-3 space-y-3">
-        <label className="block text-[11px] font-bold text-secondary uppercase tracking-wider">
-          Scope Customization & Predefined Add-ons
+      <div className="border-t border-line pt-3">
+        <label className="block text-[11px] font-bold text-secondary uppercase tracking-wider mb-2">
+          Scope Customization & Add-ons
         </label>
-
-        {/* Predefined Add-ons Bar */}
-        <div className="flex flex-wrap gap-2">
-          {PACKAGE_ADDONS.map((addon) => (
-            <button
-              key={addon.id}
-              type="button"
-              onClick={() => onAddCustomAddon(`${addon.name} (${addon.unitLabel})`, addon.unitPrice)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:border-brand hover:text-brand transition-colors shadow-xs"
-            >
-              <Plus className="w-3.5 h-3.5 text-brand" />
-              <span>{addon.name}</span>
-              <span className="text-slate-400 font-mono text-[11px]">({formatCurrency(addon.unitPrice)})</span>
-            </button>
-          ))}
-        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {/* Quick Add Extra Pages */}
           <div className="bg-surface p-3 rounded-md border border-line flex items-center justify-between gap-3">
             <div>
-              <div className="text-xs font-semibold text-primary">Additional Custom Pages</div>
+              <div className="text-xs font-semibold text-primary">Additional Pages</div>
               <div className="text-[11px] text-secondary">₹1,500 per page</div>
             </div>
             <div className="flex items-center gap-2 shrink-0">
@@ -287,7 +269,7 @@ export const PackageSelector: React.FC<PackageSelectorProps> = ({
 
           {/* Quick Add Custom Module/Feature */}
           <div className="bg-surface p-3 rounded-md border border-line space-y-2">
-            <div className="text-xs font-semibold text-primary">Custom Feature / Integration</div>
+            <div className="text-xs font-semibold text-primary">Add Custom Feature / Integration</div>
             <input
               type="text"
               placeholder="Feature description (e.g. Payment Gateway)"
@@ -511,17 +493,6 @@ export const PackageSelector: React.FC<PackageSelectorProps> = ({
           </div>
         </div>
       )}
-
-      {/* Reset Confirmation Dialog */}
-      <ConfirmDialog
-        isOpen={showResetConfirm}
-        onClose={() => setShowResetConfirm(false)}
-        onConfirm={handleResetPackagesConfirmed}
-        title="Reset Package Presets"
-        message="Are you sure you want to reset all service packages back to standard AESCION factory defaults? Any custom packages you created will be removed."
-        confirmText="Yes, Reset Packages"
-        variant="danger"
-      />
     </div>
   );
 };

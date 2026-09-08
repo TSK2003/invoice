@@ -1,11 +1,8 @@
-import { CompanyProfile, SignatureSealConfig } from './company';
-export type { CompanyProfile, SignatureSealConfig };
-
 export type DocumentType = 'quotation' | 'tax_invoice' | 'payment_receipt';
 
 export type DocumentStatus = 
   // Quotation statuses
-  | 'draft' | 'sent' | 'accepted' | 'rejected' | 'expired' | 'converted'
+  | 'draft' | 'sent' | 'accepted' | 'rejected' | 'expired'
   // Invoice statuses
   | 'issued' | 'partially_paid' | 'paid' | 'overdue' | 'cancelled'
   // Receipt statuses
@@ -71,6 +68,33 @@ export interface ClientInfo {
   notes: string;
 }
 
+export interface SignatureSealConfig {
+  showSeal: boolean;
+  showSignature: boolean;
+  sealImageUrl?: string;
+  signatureImageUrl?: string;
+  signatoryTitle: string;
+  customerSignatoryTitle: string;
+}
+
+export interface CompanyProfile {
+  companyName: string;
+  tagline: string;
+  logoUrl: string;
+  address: string;
+  gstin: string;
+  pan: string;
+  email: string;
+  phone: string;
+  website: string;
+  bankName: string;
+  accountName: string;
+  accountNumber: string;
+  ifsc: string;
+  upiId: string;
+  signatureSeal?: SignatureSealConfig;
+}
+
 export interface ReceiptDetails {
   receivedFrom: string;
   invoiceReference: string;
@@ -81,8 +105,6 @@ export interface ReceiptDetails {
   invoiceTotal: number;
   balanceDue: number;
   paymentStatus: 'Paid in Full' | 'Partial Payment' | 'Advance Payment';
-  paymentId?: string;
-  sourceInvoiceId?: string;
 }
 
 export interface DocumentData {
@@ -93,16 +115,6 @@ export interface DocumentData {
   validUntilOrDueDate: string;
   status: DocumentStatus;
   
-  // Relationships & Lineage
-  customerId?: string;
-  sourceQuotationId?: string;
-  sourceInvoiceId?: string;
-  isLocked?: boolean;
-  
-  // Historical Snapshots (frozen at issuance)
-  customerSnapshot?: ClientInfo;
-  companySnapshot?: CompanyProfile;
-
   // References
   packageId?: string;
   packageName?: string;
@@ -119,8 +131,6 @@ export interface DocumentData {
   termsAndConditions: string[];
   signatureSeal: SignatureSealConfig;
   
-  companyId?: string;
-  createdBy?: string;
   createdAt: string;
   updatedAt: string;
 }

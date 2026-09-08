@@ -1,42 +1,29 @@
 import React from 'react';
 import { DocumentItem } from '../../types/document';
-import { Plus, Trash2, Copy, AlertTriangle } from 'lucide-react';
+import { Plus, Trash2, Copy } from 'lucide-react';
 import { formatCurrency } from '../../utils/currency';
-import { roundMoney } from '../../utils/money';
-import { VALID_GST_RATES } from '../../constants/gstRates';
-import { useToast } from '../../app/providers/ToastProvider';
 
 interface ItemEditorProps {
   items: DocumentItem[];
   onChangeItems: (items: DocumentItem[]) => void;
-  defaultTaxRate?: number;
 }
 
 export const ItemEditor: React.FC<ItemEditorProps> = ({
   items,
   onChangeItems,
-  defaultTaxRate = 18,
 }) => {
-  const { showWarning } = useToast();
-
   const handleItemChange = (index: number, field: keyof DocumentItem, value: any) => {
     const updated = [...items];
     const target = { ...updated[index] };
 
     (target as any)[field] = value;
 
-    const qty = typeof target.quantity === 'number' ? target.quantity : parseFloat(String(target.quantity)) || 1;
-    const rate = typeof target.rate === 'number' ? target.rate : parseFloat(String(target.rate)) || 0;
-    let discount = typeof target.discount === 'number' ? target.discount : parseFloat(String(target.discount)) || 0;
+    // Auto recalculate taxable value & amount
+    const qty = typeof target.quantity === 'number' ? target.quantity : parseFloat(target.quantity) || 1;
+    const rate = target.rate || 0;
+    const discount = target.discount || 0;
 
-    const lineTotal = roundMoney(qty * rate);
-    if (discount > lineTotal) {
-      discount = lineTotal;
-      showWarning('Discount Capped', 'Discount cannot exceed total item price (Quantity × Rate).');
-    }
-
-    target.discount = discount;
-    target.taxableValue = roundMoney(Math.max(0, lineTotal - discount));
+    target.taxableValue = Math.max(0, (qty * rate) - discount);
     target.amount = target.taxableValue;
 
     updated[index] = target;
@@ -52,7 +39,7 @@ export const ItemEditor: React.FC<ItemEditorProps> = ({
       quantity: 1,
       rate: 5000,
       discount: 0,
-      taxRate: defaultTaxRate,
+      taxRate: 18,
       taxableValue: 5000,
       amount: 5000,
       isIncluded: false,
@@ -64,7 +51,7 @@ export const ItemEditor: React.FC<ItemEditorProps> = ({
     const original = items[index];
     const duplicate: DocumentItem = {
       ...original,
-      id: `item-${Date.now()}-${Math.random().toString(36).substring(2, 5)}`,
+      id: `item-${Date.now()}`,
       sNo: items.length + 1,
       description: `${original.description} (Copy)`,
     };
@@ -73,158 +60,135 @@ export const ItemEditor: React.FC<ItemEditorProps> = ({
 
   const handleDeleteItem = (index: number) => {
     if (items.length <= 1) {
-      showWarning('Cannot Delete', 'At least one line item is required in the document.');
+      alert('At least one item is required in the document.');
       return;
     }
-    const updated = items
-      .filter((_, i) => i !== index)
-      .map((item, idx) => ({
-        ...item,
-        sNo: idx + 1,
-      }));
+    const updated = items.filter((_, i) => i !== index).map((item, idx) => ({
+      ...item,
+      sNo: idx + 1,
+    }));
     onChangeItems(updated);
   };
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-2.5">
       <div className="flex items-center justify-between">
-        <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+        <label className="block text-[11px] font-bold text-secondary uppercase tracking-wider">
           Items & Services ({items.length})
         </label>
         <button
           type="button"
           onClick={handleAddItem}
-          className="flex items-center gap-1 bg-brand hover:bg-brand-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition-all shadow-xs"
+          className="flex items-center gap-1 bg-brand hover:bg-brand-600 text-white px-2.5 py-1 rounded-sm text-xs font-semibold transition-colors shadow-subtle"
         >
           <Plus className="w-3.5 h-3.5" />
           Add Item
         </button>
       </div>
 
-      <div className="overflow-x-auto border border-slate-200 rounded-xl bg-white shadow-xs">
-        <table className="w-full text-left text-xs min-w-[720px] border-collapse">
-          <thead className="bg-slate-50 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[10.5px]">
+      <div className="overflow-x-auto border border-line rounded-md bg-surface">
+        <table className="w-full text-left text-xs min-w-[620px] border-collapse">
+          <thead className="bg-page border-b border-line text-secondary font-bold uppercase tracking-wider text-[10.5px]">
             <tr>
-              <th className="py-2.5 px-3 w-[5%] text-center">#</th>
-              <th className="py-2.5 px-3 w-[34%]">Description</th>
-              <th className="py-2.5 px-3 w-[10%] text-center">SAC/HSN</th>
-              <th className="py-2.5 px-3 w-[8%] text-center">Qty</th>
-              <th className="py-2.5 px-3 w-[13%] text-right">Rate ₹</th>
-              <th className="py-2.5 px-3 w-[10%] text-right">Discount</th>
-              <th className="py-2.5 px-3 w-[10%] text-center">GST %</th>
-              <th className="py-2.5 px-3 w-[12%] text-right">Taxable</th>
-              <th className="py-2.5 px-3 w-[8%] text-center">Actions</th>
+              <th className="py-2 px-2.5 w-[5%] text-center">#</th>
+              <th className="py-2 px-2.5 w-[36%]">Description</th>
+              <th className="py-2 px-2.5 w-[12%] text-center">SAC/HSN</th>
+              <th className="py-2 px-2.5 w-[10%] text-center">Qty</th>
+              <th className="py-2 px-2.5 w-[15%] text-right">Rate ₹</th>
+              <th className="py-2 px-2.5 w-[12%] text-right">Discount</th>
+              <th className="py-2 px-2.5 w-[16%] text-right">Taxable Value</th>
+              <th className="py-2 px-2.5 w-[8%] text-center">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100 text-slate-800">
+          <tbody className="divide-y divide-line text-primary">
             {items.map((item, idx) => (
               <tr
                 key={item.id || idx}
-                className={item.isIncluded ? 'bg-slate-50/50' : 'hover:bg-slate-50/70'}
+                className={item.isIncluded ? 'bg-page/50' : 'hover:bg-page/70'}
               >
                 {/* Index */}
-                <td className="py-2 px-3 text-center font-bold text-slate-400">
+                <td className="py-1.5 px-2.5 text-center font-bold text-secondary">
                   {idx + 1}
                 </td>
 
                 {/* Description */}
-                <td className="py-2 px-3">
+                <td className="py-1.5 px-2.5">
                   <input
                     type="text"
                     value={item.description}
-                    onChange={(e) => handleItemChange(idx, 'description', e.target.value)}
-                    className="w-full h-8 px-2.5 border border-slate-300 rounded-lg text-xs bg-white text-slate-900 focus:border-brand"
+                    onChange={e => handleItemChange(idx, 'description', e.target.value)}
+                    className="w-full h-7 px-2 border border-line rounded-sm text-xs bg-surface text-primary focus:border-brand"
                   />
                   {item.isIncluded && (
-                    <span className="text-[10px] text-brand font-medium block mt-0.5">
+                    <span className="text-[10px] text-secondary font-medium block mt-0.5">
                       Included with package
                     </span>
                   )}
                 </td>
 
                 {/* SAC/HSN */}
-                <td className="py-2 px-3">
+                <td className="py-1.5 px-2.5">
                   <input
                     type="text"
                     value={item.sacHsn}
-                    onChange={(e) => handleItemChange(idx, 'sacHsn', e.target.value)}
-                    className="w-full h-8 px-1.5 border border-slate-300 rounded-lg text-xs text-center bg-white font-mono text-slate-600 focus:border-brand"
+                    onChange={e => handleItemChange(idx, 'sacHsn', e.target.value)}
+                    className="w-full h-7 px-1.5 border border-line rounded-sm text-xs text-center bg-surface font-mono text-secondary focus:border-brand"
                     disabled={item.isIncluded}
                   />
                 </td>
 
                 {/* Qty */}
-                <td className="py-2 px-3 text-center">
+                <td className="py-1.5 px-2.5 text-center">
                   <input
                     type="text"
                     value={item.quantity}
-                    onChange={(e) => handleItemChange(idx, 'quantity', e.target.value)}
-                    className="w-full h-8 px-1 border border-slate-300 rounded-lg text-xs text-center font-medium bg-white text-slate-900 focus:border-brand"
+                    onChange={e => handleItemChange(idx, 'quantity', e.target.value)}
+                    className="w-full h-7 px-1 border border-line rounded-sm text-xs text-center font-medium bg-surface text-primary focus:border-brand"
                     disabled={item.isIncluded}
                   />
                 </td>
 
                 {/* Rate */}
-                <td className="py-2 px-3 text-right">
+                <td className="py-1.5 px-2.5 text-right">
                   <input
                     type="number"
-                    step="0.01"
                     value={item.isIncluded ? '' : item.rate}
-                    onChange={(e) => handleItemChange(idx, 'rate', parseFloat(e.target.value) || 0)}
+                    onChange={e => handleItemChange(idx, 'rate', parseFloat(e.target.value) || 0)}
                     placeholder={item.isIncluded ? 'Included' : '0'}
-                    className="w-full h-8 px-2 border border-slate-300 rounded-lg text-xs text-right font-medium bg-white text-slate-900 focus:border-brand"
+                    className="w-full h-7 px-2 border border-line rounded-sm text-xs text-right font-medium bg-surface text-primary focus:border-brand"
                     disabled={item.isIncluded}
                   />
                 </td>
 
                 {/* Discount */}
-                <td className="py-2 px-3 text-right">
+                <td className="py-1.5 px-2.5 text-right">
                   <input
                     type="number"
-                    step="0.01"
-                    min="0"
                     value={item.isIncluded ? '' : item.discount}
-                    onChange={(e) => handleItemChange(idx, 'discount', parseFloat(e.target.value) || 0)}
+                    onChange={e => handleItemChange(idx, 'discount', parseFloat(e.target.value) || 0)}
                     placeholder={item.isIncluded ? '—' : '0'}
-                    className="w-full h-8 px-1.5 border border-slate-300 rounded-lg text-xs text-right bg-white text-slate-600 focus:border-brand"
+                    className="w-full h-7 px-1.5 border border-line rounded-sm text-xs text-right bg-surface text-secondary focus:border-brand"
                     disabled={item.isIncluded}
                   />
                 </td>
 
-                {/* Per-item Tax Rate */}
-                <td className="py-2 px-3 text-center">
-                  <select
-                    value={item.taxRate !== undefined ? item.taxRate : defaultTaxRate}
-                    onChange={(e) => handleItemChange(idx, 'taxRate', parseFloat(e.target.value) || 0)}
-                    disabled={item.isIncluded}
-                    className="w-full h-8 px-1 text-center border border-slate-300 rounded-lg text-xs bg-white text-slate-900 focus:border-brand disabled:opacity-50"
-                  >
-                    {VALID_GST_RATES.map((rate) => (
-                      <option key={rate} value={rate}>
-                        {rate}%
-                      </option>
-                    ))}
-                  </select>
-                </td>
-
                 {/* Taxable Value */}
-                <td className="py-2 px-3 text-right font-bold text-slate-900 font-mono">
+                <td className="py-1.5 px-2.5 text-right font-bold text-primary">
                   {item.isIncluded ? (
-                    <span className="text-slate-400 font-sans font-normal">Included</span>
+                    <span className="text-secondary font-medium">Included</span>
                   ) : (
                     formatCurrency(item.taxableValue)
                   )}
                 </td>
 
                 {/* Actions */}
-                <td className="py-2 px-3 text-center">
-                  <div className="flex items-center justify-center space-x-1">
+                <td className="py-1.5 px-2.5 text-center">
+                  <div className="flex items-center justify-center space-x-0.5">
                     <button
                       type="button"
                       onClick={() => handleDuplicateItem(idx)}
                       title="Duplicate Item"
-                      aria-label="Duplicate Item"
-                      className="p-1 text-slate-400 hover:text-brand hover:bg-brand-50 dark:hover:bg-brand-950/50 rounded transition-colors"
+                      className="p-1 text-secondary hover:text-brand hover:bg-brand-50 rounded-xs transition-colors"
                     >
                       <Copy className="w-3.5 h-3.5" />
                     </button>
@@ -233,8 +197,7 @@ export const ItemEditor: React.FC<ItemEditorProps> = ({
                       type="button"
                       onClick={() => handleDeleteItem(idx)}
                       title="Delete Item"
-                      aria-label="Delete Item"
-                      className="p-1 text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/50 rounded transition-colors"
+                      className="p-1 text-secondary hover:text-primary hover:bg-page rounded-xs transition-colors"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -248,3 +211,4 @@ export const ItemEditor: React.FC<ItemEditorProps> = ({
     </div>
   );
 };
+

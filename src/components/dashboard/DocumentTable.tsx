@@ -189,10 +189,8 @@ export const DocumentTable: React.FC<TableProps> = ({
                       <div className="flex items-center justify-center space-x-1">
                         {/* Edit / View */}
                         <button
-                          type="button"
                           onClick={() => onEdit(doc)}
                           title="Edit Document"
-                          aria-label={`Edit document ${doc.documentNumber}`}
                           className="p-1.5 text-secondary hover:text-brand hover:bg-brand-50 rounded-xs transition-colors"
                         >
                           <Edit3 className="w-3.5 h-3.5" />
@@ -200,10 +198,8 @@ export const DocumentTable: React.FC<TableProps> = ({
 
                         {/* Duplicate */}
                         <button
-                          type="button"
                           onClick={() => onDuplicate(doc.id)}
                           title="Duplicate Document"
-                          aria-label={`Duplicate document ${doc.documentNumber}`}
                           className="p-1.5 text-secondary hover:text-brand hover:bg-brand-50 rounded-xs transition-colors"
                         >
                           <Copy className="w-3.5 h-3.5" />
@@ -211,10 +207,8 @@ export const DocumentTable: React.FC<TableProps> = ({
 
                         {/* Download PDF */}
                         <button
-                          type="button"
                           onClick={() => onDownloadPDF(doc)}
                           title="Download PDF"
-                          aria-label={`Download PDF for ${doc.documentNumber}`}
                           className="p-1.5 text-secondary hover:text-brand hover:bg-brand-50 rounded-xs transition-colors"
                         >
                           <Download className="w-3.5 h-3.5" />
@@ -222,10 +216,8 @@ export const DocumentTable: React.FC<TableProps> = ({
 
                         {/* Delete Button */}
                         <button
-                          type="button"
                           onClick={() => setDeletingDoc(doc)}
                           title="Delete Document"
-                          aria-label={`Delete document ${doc.documentNumber}`}
                           className="p-1.5 text-secondary hover:text-primary hover:bg-page rounded-xs transition-colors"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
