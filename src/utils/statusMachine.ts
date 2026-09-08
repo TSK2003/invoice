@@ -71,29 +71,29 @@ export interface StatusStyle {
 export function getStatusStyle(status: DocumentStatus): StatusStyle {
   switch (status) {
     case 'draft':
-      return { label: 'Draft', bg: 'bg-slate-100 dark:bg-slate-800', text: 'text-slate-700 dark:text-slate-300', border: 'border-slate-300 dark:border-slate-700' };
+      return { label: 'Draft', bg: 'bg-slate-100', text: 'text-slate-700', border: 'border-slate-300' };
     case 'sent':
-      return { label: 'Sent', bg: 'bg-sky-50 dark:bg-sky-950/40', text: 'text-sky-700 dark:text-sky-300', border: 'border-sky-300 dark:border-sky-800' };
+      return { label: 'Sent', bg: 'bg-sky-50', text: 'text-sky-700', border: 'border-sky-300' };
     case 'accepted':
-      return { label: 'Accepted', bg: 'bg-emerald-50 dark:bg-emerald-950/40', text: 'text-emerald-700 dark:text-emerald-300', border: 'border-emerald-300 dark:border-emerald-800' };
+      return { label: 'Accepted', bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-300' };
     case 'rejected':
-      return { label: 'Rejected', bg: 'bg-rose-50 dark:bg-rose-950/40', text: 'text-rose-700 dark:text-rose-300', border: 'border-rose-300 dark:border-rose-800' };
+      return { label: 'Rejected', bg: 'bg-rose-50', text: 'text-rose-700', border: 'border-rose-300' };
     case 'expired':
-      return { label: 'Expired', bg: 'bg-amber-50 dark:bg-amber-950/40', text: 'text-amber-700 dark:text-amber-300', border: 'border-amber-300 dark:border-amber-800' };
+      return { label: 'Expired', bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-300' };
     case 'converted':
-      return { label: 'Converted to Invoice', bg: 'bg-purple-50 dark:bg-purple-950/40', text: 'text-purple-700 dark:text-purple-300', border: 'border-purple-300 dark:border-purple-800' };
+      return { label: 'Converted to Invoice', bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-300' };
     case 'issued':
-      return { label: 'Issued / Unpaid', bg: 'bg-blue-50 dark:bg-blue-950/40', text: 'text-blue-700 dark:text-blue-300', border: 'border-blue-300 dark:border-blue-800' };
+      return { label: 'Issued / Unpaid', bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-300' };
     case 'partially_paid':
-      return { label: 'Partially Paid', bg: 'bg-amber-50 dark:bg-amber-950/40', text: 'text-amber-700 dark:text-amber-300', border: 'border-amber-300 dark:border-amber-800' };
+      return { label: 'Partially Paid', bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-300' };
     case 'paid':
-      return { label: 'Paid in Full', bg: 'bg-emerald-50 dark:bg-emerald-950/40', text: 'text-emerald-700 dark:text-emerald-300', border: 'border-emerald-300 dark:border-emerald-800' };
+      return { label: 'Paid in Full', bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-300' };
     case 'overdue':
-      return { label: 'Overdue', bg: 'bg-rose-50 dark:bg-rose-950/40', text: 'text-rose-700 dark:text-rose-300', border: 'border-rose-300 dark:border-rose-800' };
+      return { label: 'Overdue', bg: 'bg-rose-50', text: 'text-rose-700', border: 'border-rose-300' };
     case 'cancelled':
-      return { label: 'Cancelled', bg: 'bg-slate-200 dark:bg-slate-800', text: 'text-slate-500 dark:text-slate-400', border: 'border-slate-300 dark:border-slate-700' };
+      return { label: 'Cancelled', bg: 'bg-slate-200', text: 'text-slate-600', border: 'border-slate-300' };
     case 'generated':
-      return { label: 'Receipt Issued', bg: 'bg-teal-50 dark:bg-teal-950/40', text: 'text-teal-700 dark:text-teal-300', border: 'border-teal-300 dark:border-teal-800' };
+      return { label: 'Receipt Issued', bg: 'bg-teal-50', text: 'text-teal-700', border: 'border-teal-300' };
     default:
       return { label: String(status), bg: 'bg-slate-100', text: 'text-slate-700', border: 'border-slate-300' };
   }

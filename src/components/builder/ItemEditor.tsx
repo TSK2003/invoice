@@ -101,9 +101,9 @@ export const ItemEditor: React.FC<ItemEditorProps> = ({
         </button>
       </div>
 
-      <div className="overflow-x-auto border border-slate-200 dark:border-slate-800 rounded-xl bg-white dark:bg-slate-900 shadow-xs">
+      <div className="overflow-x-auto border border-slate-200 rounded-xl bg-white shadow-xs">
         <table className="w-full text-left text-xs min-w-[720px] border-collapse">
-          <thead className="bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 font-bold uppercase tracking-wider text-[10.5px]">
+          <thead className="bg-slate-50 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[10.5px]">
             <tr>
               <th className="py-2.5 px-3 w-[5%] text-center">#</th>
               <th className="py-2.5 px-3 w-[34%]">Description</th>
@@ -116,11 +116,11 @@ export const ItemEditor: React.FC<ItemEditorProps> = ({
               <th className="py-2.5 px-3 w-[8%] text-center">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-800 dark:text-slate-200">
+          <tbody className="divide-y divide-slate-100 text-slate-800">
             {items.map((item, idx) => (
               <tr
                 key={item.id || idx}
-                className={item.isIncluded ? 'bg-slate-50/50 dark:bg-slate-800/30' : 'hover:bg-slate-50/70 dark:hover:bg-slate-800/40'}
+                className={item.isIncluded ? 'bg-slate-50/50' : 'hover:bg-slate-50/70'}
               >
                 {/* Index */}
                 <td className="py-2 px-3 text-center font-bold text-slate-400">
@@ -133,7 +133,7 @@ export const ItemEditor: React.FC<ItemEditorProps> = ({
                     type="text"
                     value={item.description}
                     onChange={(e) => handleItemChange(idx, 'description', e.target.value)}
-                    className="w-full h-8 px-2.5 border border-slate-300 dark:border-slate-700 rounded-lg text-xs bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-brand"
+                    className="w-full h-8 px-2.5 border border-slate-300 rounded-lg text-xs bg-white text-slate-900 focus:border-brand"
                   />
                   {item.isIncluded && (
                     <span className="text-[10px] text-brand font-medium block mt-0.5">
@@ -148,7 +148,7 @@ export const ItemEditor: React.FC<ItemEditorProps> = ({
                     type="text"
                     value={item.sacHsn}
                     onChange={(e) => handleItemChange(idx, 'sacHsn', e.target.value)}
-                    className="w-full h-8 px-1.5 border border-slate-300 dark:border-slate-700 rounded-lg text-xs text-center bg-white dark:bg-slate-800 font-mono text-slate-600 dark:text-slate-300 focus:border-brand"
+                    className="w-full h-8 px-1.5 border border-slate-300 rounded-lg text-xs text-center bg-white font-mono text-slate-600 focus:border-brand"
                     disabled={item.isIncluded}
                   />
                 </td>
@@ -159,7 +159,7 @@ export const ItemEditor: React.FC<ItemEditorProps> = ({
                     type="text"
                     value={item.quantity}
                     onChange={(e) => handleItemChange(idx, 'quantity', e.target.value)}
-                    className="w-full h-8 px-1 border border-slate-300 dark:border-slate-700 rounded-lg text-xs text-center font-medium bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-brand"
+                    className="w-full h-8 px-1 border border-slate-300 rounded-lg text-xs text-center font-medium bg-white text-slate-900 focus:border-brand"
                     disabled={item.isIncluded}
                   />
                 </td>
@@ -172,7 +172,7 @@ export const ItemEditor: React.FC<ItemEditorProps> = ({
                     value={item.isIncluded ? '' : item.rate}
                     onChange={(e) => handleItemChange(idx, 'rate', parseFloat(e.target.value) || 0)}
                     placeholder={item.isIncluded ? 'Included' : '0'}
-                    className="w-full h-8 px-2 border border-slate-300 dark:border-slate-700 rounded-lg text-xs text-right font-medium bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-brand"
+                    className="w-full h-8 px-2 border border-slate-300 rounded-lg text-xs text-right font-medium bg-white text-slate-900 focus:border-brand"
                     disabled={item.isIncluded}
                   />
                 </td>
@@ -186,7 +186,7 @@ export const ItemEditor: React.FC<ItemEditorProps> = ({
                     value={item.isIncluded ? '' : item.discount}
                     onChange={(e) => handleItemChange(idx, 'discount', parseFloat(e.target.value) || 0)}
                     placeholder={item.isIncluded ? '—' : '0'}
-                    className="w-full h-8 px-1.5 border border-slate-300 dark:border-slate-700 rounded-lg text-xs text-right bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 focus:border-brand"
+                    className="w-full h-8 px-1.5 border border-slate-300 rounded-lg text-xs text-right bg-white text-slate-600 focus:border-brand"
                     disabled={item.isIncluded}
                   />
                 </td>
@@ -197,7 +197,7 @@ export const ItemEditor: React.FC<ItemEditorProps> = ({
                     value={item.taxRate !== undefined ? item.taxRate : defaultTaxRate}
                     onChange={(e) => handleItemChange(idx, 'taxRate', parseFloat(e.target.value) || 0)}
                     disabled={item.isIncluded}
-                    className="w-full h-8 px-1 text-center border border-slate-300 dark:border-slate-700 rounded-lg text-xs bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-brand disabled:opacity-50"
+                    className="w-full h-8 px-1 text-center border border-slate-300 rounded-lg text-xs bg-white text-slate-900 focus:border-brand disabled:opacity-50"
                   >
                     {VALID_GST_RATES.map((rate) => (
                       <option key={rate} value={rate}>
@@ -208,7 +208,7 @@ export const ItemEditor: React.FC<ItemEditorProps> = ({
                 </td>
 
                 {/* Taxable Value */}
-                <td className="py-2 px-3 text-right font-bold text-slate-900 dark:text-white font-mono">
+                <td className="py-2 px-3 text-right font-bold text-slate-900 font-mono">
                   {item.isIncluded ? (
                     <span className="text-slate-400 font-sans font-normal">Included</span>
                   ) : (

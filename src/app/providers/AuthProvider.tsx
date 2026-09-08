@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User } from 'firebase/auth';
-import { subscribeToAuthChanges, loginWithEmail, logoutUser } from '../../services/firebase/auth';
+import { subscribeToAuthChanges, loginWithEmail, logoutUser, registerUser } from '../../services/firebase/auth';
 
 interface AuthContextType {
   user: User | null;
@@ -8,6 +8,7 @@ interface AuthContextType {
   error: string | null;
   isAuthenticated: boolean;
   login: (email: string, pass: string) => Promise<void>;
+  register: (email: string, pass: string) => Promise<void>;
   logout: () => Promise<void>;
   clearError: () => void;
 }
@@ -50,6 +51,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const register = async (email: string, pass: string) => {
+    setError(null);
+    setLoading(true);
+    try {
+      const newUser = await registerUser(email, pass);
+      setUser(newUser);
+    } catch (err: any) {
+      let msg = 'Registration failed.';
+      if (err.code === 'auth/email-already-in-use') {
+        msg = 'This email is already registered. Please sign in instead.';
+      } else if (err.code === 'auth/weak-password') {
+        msg = 'Password should be at least 6 characters long.';
+      } else if (err.code === 'auth/operation-not-allowed') {
+        msg = 'Email/Password sign-in is not enabled in Firebase Console. Please enable it under Authentication > Sign-in method, or click "Add user" in Firebase Console.';
+      } else if (err.message) {
+        msg = err.message;
+      }
+      setError(msg);
+      throw new Error(msg);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const logout = async () => {
     try {
       await logoutUser();
@@ -69,6 +94,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         error,
         isAuthenticated: !!user,
         login,
+        register,
         logout,
         clearError,
       }}

@@ -55,13 +55,13 @@ export const DocumentViewPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-100 dark:bg-slate-950 py-8 px-4">
+    <div className="min-h-screen bg-slate-100 py-8 px-4">
       {/* Top Floating Control Bar */}
-      <div className="no-print print:hidden max-w-[850px] mx-auto mb-6 bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800 shadow-md flex items-center justify-between">
+      <div className="no-print print:hidden max-w-[850px] mx-auto mb-6 bg-white p-3 rounded-xl border border-slate-200 shadow-md flex items-center justify-between">
         <button
           type="button"
           onClick={() => navigate('/documents')}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
         >
           <ArrowLeft className="w-3.5 h-3.5" /> Back
         </button>
@@ -70,14 +70,14 @@ export const DocumentViewPage: React.FC = () => {
           <button
             type="button"
             onClick={() => navigate(`/documents/${doc.id}`)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
           >
             <Edit3 className="w-3.5 h-3.5" /> Edit
           </button>
           <button
             type="button"
             onClick={() => printDocument()}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
           >
             <Printer className="w-3.5 h-3.5" /> Print
           </button>

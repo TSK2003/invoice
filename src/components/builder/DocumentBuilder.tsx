@@ -332,14 +332,14 @@ export const DocumentBuilder: React.FC<BuilderProps> = ({
       )}
 
       {/* Mobile / Tablet Segmented Tab Switcher (< lg screens) */}
-      <div className="no-print print:hidden lg:hidden flex items-center bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 p-2 sticky top-[70px] z-30 shadow-xs">
+      <div className="no-print print:hidden lg:hidden flex items-center bg-white border-b border-slate-200 p-2 sticky top-[70px] z-30 shadow-xs">
         <button
           type="button"
           onClick={() => setMobileActiveTab('form')}
           className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 ${
             mobileActiveTab === 'form'
               ? 'bg-brand text-white shadow-xs'
-              : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+              : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
           <Edit3 className="w-3.5 h-3.5" />
@@ -351,7 +351,7 @@ export const DocumentBuilder: React.FC<BuilderProps> = ({
           className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 ${
             mobileActiveTab === 'preview'
               ? 'bg-brand text-white shadow-xs'
-              : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+              : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
           <Eye className="w-3.5 h-3.5" />
@@ -362,12 +362,12 @@ export const DocumentBuilder: React.FC<BuilderProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 flex-1">
         {/* LEFT PANEL: Form inputs */}
         <div
-          className={`no-print print:hidden lg:col-span-6 p-4 sm:p-6 space-y-4 overflow-y-auto max-h-[calc(100vh-70px)] bg-slate-50 dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800 ${
+          className={`no-print print:hidden lg:col-span-6 p-4 sm:p-6 space-y-4 overflow-y-auto max-h-[calc(100vh-70px)] bg-slate-50 border-r border-slate-200 ${
             mobileActiveTab === 'form' ? 'block' : 'hidden lg:block'
           }`}
         >
           <div className="flex items-center justify-between pb-1">
-            <h2 className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+            <h2 className="text-xs font-bold text-slate-700 uppercase tracking-wider">
               Document Parameters & Content
             </h2>
             {doc.type === 'quotation' && ['accepted', 'sent', 'draft'].includes(doc.status) && (
@@ -375,7 +375,7 @@ export const DocumentBuilder: React.FC<BuilderProps> = ({
                 type="button"
                 disabled={isConverting}
                 onClick={handleConvertToInvoice}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-bold transition-all shadow-xs"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-bold transition-all shadow-xs cursor-pointer"
               >
                 <ArrowRightLeft className="w-3.5 h-3.5" />
                 <span>{isConverting ? 'Converting...' : 'Convert to Tax Invoice'}</span>
@@ -384,14 +384,14 @@ export const DocumentBuilder: React.FC<BuilderProps> = ({
           </div>
 
           {/* SECTION 1: DOCUMENT TYPE & METADATA */}
-          <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
             <div
               onClick={() => toggleSection('typeAndMeta')}
-              className="p-3.5 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
+              className="p-3.5 bg-white border-b border-slate-200 flex items-center justify-between cursor-pointer hover:bg-slate-50 transition-colors"
             >
               <div className="flex items-center gap-2">
                 <FileText className="w-4 h-4 text-brand" />
-                <span className="font-bold text-xs text-slate-800 dark:text-slate-200 uppercase tracking-wider">
+                <span className="font-bold text-xs text-slate-800 uppercase tracking-wider">
                   01  Document Type & Details
                 </span>
               </div>
@@ -500,14 +500,14 @@ export const DocumentBuilder: React.FC<BuilderProps> = ({
           </div>
 
           {/* SECTION 2: CLIENT DETAILS */}
-          <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
             <div
               onClick={() => toggleSection('client')}
-              className="p-3.5 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
+              className="p-3.5 bg-white border-b border-slate-200 flex items-center justify-between cursor-pointer hover:bg-slate-50 transition-colors"
             >
               <div className="flex items-center gap-2">
                 <UserCheck className="w-4 h-4 text-brand" />
-                <span className="font-bold text-xs text-slate-800 dark:text-slate-200 uppercase tracking-wider">
+                <span className="font-bold text-xs text-slate-800 uppercase tracking-wider">
                   02  Client Information & Destination State
                 </span>
               </div>
@@ -532,14 +532,14 @@ export const DocumentBuilder: React.FC<BuilderProps> = ({
 
           {/* SECTION 3: PACKAGE SELECTOR (For Quotation) */}
           {doc.type === 'quotation' && (
-            <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden">
+            <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
               <div
                 onClick={() => toggleSection('package')}
-                className="p-3.5 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
+                className="p-3.5 bg-white border-b border-slate-200 flex items-center justify-between cursor-pointer hover:bg-slate-50 transition-colors"
               >
                 <div className="flex items-center gap-2">
                   <Package className="w-4 h-4 text-brand" />
-                  <span className="font-bold text-xs text-slate-800 dark:text-slate-200 uppercase tracking-wider">
+                  <span className="font-bold text-xs text-slate-800 uppercase tracking-wider">
                     03  Package & Scope Presets
                   </span>
                 </div>
@@ -564,14 +564,14 @@ export const DocumentBuilder: React.FC<BuilderProps> = ({
 
           {/* SECTION 4: ITEMS & SERVICES BUILDER */}
           {doc.type !== 'payment_receipt' && (
-            <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden">
+            <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
               <div
                 onClick={() => toggleSection('items')}
-                className="p-3.5 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
+                className="p-3.5 bg-white border-b border-slate-200 flex items-center justify-between cursor-pointer hover:bg-slate-50 transition-colors"
               >
                 <div className="flex items-center gap-2">
                   <ListOrdered className="w-4 h-4 text-brand" />
-                  <span className="font-bold text-xs text-slate-800 dark:text-slate-200 uppercase tracking-wider">
+                  <span className="font-bold text-xs text-slate-800 uppercase tracking-wider">
                     04  Items & Services ({doc.items.length})
                   </span>
                 </div>
@@ -596,14 +596,14 @@ export const DocumentBuilder: React.FC<BuilderProps> = ({
 
           {/* SECTION 5: GST / TAX ENGINE */}
           {doc.type !== 'payment_receipt' && (
-            <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden">
+            <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
               <div
                 onClick={() => toggleSection('tax')}
-                className="p-3.5 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
+                className="p-3.5 bg-white border-b border-slate-200 flex items-center justify-between cursor-pointer hover:bg-slate-50 transition-colors"
               >
                 <div className="flex items-center gap-2">
                   <Percent className="w-4 h-4 text-brand" />
-                  <span className="font-bold text-xs text-slate-800 dark:text-slate-200 uppercase tracking-wider">
+                  <span className="font-bold text-xs text-slate-800 uppercase tracking-wider">
                     05  GST & Tax Engine
                   </span>
                 </div>
@@ -628,14 +628,14 @@ export const DocumentBuilder: React.FC<BuilderProps> = ({
 
           {/* SECTION 6: PAYMENT TERMS */}
           {doc.type === 'quotation' && (
-            <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden">
+            <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
               <div
                 onClick={() => toggleSection('payment')}
-                className="p-3.5 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
+                className="p-3.5 bg-white border-b border-slate-200 flex items-center justify-between cursor-pointer hover:bg-slate-50 transition-colors"
               >
                 <div className="flex items-center gap-2">
                   <CreditCard className="w-4 h-4 text-brand" />
-                  <span className="font-bold text-xs text-slate-800 dark:text-slate-200 uppercase tracking-wider">
+                  <span className="font-bold text-xs text-slate-800 uppercase tracking-wider">
                     06  Payment Milestone Terms
                   </span>
                 </div>
@@ -659,14 +659,14 @@ export const DocumentBuilder: React.FC<BuilderProps> = ({
           )}
 
           {/* SECTION 7: NOTES & TERMS */}
-          <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
             <div
               onClick={() => toggleSection('notesAndTerms')}
-              className="p-3.5 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
+              className="p-3.5 bg-white border-b border-slate-200 flex items-center justify-between cursor-pointer hover:bg-slate-50 transition-colors"
             >
               <div className="flex items-center gap-2">
                 <AlignLeft className="w-4 h-4 text-brand" />
-                <span className="font-bold text-xs text-slate-800 dark:text-slate-200 uppercase tracking-wider">
+                <span className="font-bold text-xs text-slate-800 uppercase tracking-wider">
                   07  Notes & Document Specific Terms
                 </span>
               </div>

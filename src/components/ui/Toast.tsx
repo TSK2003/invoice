@@ -43,22 +43,22 @@ const ToastCard: React.FC<{ toast: ToastItem; onDismiss: (id: string) => void }>
       case 'error':
         return {
           icon: <AlertCircle className="w-5 h-5 text-rose-500 shrink-0" />,
-          container: 'bg-white dark:bg-slate-900 border-rose-200 dark:border-rose-900/50 shadow-lg shadow-rose-500/5 text-slate-800 dark:text-slate-100',
+          container: 'bg-white border-rose-200 shadow-lg shadow-rose-500/10 text-slate-800',
         };
       case 'warning':
         return {
           icon: <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0" />,
-          container: 'bg-white dark:bg-slate-900 border-amber-200 dark:border-amber-900/50 shadow-lg shadow-amber-500/5 text-slate-800 dark:text-slate-100',
+          container: 'bg-white border-amber-200 shadow-lg shadow-amber-500/10 text-slate-800',
         };
       case 'info':
         return {
           icon: <Info className="w-5 h-5 text-sky-500 shrink-0" />,
-          container: 'bg-white dark:bg-slate-900 border-sky-200 dark:border-sky-900/50 shadow-lg shadow-sky-500/5 text-slate-800 dark:text-slate-100',
+          container: 'bg-white border-sky-200 shadow-lg shadow-sky-500/10 text-slate-800',
         };
       default:
         return {
           icon: <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" />,
-          container: 'bg-white dark:bg-slate-900 border-emerald-200 dark:border-emerald-900/50 shadow-lg shadow-emerald-500/5 text-slate-800 dark:text-slate-100',
+          container: 'bg-white border-emerald-200 shadow-lg shadow-emerald-500/10 text-slate-800',
         };
     }
   };
@@ -73,13 +73,13 @@ const ToastCard: React.FC<{ toast: ToastItem; onDismiss: (id: string) => void }>
       {style.icon}
       <div className="flex-1 min-w-0">
         <p className="font-semibold leading-snug">{toast.title}</p>
-        {toast.message && <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{toast.message}</p>}
+        {toast.message && <p className="text-xs text-slate-500 mt-0.5">{toast.message}</p>}
       </div>
       <button
         type="button"
         aria-label="Dismiss notification"
         onClick={() => onDismiss(toast.id)}
-        className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors p-1 -mr-1 -mt-1 rounded"
+        className="text-slate-400 hover:text-slate-600 transition-colors p-1 -mr-1 -mt-1 rounded"
       >
         <X className="w-4 h-4" />
       </button>

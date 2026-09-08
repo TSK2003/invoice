@@ -90,28 +90,28 @@ export const PaymentList: React.FC = () => {
 
       {/* Summary KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="p-5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs">
-          <p className="text-xs font-semibold text-slate-500 dark:text-slate-400">Total Collected</p>
-          <p className="text-2xl font-black text-emerald-600 dark:text-emerald-400 mt-1">
+        <div className="p-5 rounded-xl bg-white border border-slate-200 shadow-xs">
+          <p className="text-xs font-semibold text-slate-500">Total Collected</p>
+          <p className="text-2xl font-black text-emerald-600 mt-1">
             {formatCurrency(totalCollected)}
           </p>
         </div>
-        <div className="p-5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs">
-          <p className="text-xs font-semibold text-slate-500 dark:text-slate-400">Transactions Recorded</p>
-          <p className="text-2xl font-black text-slate-900 dark:text-white mt-1">
+        <div className="p-5 rounded-xl bg-white border border-slate-200 shadow-xs">
+          <p className="text-xs font-semibold text-slate-500">Transactions Recorded</p>
+          <p className="text-2xl font-black text-slate-900 mt-1">
             {payments.length}
           </p>
         </div>
-        <div className="p-5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs">
-          <p className="text-xs font-semibold text-slate-500 dark:text-slate-400">Latest Payment</p>
-          <p className="text-base font-bold text-slate-900 dark:text-white mt-1.5">
+        <div className="p-5 rounded-xl bg-white border border-slate-200 shadow-xs">
+          <p className="text-xs font-semibold text-slate-500">Latest Payment</p>
+          <p className="text-base font-bold text-slate-900 mt-1.5">
             {payments.length > 0 ? payments[0].paymentDate : 'No payments yet'}
           </p>
         </div>
       </div>
 
       {/* Search & Filter Bar */}
-      <div className="flex items-center gap-3 bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs">
+      <div className="flex items-center gap-3 bg-white p-3 rounded-xl border border-slate-200 shadow-xs">
         <div className="relative flex-1">
           <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3 pointer-events-none" />
           <input
@@ -119,14 +119,14 @@ export const PaymentList: React.FC = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Filter by invoice #, customer name, method (UPI, Bank), or reference..."
-            className="w-full h-10 pl-9 pr-4 rounded-lg bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-brand"
+            className="w-full h-10 pl-9 pr-4 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-brand"
           />
         </div>
         {searchTerm && (
           <button
             type="button"
             onClick={() => setSearchTerm('')}
-            className="px-3 py-2 text-xs font-semibold text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
+            className="px-3 py-2 text-xs font-semibold text-slate-500 hover:text-slate-700 cursor-pointer"
           >
             Clear
           </button>
@@ -135,12 +135,12 @@ export const PaymentList: React.FC = () => {
 
       {/* Table of Payments */}
       {filteredPayments.length === 0 ? (
-        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-12 text-center shadow-xs">
-          <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center mx-auto mb-3">
+        <div className="bg-white rounded-xl border border-slate-200 p-12 text-center shadow-xs">
+          <div className="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-3">
             <CreditCard className="w-6 h-6" />
           </div>
-          <h3 className="text-base font-bold text-slate-900 dark:text-white">No payments recorded</h3>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-sm mx-auto">
+          <h3 className="text-base font-bold text-slate-900">No payments recorded</h3>
+          <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
             {searchTerm
               ? `No payment entries matched "${searchTerm}".`
               : 'Record incoming customer payments against invoices to automatically update their payment status.'}
@@ -149,18 +149,18 @@ export const PaymentList: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsModalOpen(true)}
-              className="mt-4 inline-flex items-center gap-1.5 px-4 py-2 bg-brand text-white text-xs font-bold rounded-lg hover:bg-brand-600 transition-colors shadow-xs"
+              className="mt-4 inline-flex items-center gap-1.5 px-4 py-2 bg-brand text-white text-xs font-bold rounded-lg hover:bg-brand-600 transition-colors shadow-xs cursor-pointer"
             >
               <Plus className="w-4 h-4" /> Record First Payment
             </button>
           )}
         </div>
       ) : (
-        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden">
+        <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse text-xs">
               <thead>
-                <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50/75 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400 uppercase tracking-wider text-[11px] font-bold">
+                <tr className="border-b border-slate-200 bg-slate-50/75 text-slate-600 uppercase tracking-wider text-[11px] font-bold">
                   <th className="py-3.5 px-4">Date</th>
                   <th className="py-3.5 px-4">Invoice Reference</th>
                   <th className="py-3.5 px-4">Customer</th>
@@ -169,13 +169,13 @@ export const PaymentList: React.FC = () => {
                   <th className="py-3.5 px-4 text-right">Receipt / Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60 font-medium">
+              <tbody className="divide-y divide-slate-100 font-medium">
                 {filteredPayments.map((payment) => (
                   <tr
                     key={payment.id}
-                    className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors"
+                    className="hover:bg-slate-50/80 transition-colors"
                   >
-                    <td className="py-3.5 px-4 text-slate-600 dark:text-slate-300 font-mono">
+                    <td className="py-3.5 px-4 text-slate-600 font-mono">
                       {payment.paymentDate}
                     </td>
 
@@ -184,7 +184,7 @@ export const PaymentList: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => navigate(`/documents/${payment.invoiceId}/view`)}
-                          className="hover:underline flex items-center gap-1 font-mono"
+                          className="hover:underline flex items-center gap-1 font-mono cursor-pointer"
                         >
                           {payment.invoiceNumber || 'View Invoice'}
                           <ArrowUpRight className="w-3 h-3 opacity-60" />
@@ -194,12 +194,12 @@ export const PaymentList: React.FC = () => {
                       )}
                     </td>
 
-                    <td className="py-3.5 px-4 font-bold text-slate-900 dark:text-white">
+                    <td className="py-3.5 px-4 font-bold text-slate-900">
                       {payment.customerName || 'N/A'}
                     </td>
 
                     <td className="py-3.5 px-4">
-                      <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-700 border border-slate-200">
                         {payment.paymentMethod}
                       </span>
                       {payment.transactionReference && (
@@ -209,7 +209,7 @@ export const PaymentList: React.FC = () => {
                       )}
                     </td>
 
-                    <td className="py-3.5 px-4 text-right font-mono font-bold text-emerald-600 dark:text-emerald-400 text-sm">
+                    <td className="py-3.5 px-4 text-right font-mono font-bold text-emerald-600 text-sm">
                       {formatCurrency(payment.amount)}
                     </td>
 
@@ -220,7 +220,7 @@ export const PaymentList: React.FC = () => {
                             type="button"
                             onClick={() => navigate(`/documents/${payment.receiptId}/view`)}
                             title="View Generated Receipt"
-                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-teal-50 dark:bg-teal-950/40 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-800 hover:bg-teal-100 transition-colors text-[11px] font-semibold"
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-teal-50 text-teal-700 border border-teal-200 hover:bg-teal-100 transition-colors text-[11px] font-semibold cursor-pointer"
                           >
                             <Receipt className="w-3.5 h-3.5" />
                             <span>Receipt</span>
@@ -230,7 +230,7 @@ export const PaymentList: React.FC = () => {
                           type="button"
                           onClick={() => setPaymentToDelete(payment)}
                           title="Delete Payment Record"
-                          className="p-1.5 text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/50 rounded-lg transition-colors"
+                          className="p-1.5 text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>

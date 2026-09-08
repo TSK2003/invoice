@@ -220,9 +220,9 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
               {formatCurrency(existingPaid)}
             </span>
           </div>
-          <div className="flex items-center justify-between border-t border-slate-200 dark:border-slate-700 pt-2">
-            <span className="font-bold text-slate-700 dark:text-slate-300">Remaining Balance:</span>
-            <span className="font-black text-rose-600 dark:text-rose-400 text-sm">
+          <div className="flex items-center justify-between border-t border-slate-200 pt-2">
+            <span className="font-bold text-slate-700">Remaining Balance:</span>
+            <span className="font-black text-rose-600 text-sm">
               {formatCurrency(balanceDue)}
             </span>
           </div>
@@ -233,7 +233,7 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* Amount */}
         <div>
-          <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">
+          <label className="block text-[11px] font-bold text-slate-700 mb-1">
             Payment Amount (₹) *
           </label>
           <div className="relative">
@@ -246,14 +246,14 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               placeholder="0.00"
-              className="w-full h-10 pl-8 pr-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-mono font-bold focus:border-brand"
+              className="w-full h-10 pl-8 pr-3 rounded-lg border border-slate-300 bg-white text-slate-900 font-mono font-bold focus:border-brand"
             />
           </div>
         </div>
 
         {/* Date */}
         <div>
-          <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">
+          <label className="block text-[11px] font-bold text-slate-700 mb-1">
             Payment Date *
           </label>
           <div className="relative">
@@ -263,20 +263,20 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
               required
               value={paymentDate}
               onChange={(e) => setPaymentDate(e.target.value)}
-              className="w-full h-10 pl-9 pr-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-brand"
+              className="w-full h-10 pl-9 pr-3 rounded-lg border border-slate-300 bg-white text-slate-900 focus:border-brand"
             />
           </div>
         </div>
 
         {/* Method */}
         <div>
-          <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">
+          <label className="block text-[11px] font-bold text-slate-700 mb-1">
             Payment Method *
           </label>
           <select
             value={paymentMethod}
             onChange={(e) => setPaymentMethod(e.target.value as PaymentMethod)}
-            className="w-full h-10 px-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-brand"
+            className="w-full h-10 px-3 rounded-lg border border-slate-300 bg-white text-slate-900 focus:border-brand"
           >
             <option value="UPI">UPI (Google Pay / PhonePe / Paytm)</option>
             <option value="Bank Transfer">Bank Transfer (IMPS / NEFT / RTGS)</option>
@@ -288,7 +288,7 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
 
         {/* Transaction Reference */}
         <div>
-          <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">
+          <label className="block text-[11px] font-semibold text-slate-700 mb-1">
             Transaction Ref / UTR / Cheque #
           </label>
           <div className="relative">
@@ -298,7 +298,7 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
               value={transactionReference}
               onChange={(e) => setTransactionReference(e.target.value)}
               placeholder="e.g. UTR12345678 or Cheque 00412"
-              className="w-full h-10 pl-9 pr-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-brand font-mono"
+              className="w-full h-10 pl-9 pr-3 rounded-lg border border-slate-300 bg-white text-slate-900 focus:border-brand font-mono"
             />
           </div>
         </div>
@@ -306,7 +306,7 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
 
       {/* Notes */}
       <div>
-        <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">
+        <label className="block text-[11px] font-semibold text-slate-700 mb-1">
           Payment Remarks / Notes
         </label>
         <div className="relative">
@@ -316,38 +316,38 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             placeholder="e.g. Received 50% advance for milestone 1"
-            className="w-full h-10 pl-9 pr-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-brand"
+            className="w-full h-10 pl-9 pr-3 rounded-lg border border-slate-300 bg-white text-slate-900 focus:border-brand"
           />
         </div>
       </div>
 
       {/* Auto-create Receipt Checkbox */}
-      <div className="flex items-center gap-2 p-3 rounded-lg bg-brand-50/60 dark:bg-brand-950/30 border border-brand-200 dark:border-brand-900/50">
+      <div className="flex items-center gap-2 p-3 rounded-lg bg-brand-50/60 border border-brand-200">
         <input
           type="checkbox"
           id="autoCreateReceipt"
           checked={autoCreateReceipt}
           onChange={(e) => setAutoCreateReceipt(e.target.checked)}
-          className="w-4 h-4 rounded text-brand focus:ring-brand"
+          className="w-4 h-4 rounded text-brand focus:ring-brand cursor-pointer"
         />
-        <label htmlFor="autoCreateReceipt" className="text-xs font-semibold text-slate-800 dark:text-slate-200 cursor-pointer">
+        <label htmlFor="autoCreateReceipt" className="text-xs font-semibold text-slate-800 cursor-pointer">
           Automatically generate official Payment Receipt document
         </label>
       </div>
 
       {/* Action Buttons */}
-      <div className="flex justify-end gap-3 pt-3 border-t border-slate-200 dark:border-slate-800">
+      <div className="flex justify-end gap-3 pt-3 border-t border-slate-200">
         <button
           type="button"
           onClick={onCancel}
-          className="px-4 py-2 text-xs font-semibold rounded-lg border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+          className="px-4 py-2 text-xs font-semibold rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
         >
           Cancel
         </button>
         <button
           type="submit"
           disabled={isSaving || !selectedInvoice}
-          className="inline-flex items-center gap-2 px-5 py-2 text-xs font-bold rounded-lg bg-brand text-white hover:bg-brand-600 transition-colors shadow-xs disabled:opacity-50"
+          className="inline-flex items-center gap-2 px-5 py-2 text-xs font-bold rounded-lg bg-brand text-white hover:bg-brand-600 transition-colors shadow-xs disabled:opacity-50 cursor-pointer"
         >
           <Check className="w-4 h-4" />
           {isSaving ? 'Recording...' : 'Record Payment'}

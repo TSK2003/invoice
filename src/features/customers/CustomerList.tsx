@@ -92,7 +92,7 @@ export const CustomerList: React.FC = () => {
       </div>
 
       {/* Search & Filter Bar */}
-      <div className="flex items-center gap-3 bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs">
+      <div className="flex items-center gap-3 bg-white p-3 rounded-xl border border-slate-200 shadow-xs">
         <div className="relative flex-1">
           <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3 pointer-events-none" />
           <input
@@ -100,14 +100,14 @@ export const CustomerList: React.FC = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search by company name, contact person, phone, email, city, or GSTIN..."
-            className="w-full h-10 pl-9 pr-4 rounded-lg bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-brand"
+            className="w-full h-10 pl-9 pr-4 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-brand"
           />
         </div>
         {searchTerm && (
           <button
             type="button"
             onClick={() => setSearchTerm('')}
-            className="px-3 py-2 text-xs font-semibold text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
+            className="px-3 py-2 text-xs font-semibold text-slate-500 hover:text-slate-700 cursor-pointer"
           >
             Clear
           </button>
@@ -116,12 +116,12 @@ export const CustomerList: React.FC = () => {
 
       {/* Customers Table / Grid */}
       {filteredCustomers.length === 0 ? (
-        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-12 text-center shadow-xs">
-          <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center mx-auto mb-3">
+        <div className="bg-white rounded-xl border border-slate-200 p-12 text-center shadow-xs">
+          <div className="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-3">
             <Building2 className="w-6 h-6" />
           </div>
-          <h3 className="text-base font-bold text-slate-900 dark:text-white">No customers found</h3>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-sm mx-auto">
+          <h3 className="text-base font-bold text-slate-900">No customers found</h3>
+          <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
             {searchTerm
               ? `No matching customer profiles found for "${searchTerm}". Try a different search query.`
               : 'Your customer database is empty. Add your first customer profile to start generating professional documents.'}
@@ -130,18 +130,18 @@ export const CustomerList: React.FC = () => {
             <button
               type="button"
               onClick={handleCreateNew}
-              className="mt-4 inline-flex items-center gap-1.5 px-4 py-2 bg-brand text-white text-xs font-bold rounded-lg hover:bg-brand-600 transition-colors shadow-xs"
+              className="mt-4 inline-flex items-center gap-1.5 px-4 py-2 bg-brand text-white text-xs font-bold rounded-lg hover:bg-brand-600 transition-colors shadow-xs cursor-pointer"
             >
               <Plus className="w-4 h-4" /> Add First Customer
             </button>
           )}
         </div>
       ) : (
-        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden">
+        <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse text-xs">
               <thead>
-                <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50/75 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400 uppercase tracking-wider text-[11px] font-bold">
+                <tr className="border-b border-slate-200 bg-slate-50/75 text-slate-600 uppercase tracking-wider text-[11px] font-bold">
                   <th className="py-3.5 px-4">Company / Client</th>
                   <th className="py-3.5 px-4">Location</th>
                   <th className="py-3.5 px-4">Tax Identifiers</th>
@@ -149,24 +149,24 @@ export const CustomerList: React.FC = () => {
                   <th className="py-3.5 px-4 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60 font-medium">
+              <tbody className="divide-y divide-slate-100 font-medium">
                 {filteredCustomers.map((cust) => (
                   <tr
                     key={cust.id}
-                    className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors"
+                    className="hover:bg-slate-50/80 transition-colors"
                   >
                     {/* Company & Contact Person */}
                     <td className="py-3.5 px-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-lg bg-brand-50 dark:bg-brand-950/50 border border-brand-100 dark:border-brand-900/50 text-brand flex items-center justify-center font-bold text-sm shrink-0">
+                        <div className="w-9 h-9 rounded-lg bg-brand-50 border border-brand-100 text-brand flex items-center justify-center font-bold text-sm shrink-0">
                           {cust.companyName.charAt(0).toUpperCase()}
                         </div>
                         <div>
-                          <p className="font-bold text-slate-900 dark:text-white text-xs">
+                          <p className="font-bold text-slate-900 text-xs">
                             {cust.companyName}
                           </p>
                           {cust.contactPerson && (
-                            <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                            <p className="text-[11px] text-slate-500">
                               Attn: {cust.contactPerson}
                             </p>
                           )}
@@ -175,7 +175,7 @@ export const CustomerList: React.FC = () => {
                     </td>
 
                     {/* Location */}
-                    <td className="py-3.5 px-4 text-slate-600 dark:text-slate-300">
+                    <td className="py-3.5 px-4 text-slate-600">
                       <div className="flex items-center gap-1.5">
                         <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                         <span>
@@ -191,7 +191,7 @@ export const CustomerList: React.FC = () => {
                     <td className="py-3.5 px-4">
                       {cust.gstin ? (
                         <div className="space-y-0.5">
-                          <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-sky-50 dark:bg-sky-950/40 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-800">
+                          <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-sky-50 text-sky-700 border border-sky-200">
                             GSTIN: {cust.gstin}
                           </span>
                           {cust.pan && (
@@ -206,7 +206,7 @@ export const CustomerList: React.FC = () => {
                     </td>
 
                     {/* Contact Details */}
-                    <td className="py-3.5 px-4 text-slate-600 dark:text-slate-300">
+                    <td className="py-3.5 px-4 text-slate-600">
                       {cust.phone && (
                         <div className="flex items-center gap-1.5 text-[11px]">
                           <Phone className="w-3 h-3 text-slate-400 shrink-0" />
@@ -228,7 +228,7 @@ export const CustomerList: React.FC = () => {
                           type="button"
                           onClick={() => navigate(`/documents/new/quotation?customerId=${cust.id}`)}
                           title="Create Quotation for Customer"
-                          className="p-1.5 text-brand hover:bg-brand-50 dark:hover:bg-brand-950/50 rounded-lg transition-colors"
+                          className="p-1.5 text-brand hover:bg-brand-50 rounded-lg transition-colors cursor-pointer"
                         >
                           <FilePlus className="w-4 h-4" />
                         </button>
@@ -236,7 +236,7 @@ export const CustomerList: React.FC = () => {
                           type="button"
                           onClick={() => handleEdit(cust)}
                           title="Edit Customer"
-                          className="p-1.5 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+                          className="p-1.5 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
                         >
                           <Edit3 className="w-4 h-4" />
                         </button>
@@ -244,7 +244,7 @@ export const CustomerList: React.FC = () => {
                           type="button"
                           onClick={() => setCustomerToDelete(cust)}
                           title="Delete Customer"
-                          className="p-1.5 text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/50 rounded-lg transition-colors"
+                          className="p-1.5 text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
