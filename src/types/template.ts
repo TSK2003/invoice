@@ -10,4 +10,7 @@ export interface DocumentTemplateConfig {
   fontFamily: string;
   defaultTermsQuotation: string[];
   defaultTermsInvoice: string[];
+  defaultTermsReceipt: string[];
+  companyId?: string;
+  updatedAt?: string;
 }

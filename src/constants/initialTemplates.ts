@@ -1,5 +1,5 @@
 import { DocumentTemplateConfig } from '../types/template';
-import { DEFAULT_QUOTATION_TERMS, DEFAULT_INVOICE_TERMS } from './defaultTerms';
+import { DEFAULT_QUOTATION_TERMS, DEFAULT_INVOICE_TERMS, DEFAULT_RECEIPT_TERMS } from './defaultTerms';
 
 export const AESCION_PROFESSIONAL_TEMPLATE: DocumentTemplateConfig = {
   id: 'aescion-professional',
@@ -13,4 +13,5 @@ export const AESCION_PROFESSIONAL_TEMPLATE: DocumentTemplateConfig = {
   fontFamily: 'Inter, Segoe UI, Arial, sans-serif',
   defaultTermsQuotation: DEFAULT_QUOTATION_TERMS,
   defaultTermsInvoice: DEFAULT_INVOICE_TERMS,
+  defaultTermsReceipt: DEFAULT_RECEIPT_TERMS,
 };
