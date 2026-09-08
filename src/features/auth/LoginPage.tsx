@@ -1,21 +1,19 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { LOGO_BASE64 } from '../../constants/imageAssets';
-import { Mail, Lock, Eye, EyeOff, ShieldCheck, AlertCircle, ArrowRight, Loader2, UserPlus, LogIn, Info } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, ShieldCheck, AlertCircle, ArrowRight, Loader2 } from 'lucide-react';
 import { useAuth } from '../../app/providers/AuthProvider';
 import { requestPasswordReset } from '../../services/firebase/auth';
 
 export const LoginPage: React.FC = () => {
-  const [mode, setMode] = useState<'login' | 'register'>('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [resetSentMessage, setResetSentMessage] = useState<string | null>(null);
   const [isResetting, setIsResetting] = useState(false);
 
-  const { login, register, loading } = useAuth();
+  const { login, loading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -31,29 +29,11 @@ export const LoginPage: React.FC = () => {
       return;
     }
 
-    if (mode === 'register') {
-      if (password.length < 6) {
-        setErrorMessage('Password must be at least 6 characters long.');
-        return;
-      }
-      if (password !== confirmPassword) {
-        setErrorMessage('Passwords do not match. Please re-enter.');
-        return;
-      }
-
-      try {
-        await register(email.trim(), password);
-        navigate(from, { replace: true });
-      } catch (err: any) {
-        setErrorMessage(err.message || 'Registration failed.');
-      }
-    } else {
-      try {
-        await login(email.trim(), password);
-        navigate(from, { replace: true });
-      } catch (err: any) {
-        setErrorMessage(err.message || 'Authentication failed. Please verify credentials.');
-      }
+    try {
+      await login(email.trim(), password);
+      navigate(from, { replace: true });
+    } catch (err: any) {
+      setErrorMessage(err.message || 'Authentication failed. Please verify credentials.');
     }
   };
 
@@ -76,7 +56,7 @@ export const LoginPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col items-center justify-center p-4 selection:bg-brand-100 selection:text-brand-900">
-      <div className="max-w-[440px] w-full">
+      <div className="max-w-[420px] w-full">
         {/* Main Login Card */}
         <div className="bg-white border border-slate-200 rounded-2xl shadow-xl shadow-slate-200/60 p-7 sm:p-9 space-y-6">
           {/* Header & Logo */}
@@ -95,50 +75,6 @@ export const LoginPage: React.FC = () => {
               <p className="text-xs text-slate-500 mt-0.5 font-medium">
                 Enterprise Invoicing & Quotation Portal
               </p>
-            </div>
-          </div>
-
-          {/* Mode Switcher Tabs */}
-          <div className="grid grid-cols-2 p-1 bg-slate-100 rounded-xl border border-slate-200 text-xs font-semibold">
-            <button
-              type="button"
-              onClick={() => { setMode('login'); setErrorMessage(null); }}
-              className={`py-2 rounded-lg flex items-center justify-center gap-1.5 transition-all ${
-                mode === 'login'
-                  ? 'bg-white text-slate-900 shadow-xs'
-                  : 'text-slate-500 hover:text-slate-900'
-              }`}
-            >
-              <LogIn className="w-3.5 h-3.5" />
-              <span>Sign In</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => { setMode('register'); setErrorMessage(null); }}
-              className={`py-2 rounded-lg flex items-center justify-center gap-1.5 transition-all ${
-                mode === 'register'
-                  ? 'bg-white text-brand font-bold shadow-xs'
-                  : 'text-slate-500 hover:text-slate-900'
-              }`}
-            >
-              <UserPlus className="w-3.5 h-3.5" />
-              <span>Create Account</span>
-            </button>
-          </div>
-
-          {/* New Project Setup Info Callout */}
-          <div className="p-3 bg-blue-50/80 border border-blue-100 rounded-xl flex items-start gap-2.5 text-xs text-blue-900">
-            <Info className="w-4 h-4 text-brand shrink-0 mt-0.5" />
-            <div className="leading-snug">
-              {mode === 'login' ? (
-                <span>
-                  First time? Switch to <strong>Create Account</strong> above, or add a user in your <strong>Firebase Console</strong>.
-                </span>
-              ) : (
-                <span>
-                  Enter your email and password below to create your official administrator account.
-                </span>
-              )}
             </div>
           </div>
 
@@ -162,9 +98,9 @@ export const LoginPage: React.FC = () => {
             </div>
           )}
 
-          {/* Login / Register Form */}
+          {/* Sign In Form */}
           <form onSubmit={handleSubmit} className="space-y-4 text-xs" autoComplete="on">
-            {/* Username / Email */}
+            {/* Work Email */}
             <div>
               <label htmlFor="login-email" className="block text-[11px] font-semibold text-slate-700 mb-1.5">
                 Work Email Address
@@ -181,7 +117,7 @@ export const LoginPage: React.FC = () => {
                   autoComplete="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="contact.aescion@gmail.com"
+                  placeholder="name@company.com"
                   className="w-full h-11 pl-10 pr-3 border border-slate-300 rounded-xl bg-white text-slate-900 text-xs placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand transition-all"
                 />
               </div>
@@ -193,16 +129,14 @@ export const LoginPage: React.FC = () => {
                 <label htmlFor="login-password" className="text-[11px] font-semibold text-slate-700">
                   Password
                 </label>
-                {mode === 'login' && (
-                  <button
-                    type="button"
-                    onClick={handleForgotPassword}
-                    disabled={isResetting}
-                    className="text-[11px] text-brand hover:text-brand-600 font-medium transition-colors"
-                  >
-                    {isResetting ? 'Sending...' : 'Forgot password?'}
-                  </button>
-                )}
+                <button
+                  type="button"
+                  onClick={handleForgotPassword}
+                  disabled={isResetting}
+                  className="text-[11px] text-brand hover:text-brand-600 font-medium transition-colors cursor-pointer"
+                >
+                  {isResetting ? 'Sending...' : 'Forgot password?'}
+                </button>
               </div>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
@@ -212,61 +146,37 @@ export const LoginPage: React.FC = () => {
                   id="login-password"
                   type={showPassword ? 'text' : 'password'}
                   required
-                  autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
+                  autoComplete="current-password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
+                  placeholder="Enter your password"
                   className="w-full h-11 pl-10 pr-10 border border-slate-300 rounded-xl bg-white text-slate-900 text-xs placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand transition-all"
                 />
                 <button
                   type="button"
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 transition-colors"
+                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
             </div>
 
-            {/* Confirm Password (Register Mode only) */}
-            {mode === 'register' && (
-              <div>
-                <label htmlFor="login-confirm-password" className="block text-[11px] font-semibold text-slate-700 mb-1.5">
-                  Confirm Password
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                    <Lock className="w-4 h-4" />
-                  </div>
-                  <input
-                    id="login-confirm-password"
-                    type={showPassword ? 'text' : 'password'}
-                    required
-                    autoComplete="new-password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="••••••••"
-                    className="w-full h-11 pl-10 pr-3 border border-slate-300 rounded-xl bg-white text-slate-900 text-xs placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand transition-all"
-                  />
-                </div>
-              </div>
-            )}
-
             {/* Submit Button */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full h-11 bg-brand hover:bg-brand-600 text-white font-bold text-xs rounded-xl shadow-md shadow-brand/20 transition-all flex items-center justify-center gap-2 uppercase tracking-wider disabled:opacity-60 mt-4 cursor-pointer active:scale-98"
+              className="w-full h-11 bg-brand hover:bg-brand-600 text-white font-bold text-xs rounded-xl shadow-md shadow-brand/20 transition-all flex items-center justify-center gap-2 uppercase tracking-wider disabled:opacity-60 mt-5 cursor-pointer active:scale-98"
             >
               {loading ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>{mode === 'login' ? 'Authenticating...' : 'Creating Account...'}</span>
+                  <span>Authenticating...</span>
                 </>
               ) : (
                 <>
-                  <span>{mode === 'login' ? 'Sign In to Document Studio' : 'Create Account & Sign In'}</span>
+                  <span>Sign In to Document Studio</span>
                   <ArrowRight className="w-4 h-4" />
                 </>
               )}
