@@ -10,6 +10,7 @@ const STORAGE_KEY = 'aescion_documents_v2';
 const DRAFT_KEY = 'aescion_current_draft_v2';
 const COMPANY_KEY = 'aescion_company_profile_v2';
 const TEMPLATE_KEY = 'aescion_template_config_v2';
+const COUNTERS_KEY = 'aescion_sequence_counters_v2';
 
 const getInitialSeedDocuments = (): DocumentData[] => {
   const now = new Date().toISOString().split('T')[0];
@@ -326,11 +327,55 @@ export class LocalStorageService implements IDocumentStorageService {
     return docs.find(d => d.id === id) || null;
   }
 
+  private getCounters(): Record<string, number> {
+    try {
+      const raw = localStorage.getItem(COUNTERS_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch (e) {
+      console.error('Failed to load counters', e);
+    }
+    return {};
+  }
+
+  private setCounters(counters: Record<string, number>): void {
+    try {
+      localStorage.setItem(COUNTERS_KEY, JSON.stringify(counters));
+    } catch (e) {
+      console.error('Failed to save counters', e);
+    }
+  }
+
   async saveDocument(doc: DocumentData): Promise<DocumentData> {
     const docs = this.loadDocumentsFromStorage();
     const existingIndex = docs.findIndex(d => d.id === doc.id);
+
+    // Collision check: if another document with a different id already uses this documentNumber, generate next unique
+    let finalDocNumber = doc.documentNumber;
+    const isDuplicate = docs.some(d => d.id !== doc.id && d.type === doc.type && d.documentNumber === finalDocNumber);
+    if (isDuplicate || !finalDocNumber) {
+      finalDocNumber = await this.generateNextDocumentNumber(doc.type);
+    }
+
+    // Update sequence counter so counter is at least this doc's number
+    const currentYear = new Date().getFullYear();
+    let prefix = 'AES-QTN';
+    if (doc.type === 'tax_invoice') prefix = 'AES-INV';
+    if (doc.type === 'payment_receipt') prefix = 'AES-RCP';
+    const regex = new RegExp(`^${prefix}-${currentYear}-(\\d+)`);
+    const match = finalDocNumber?.match(regex);
+    if (match && match[1]) {
+      const num = parseInt(match[1], 10);
+      const counters = this.getCounters();
+      const counterKey = `${doc.type}_${currentYear}`;
+      if (!counters[counterKey] || num > counters[counterKey]) {
+        counters[counterKey] = num;
+        this.setCounters(counters);
+      }
+    }
+
     const updatedDoc = {
       ...doc,
+      documentNumber: finalDocNumber,
       updatedAt: new Date().toISOString(),
     };
 
@@ -429,8 +474,9 @@ export class LocalStorageService implements IDocumentStorageService {
     const regex = new RegExp(`^${prefix}-${currentYear}-(\\d+)`);
     let maxNumber = 0;
 
+    // 1. Scan saved documents
     docs.forEach(doc => {
-      if (doc.type === type) {
+      if (doc.type === type && doc.documentNumber) {
         const match = doc.documentNumber.match(regex);
         if (match && match[1]) {
           const num = parseInt(match[1], 10);
@@ -439,7 +485,29 @@ export class LocalStorageService implements IDocumentStorageService {
       }
     });
 
-    const nextNumStr = String(maxNumber + 1).padStart(3, '0');
+    // 2. Scan active draft if present
+    const draft = this.loadCurrentDraft();
+    if (draft?.doc && draft.doc.type === type && draft.doc.documentNumber) {
+      const match = draft.doc.documentNumber.match(regex);
+      if (match && match[1]) {
+        const num = parseInt(match[1], 10);
+        if (num > maxNumber) maxNumber = num;
+      }
+    }
+
+    // 3. Scan persistent counter
+    const counters = this.getCounters();
+    const counterKey = `${type}_${currentYear}`;
+    const storedCounter = counters[counterKey] || 0;
+    if (storedCounter > maxNumber) {
+      maxNumber = storedCounter;
+    }
+
+    const nextNumber = maxNumber + 1;
+    counters[counterKey] = nextNumber;
+    this.setCounters(counters);
+
+    const nextNumStr = String(nextNumber).padStart(3, '0');
     return `${prefix}-${currentYear}-${nextNumStr}`;
   }
 

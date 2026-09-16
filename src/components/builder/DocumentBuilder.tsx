@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { DocumentData, DocumentType, DocumentStatus, DocumentItem } from '../../types/document';
+import { DocumentData, DocumentType, DocumentStatus, DocumentItem, TaxConfig } from '../../types/document';
 import { DocumentTypeSelector } from './DocumentTypeSelector';
 import { PackageSelector } from './PackageSelector';
 import { ClientForm } from './ClientForm';
@@ -9,7 +9,8 @@ import { PaymentTermsEditor } from './PaymentTermsEditor';
 import { LivePreview } from '../preview/LivePreview';
 import { FormErrors, validateDocumentForm } from '../../utils/validator';
 import { ServicePackage } from '../../types/package';
-import { ChevronDown, ChevronUp, FileText, UserCheck, Package, ListOrdered, Percent, CreditCard, Save, Eye, Edit3 } from 'lucide-react';
+import { calculateTaxTotals } from '../../utils/taxCalculator';
+import { ChevronDown, ChevronUp, FileText, UserCheck, Package, ListOrdered, Percent, CreditCard, Save, Eye, Edit3, Lock, Columns } from 'lucide-react';
 
 interface BuilderProps {
   document: DocumentData;
@@ -30,6 +31,7 @@ export const DocumentBuilder: React.FC<BuilderProps> = ({
 }) => {
   const [errors, setErrors] = useState<FormErrors>({});
   const [mobileActiveTab, setMobileActiveTab] = useState<'form' | 'preview'>('form');
+  const [desktopLayout, setDesktopLayout] = useState<'split' | 'form' | 'preview'>('split');
 
   // Accordion Section States
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
@@ -68,6 +70,78 @@ export const DocumentBuilder: React.FC<BuilderProps> = ({
     onChangeDocument(updated);
   };
 
+  // Central financial engine to recalculate items, taxes, totals, and payment milestones
+  const recalculateDocumentWithItems = (
+    newItems: DocumentItem[],
+    baseDoc: DocumentData = doc
+  ): DocumentData => {
+    // 1. Normalize line items
+    const normalizedItems: DocumentItem[] = newItems.map((item, idx) => {
+      const sNo = idx + 1;
+      if (item.isIncluded) {
+        return {
+          ...item,
+          sNo,
+          rate: 0,
+          discount: 0,
+          taxableValue: 0,
+          amount: 0,
+        };
+      }
+      const qty = typeof item.quantity === 'number' ? item.quantity : (parseFloat(String(item.quantity)) || 1);
+      const rate = item.rate || 0;
+      const discount = item.discount || 0;
+      const taxableValue = Math.max(0, (qty * rate) - discount);
+      return {
+        ...item,
+        sNo,
+        quantity: qty,
+        rate,
+        discount,
+        taxableValue,
+        amount: taxableValue,
+      };
+    });
+
+    // 2. Recalculate tax subtotal, CGST, SGST, IGST, round-off and grand total
+    const taxConfig = calculateTaxTotals(
+      normalizedItems,
+      baseDoc.tax.taxType,
+      baseDoc.tax.gstRate,
+      baseDoc.tax.roundOff
+    );
+
+    // 3. Recalculate payment milestone amounts based on new grandTotal
+    const grandTotal = taxConfig.grandTotal;
+    const advPct = baseDoc.paymentTerms?.advancePercentage ?? 50;
+    const advanceAmount = Math.round(grandTotal * (advPct / 100));
+    const balanceAmount = grandTotal - advanceAmount;
+
+    // 4. Update receipt details if applicable
+    const receiptDetails = baseDoc.receiptDetails ? {
+      ...baseDoc.receiptDetails,
+      invoiceTotal: grandTotal,
+      balanceDue: Math.max(0, grandTotal - (baseDoc.receiptDetails.amountReceived || 0)),
+    } : undefined;
+
+    return {
+      ...baseDoc,
+      items: normalizedItems,
+      tax: taxConfig,
+      paymentTerms: {
+        ...baseDoc.paymentTerms,
+        advanceAmount,
+        balanceAmount,
+      },
+      receiptDetails,
+    };
+  };
+
+  const handleItemsChange = (newItems: DocumentItem[]) => {
+    const updated = recalculateDocumentWithItems(newItems);
+    onChangeDocument(updated);
+  };
+
   // Handle Package Selection & auto-add inclusions
   const handleSelectPackage = (pkg: ServicePackage) => {
     // Build package main item
@@ -100,110 +174,55 @@ export const DocumentBuilder: React.FC<BuilderProps> = ({
       isIncluded: true,
     }));
 
-    const newItems = [mainItem, ...inclusionItems];
+    // Keep any custom user add-ons that were added previously
+    const customUserItems = doc.items.filter(item =>
+      !item.id.startsWith('item-pkg-') &&
+      !item.id.startsWith('item-inc-') &&
+      !item.id.startsWith('item-main-')
+    );
 
-    // Recalculate tax
-    const taxableTotal = pkg.basePrice;
-    let cgstAmount = 0;
-    let sgstAmount = 0;
-    let igstAmount = 0;
-
-    if (doc.tax.taxType === 'cgst_sgst') {
-      const halfRate = (doc.tax.gstRate || 18) / 2;
-      cgstAmount = Math.round(taxableTotal * (halfRate / 100));
-      sgstAmount = Math.round(taxableTotal * (halfRate / 100));
-    } else if (doc.tax.taxType === 'igst') {
-      igstAmount = Math.round(taxableTotal * ((doc.tax.gstRate || 18) / 100));
-    }
-
-    const taxTotal = cgstAmount + sgstAmount + igstAmount;
-    const grandTotal = Math.round(taxableTotal + taxTotal + doc.tax.roundOff);
-
-    // Recalculate payment terms
-    const advAmt = Math.round(grandTotal * (doc.paymentTerms.advancePercentage / 100));
-    const balAmt = grandTotal - advAmt;
-
-    const updated: DocumentData = {
+    const newItems = [mainItem, ...inclusionItems, ...customUserItems];
+    const updated = recalculateDocumentWithItems(newItems, {
       ...doc,
       packageId: pkg.id,
       packageName: pkg.name,
-      items: newItems,
-      tax: {
-        ...doc.tax,
-        taxableValueTotal: taxableTotal,
-        cgstAmount,
-        sgstAmount,
-        igstAmount,
-        taxTotal,
-        grandTotal,
-      },
-      paymentTerms: {
-        ...doc.paymentTerms,
-        advanceAmount: advAmt,
-        balanceAmount: balAmt,
-      },
-    };
+    });
 
     onChangeDocument(updated);
   };
 
-  const handleAddCustomAddon = (description: string, price: number) => {
+  const handleAddCustomAddon = (description: string, price: number, isIncluded: boolean = false) => {
     const newItem: DocumentItem = {
       id: `item-addon-${Date.now()}`,
       sNo: doc.items.length + 1,
       description,
       sacHsn: '998314',
-      quantity: 1,
-      rate: price,
+      quantity: isIncluded ? '—' : 1,
+      rate: isIncluded ? 0 : price,
       discount: 0,
       taxRate: doc.tax.gstRate || 18,
-      taxableValue: price,
-      amount: price,
-      isIncluded: false,
+      taxableValue: isIncluded ? 0 : price,
+      amount: isIncluded ? 0 : price,
+      isIncluded,
     };
 
-    const newItems = [...doc.items, newItem];
+    const updated = recalculateDocumentWithItems([...doc.items, newItem]);
+    onChangeDocument(updated);
+  };
 
-    // Recalculate subtotal
-    const newTaxableTotal = newItems.reduce(
-      (sum, item) => (item.isIncluded ? sum : sum + (item.taxableValue || 0)),
-      0
-    );
-
-    let cgstAmount = 0;
-    let sgstAmount = 0;
-    let igstAmount = 0;
-
-    if (doc.tax.taxType === 'cgst_sgst') {
-      const halfRate = (doc.tax.gstRate || 18) / 2;
-      cgstAmount = Math.round(newTaxableTotal * (halfRate / 100));
-      sgstAmount = Math.round(newTaxableTotal * (halfRate / 100));
-    } else if (doc.tax.taxType === 'igst') {
-      igstAmount = Math.round(newTaxableTotal * ((doc.tax.gstRate || 18) / 100));
-    }
-
-    const taxTotal = cgstAmount + sgstAmount + igstAmount;
-    const grandTotal = Math.round(newTaxableTotal + taxTotal + doc.tax.roundOff);
-
-    const advAmt = Math.round(grandTotal * (doc.paymentTerms.advancePercentage / 100));
-    const balAmt = grandTotal - advAmt;
+  const handleTaxChange = (newTax: TaxConfig) => {
+    const grandTotal = newTax.grandTotal;
+    const advPct = doc.paymentTerms?.advancePercentage ?? 50;
+    const advanceAmount = Math.round(grandTotal * (advPct / 100));
+    const balanceAmount = grandTotal - advanceAmount;
 
     onChangeDocument({
       ...doc,
-      items: newItems,
-      tax: {
-        ...doc.tax,
-        taxableValueTotal: newTaxableTotal,
-        cgstAmount,
-        sgstAmount,
-        igstAmount,
-        taxTotal,
-        grandTotal,
-      },
+      tax: newTax,
       paymentTerms: {
         ...doc.paymentTerms,
-        advanceAmount: advAmt,
-        balanceAmount: balAmt,
+        advanceAmount,
+        balanceAmount,
       },
     });
   };
@@ -257,10 +276,70 @@ export const DocumentBuilder: React.FC<BuilderProps> = ({
         </button>
       </div>
 
+      {/* Desktop Responsive Layout Switcher (>= lg screens) */}
+      <div className="no-print print:hidden hidden lg:flex items-center justify-between bg-surface border-b border-line px-6 py-2 sticky top-[72px] z-30 shadow-subtle">
+        <div className="flex items-center gap-2.5">
+          <span className="text-xs font-bold text-primary uppercase tracking-wider">
+            {doc.type === 'quotation' ? 'Quotation Studio' : doc.type === 'tax_invoice' ? 'Tax Invoice Studio' : 'Payment Receipt Studio'}
+          </span>
+          <span className="text-[11px] bg-page border border-line text-brand px-2 py-0.5 rounded font-mono font-bold">
+            {doc.documentNumber}
+          </span>
+        </div>
+
+        {/* View Mode Buttons */}
+        <div className="flex items-center gap-1 bg-page p-0.5 rounded border border-line">
+          <button
+            type="button"
+            onClick={() => setDesktopLayout('split')}
+            className={`flex items-center gap-1.5 px-3 py-1 rounded text-xs font-semibold transition-all ${
+              desktopLayout === 'split'
+                ? 'bg-surface text-brand shadow-xs border border-line'
+                : 'text-secondary hover:text-primary'
+            }`}
+          >
+            <Columns className="w-3.5 h-3.5" />
+            <span>Split View</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setDesktopLayout('form')}
+            className={`flex items-center gap-1.5 px-3 py-1 rounded text-xs font-semibold transition-all ${
+              desktopLayout === 'form'
+                ? 'bg-surface text-brand shadow-xs border border-line'
+                : 'text-secondary hover:text-primary'
+            }`}
+          >
+            <Edit3 className="w-3.5 h-3.5" />
+            <span>Form Focus (Full Width)</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setDesktopLayout('preview')}
+            className={`flex items-center gap-1.5 px-3 py-1 rounded text-xs font-semibold transition-all ${
+              desktopLayout === 'preview'
+                ? 'bg-surface text-brand shadow-xs border border-line'
+                : 'text-secondary hover:text-primary'
+            }`}
+          >
+            <Eye className="w-3.5 h-3.5" />
+            <span>Preview Focus</span>
+          </button>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 flex-1">
-        {/* LEFT PANEL (50% width on desktop for roomy form inputs) */}
-        <div className={`no-print print:hidden lg:col-span-6 p-4 sm:p-6 space-y-4 overflow-y-auto max-h-[calc(100vh-72px)] bg-page border-r border-line ${
+        {/* LEFT PANEL */}
+        <div className={`no-print print:hidden p-4 sm:p-6 space-y-4 overflow-y-auto max-h-[calc(100vh-112px)] bg-page border-r border-line ${
           mobileActiveTab === 'form' ? 'block' : 'hidden lg:block'
+        } ${
+          desktopLayout === 'form'
+            ? 'lg:col-span-12'
+            : desktopLayout === 'preview'
+            ? 'lg:hidden'
+            : 'lg:col-span-6 xl:col-span-7'
         }`}>
           <div className="flex items-center justify-between pb-1">
             <h2 className="text-xs font-bold text-primary uppercase tracking-wider">
@@ -298,15 +377,20 @@ export const DocumentBuilder: React.FC<BuilderProps> = ({
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs border-t border-line pt-3">
                 <div>
                   <label className="block text-[11px] font-semibold text-secondary mb-1">Doc Number</label>
-                  <input
-                    type="text"
-                    value={doc.documentNumber}
-                    onChange={e => updateField('documentNumber', e.target.value)}
-                    className="w-full h-9 px-2.5 border border-line rounded-sm font-mono font-bold text-primary text-xs focus:border-brand"
-                  />
-                  {errors.documentNumber && (
-                    <p className="text-[10px] text-primary font-medium mt-1">{errors.documentNumber}</p>
-                  )}
+                  <div className="relative flex items-center">
+                    <input
+                      type="text"
+                      readOnly
+                      disabled
+                      value={doc.documentNumber}
+                      className="w-full h-9 pl-8 pr-16 bg-page border border-line rounded-sm font-mono font-bold text-primary text-xs cursor-not-allowed select-none opacity-95"
+                    />
+                    <Lock className="w-3.5 h-3.5 text-secondary absolute left-2.5 pointer-events-none" />
+                    <span className="absolute right-2 text-[10px] text-secondary font-semibold uppercase tracking-wider bg-surface px-1.5 py-0.5 rounded border border-line pointer-events-none">
+                      Fixed
+                    </span>
+                  </div>
+                  <span className="text-[10px] text-secondary mt-0.5 block">Unique auto-generated ID (non-editable)</span>
                 </div>
 
                 <div>
@@ -446,7 +530,7 @@ export const DocumentBuilder: React.FC<BuilderProps> = ({
               <div className="p-3.5">
                 <ItemEditor
                   items={doc.items}
-                  onChangeItems={items => updateField('items', items)}
+                  onChangeItems={handleItemsChange}
                 />
               </div>
             )}
@@ -550,7 +634,7 @@ export const DocumentBuilder: React.FC<BuilderProps> = ({
               <div className="p-3.5">
                 <TaxEditor
                   tax={doc.tax}
-                  onChangeTax={tax => updateField('tax', tax)}
+                  onChangeTax={handleTaxChange}
                   taxableSubtotal={doc.tax.taxableValueTotal}
                 />
               </div>
@@ -599,9 +683,15 @@ export const DocumentBuilder: React.FC<BuilderProps> = ({
         </div>
       </div>
 
-        {/* RIGHT PANEL (50% width on desktop) - LIVE PREVIEW */}
-        <div className={`lg:col-span-6 h-full ${
+        {/* RIGHT PANEL - LIVE PREVIEW */}
+        <div className={`h-full ${
           mobileActiveTab === 'preview' ? 'block' : 'hidden lg:block'
+        } ${
+          desktopLayout === 'preview'
+            ? 'lg:col-span-12'
+            : desktopLayout === 'form'
+            ? 'lg:hidden'
+            : 'lg:col-span-6 xl:col-span-5'
         }`}>
           <LivePreview
             data={doc}

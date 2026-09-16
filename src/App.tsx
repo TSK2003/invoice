@@ -410,7 +410,7 @@ export const App: React.FC = () => {
       />
 
       {/* Main Content Router */}
-      <main className="flex-1 max-w-[1680px] w-full mx-auto p-4 sm:p-6 lg:p-8">
+      <main className={`flex-1 w-full mx-auto ${currentView === 'builder' ? 'p-0 max-w-full' : 'max-w-[1680px] p-4 sm:p-6 lg:p-8'}`}>
         {currentView === 'dashboard' && (
           <DocumentDashboard
             documents={documents}

@@ -9,7 +9,7 @@ const PACKAGES_STORAGE_KEY = 'aescion_packages_catalog_v2';
 interface PackageSelectorProps {
   selectedPackageId?: string;
   onSelectPackage: (pkg: ServicePackage) => void;
-  onAddCustomAddon: (description: string, price: number) => void;
+  onAddCustomAddon: (description: string, price: number, isIncluded?: boolean) => void;
 }
 
 export const PackageSelector: React.FC<PackageSelectorProps> = ({
@@ -54,18 +54,27 @@ export const PackageSelector: React.FC<PackageSelectorProps> = ({
   // Add-ons State
   const [customAddonName, setCustomAddonName] = useState('');
   const [customAddonPrice, setCustomAddonPrice] = useState<number | ''>('');
+  const [customAddonIsIncluded, setCustomAddonIsIncluded] = useState<boolean>(false);
   const [extraPagesQty, setExtraPagesQty] = useState<number>(1);
 
   const handleAddExtraPages = () => {
     if (extraPagesQty <= 0) return;
     const price = extraPagesQty * 1500;
-    onAddCustomAddon(`Additional ${extraPagesQty} Web Page(s) (₹1,500/page)`, price);
+    onAddCustomAddon(`Additional ${extraPagesQty} Web Page(s) (₹1,500/page)`, price, false);
     setExtraPagesQty(1);
   };
 
   const handleAddCustomFeature = () => {
-    if (!customAddonName.trim() || !customAddonPrice || Number(customAddonPrice) <= 0) return;
-    onAddCustomAddon(customAddonName.trim(), Number(customAddonPrice));
+    if (!customAddonName.trim()) return;
+    if (customAddonIsIncluded) {
+      onAddCustomAddon(customAddonName.trim(), 0, true);
+    } else {
+      if (!customAddonPrice || Number(customAddonPrice) <= 0) {
+        alert('Please enter a valid price or switch to Included (Free)');
+        return;
+      }
+      onAddCustomAddon(customAddonName.trim(), Number(customAddonPrice), false);
+    }
     setCustomAddonName('');
     setCustomAddonPrice('');
   };
@@ -232,68 +241,6 @@ export const PackageSelector: React.FC<PackageSelectorProps> = ({
               <span className="truncate">{inc}</span>
             </div>
           ))}
-        </div>
-      </div>
-
-      {/* Scope Customization & Add-ons */}
-      <div className="border-t border-line pt-3">
-        <label className="block text-[11px] font-bold text-secondary uppercase tracking-wider mb-2">
-          Scope Customization & Add-ons
-        </label>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {/* Quick Add Extra Pages */}
-          <div className="bg-surface p-3 rounded-md border border-line flex items-center justify-between gap-3">
-            <div>
-              <div className="text-xs font-semibold text-primary">Additional Pages</div>
-              <div className="text-[11px] text-secondary">₹1,500 per page</div>
-            </div>
-            <div className="flex items-center gap-2 shrink-0">
-              <input
-                type="number"
-                min="1"
-                max="50"
-                value={extraPagesQty}
-                onChange={e => setExtraPagesQty(Math.max(1, parseInt(e.target.value) || 1))}
-                className="w-12 h-8 px-1.5 text-xs border border-line rounded-sm bg-surface text-center font-bold text-primary focus:border-brand"
-              />
-              <button
-                type="button"
-                onClick={handleAddExtraPages}
-                className="bg-brand hover:bg-brand-600 text-white h-8 px-3 rounded-sm text-xs font-semibold transition-colors flex items-center gap-1 shrink-0 shadow-subtle"
-              >
-                <Plus className="w-3.5 h-3.5" /> Add
-              </button>
-            </div>
-          </div>
-
-          {/* Quick Add Custom Module/Feature */}
-          <div className="bg-surface p-3 rounded-md border border-line space-y-2">
-            <div className="text-xs font-semibold text-primary">Add Custom Feature / Integration</div>
-            <input
-              type="text"
-              placeholder="Feature description (e.g. Payment Gateway)"
-              value={customAddonName}
-              onChange={e => setCustomAddonName(e.target.value)}
-              className="w-full h-8 px-2.5 text-xs border border-line rounded-sm bg-surface text-primary focus:border-brand"
-            />
-            <div className="flex items-center gap-2">
-              <input
-                type="number"
-                placeholder="Price (₹)"
-                value={customAddonPrice}
-                onChange={e => setCustomAddonPrice(e.target.value === '' ? '' : Number(e.target.value))}
-                className="flex-1 min-w-0 h-8 px-2.5 text-xs border border-line rounded-sm bg-surface text-primary font-semibold focus:border-brand"
-              />
-              <button
-                type="button"
-                onClick={handleAddCustomFeature}
-                className="bg-brand hover:bg-brand-600 text-white h-8 px-3.5 rounded-sm text-xs font-semibold transition-colors flex items-center gap-1 shrink-0 shadow-subtle"
-              >
-                <Plus className="w-3.5 h-3.5" /> Add
-              </button>
-            </div>
-          </div>
         </div>
       </div>
 

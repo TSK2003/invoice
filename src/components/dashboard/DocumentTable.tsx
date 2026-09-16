@@ -120,7 +120,7 @@ export const DocumentTable: React.FC<TableProps> = ({
 
       {/* Documents Table */}
       <div className="overflow-x-auto">
-        <table className="w-full text-left text-xs border-collapse">
+        <table className="w-full min-w-[760px] text-left text-xs border-collapse">
           <thead className="bg-page border-b border-line text-secondary font-bold text-[11px] uppercase tracking-wider">
             <tr>
               <th className="py-2.5 px-3.5">Document No</th>
