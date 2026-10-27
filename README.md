@@ -188,16 +188,16 @@ Edit `src/constants/defaultTerms.ts` to alter standard terms for Quotations, Inv
 
 ## 🔥 Firebase Hosting & Live Deployment
 
-The project is pre-configured with **Firebase Hosting** and initialized with project `invoice-88bba`.
+The project is pre-configured with **Firebase Hosting** and initialized with project `invoice-ebf0e`.
 
 ### Firebase Configuration
 
 The Firebase SDK is initialized in `src/services/firebase.ts` with environment variables support (`.env`):
 
-- **Project ID**: `invoice-88bba`
-- **Hosting URL**: `https://invoice-88bba.web.app` / `https://invoice-88bba.firebaseapp.com`
-- **Auth Domain**: `invoice-88bba.firebaseapp.com`
-- **Storage Bucket**: `invoice-88bba.firebasestorage.app`
+- **Project ID**: `invoice-ebf0e`
+- **Hosting URL**: `https://invoice-ebf0e.web.app` / `https://invoice-ebf0e.firebaseapp.com`
+- **Auth Domain**: `invoice-ebf0e.firebaseapp.com`
+- **Storage Bucket**: `invoice-ebf0e.firebasestorage.app`
 
 ### 🚀 Direct CLI Deployment
 
@@ -236,17 +236,21 @@ Continuous Integration & Continuous Deployment is pre-configured with two automa
 
 To allow GitHub Actions to deploy to Firebase Hosting automatically:
 
-1. Open your GitHub Repository: `https://github.com/TSK2003/invoice`
-2. Navigate to **Settings** > **Secrets and variables** > **Actions**.
-3. Click **New repository secret**.
-4. Generate a Firebase Service Account key:
-   - Run `firebase init hosting:github` locally (select `TSK2003/invoice`), **OR**
-   - In Google Cloud Console / Firebase Console, go to **Project Settings > Service Accounts**, click **Generate new private key**, copy the JSON content.
-5. Name the secret: `FIREBASE_SERVICE_ACCOUNT_INVOICE_88BBA` and paste the Service Account JSON.
-6. Push to `main`:
+#### Method A: Using CI Token (`firebase login:ci`) — Quickest
+1. In your local terminal, run:
    ```bash
-   git push -u origin main
+   firebase login:ci
    ```
+2. Your browser will open for authentication. Sign in and grant access.
+3. The terminal will print a token starting with `1//...`.
+4. Open GitHub repo: **Settings** > **Secrets and variables** > **Actions** > **New repository secret**.
+5. Name: `FIREBASE_TOKEN`, Value: `<paste your token>`.
+
+#### Method B: Using Google Service Account Key
+1. Go to Firebase Console > **Project Settings** > **Service Accounts**.
+2. Click **Generate new private key** (downloads a `.json` key file).
+3. Open GitHub repo: **Settings** > **Secrets and variables** > **Actions** > **New repository secret**.
+4. Name: `FIREBASE_SERVICE_ACCOUNT_INVOICE_EBF0E`, Value: `<paste full json file content>`.
 
 ---
 
