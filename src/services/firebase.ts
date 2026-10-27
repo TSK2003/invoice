@@ -5,13 +5,13 @@ import { getAuth, Auth } from 'firebase/auth';
 
 // Your web app's Firebase configuration
 export const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyBC0XCJNBvPPTCk7jRXwwyqdlQIUv1Cmpg",
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "invoice-88bba.firebaseapp.com",
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "invoice-88bba",
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "invoice-88bba.firebasestorage.app",
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "1084310681550",
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:1084310681550:web:e1c399aa95ae68358ddd9f",
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || "G-S8NK6VC8EK"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyA_d04pjpgQbE71dG5r5mD6Li_raGSXlY8",
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "invoice-ebf0e.firebaseapp.com",
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "invoice-ebf0e",
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "invoice-ebf0e.firebasestorage.app",
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "12098079695",
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:12098079695:web:9f203738d7964d317aa0ba",
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || "G-TT64WX6VTL"
 };
 
 // Initialize Firebase App instance (singleton)
