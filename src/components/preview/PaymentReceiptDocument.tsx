@@ -258,38 +258,35 @@ export const PaymentReceiptDocument: React.FC<PaymentReceiptDocumentProps> = ({
         </div>
 
         {/* BANK DETAILS & RECEIPT TERMS */}
-        <div className="grid grid-cols-2 gap-3 mt-3 text-[10px] break-inside-avoid">
+        <div className="grid grid-cols-2 gap-3 mt-3 text-[10px] items-stretch break-inside-avoid">
           {/* Left: Deposited Into Details */}
-          <div>
-            <div className="font-bold text-primary text-[9.5px] uppercase tracking-wider mb-0.5">
+          <div className="flex flex-col">
+            <div className="font-bold text-primary text-[9.5px] uppercase tracking-wider mb-1">
               Deposited Into / Account Details
             </div>
-            <div className="border border-line rounded-xs p-2 bg-white space-y-0.5 text-secondary leading-tight text-[9.5px]">
-              <div>
-                Account Name: <b className="text-primary">{company.accountName}</b>
-              </div>
-              <div>
-                Bank: <b className="text-primary">{company.bankName}</b>
-              </div>
-              <div>
-                Account No: <b className="font-mono text-primary">{company.accountNumber}</b>
-              </div>
-              <div>
-                IFSC Code: <b className="font-mono text-primary">{company.ifsc}</b>
-              </div>
-              <div>
-                UPI ID: <b className="text-brand font-mono">{company.upiId}</b>
+            <div className="flex-1 border border-line rounded-xs p-2.5 bg-white text-secondary leading-snug text-[9.5px] flex flex-col justify-center">
+              <div className="grid grid-cols-[84px_1fr] gap-y-1 gap-x-2 items-baseline">
+                <span>Account Name:</span>
+                <b className="text-primary">{company.accountName}</b>
+                <span>Bank:</span>
+                <b className="text-primary">{company.bankName}</b>
+                <span>Account No:</span>
+                <b className="font-mono text-primary tabular-nums">{company.accountNumber}</b>
+                <span>IFSC Code:</span>
+                <b className="font-mono text-primary tabular-nums">{company.ifsc}</b>
+                <span>UPI ID:</span>
+                <b className="text-brand font-mono">{company.upiId || '—'}</b>
               </div>
             </div>
           </div>
 
           {/* Right: Receipt Terms */}
-          <div>
-            <div className="font-bold text-primary text-[9.5px] uppercase tracking-wider mb-0.5">
+          <div className="flex flex-col">
+            <div className="font-bold text-primary text-[9.5px] uppercase tracking-wider mb-1">
               Receipt Terms & Conditions
             </div>
-            <div className="border border-line rounded-xs p-2 bg-white text-[9.5px] leading-relaxed text-secondary">
-              <ul className="list-disc pl-3.5 space-y-0.5 m-0">
+            <div className="flex-1 border border-line rounded-xs p-2.5 bg-white text-[9.5px] leading-relaxed text-secondary">
+              <ul className="list-disc pl-3.5 space-y-1 m-0">
                 {termsAndConditions && termsAndConditions.length > 0 ? (
                   termsAndConditions.slice(0, 3).map((term, i) => <li key={i}>{term}</li>)
                 ) : (
@@ -317,19 +314,20 @@ export const PaymentReceiptDocument: React.FC<PaymentReceiptDocumentProps> = ({
         {/* SIGNATURE & SEAL SECTION */}
         <div className="grid grid-cols-2 gap-8 items-end break-inside-avoid">
           {/* Verification Note */}
-          <div className="text-[9.5px] text-secondary leading-tight pb-1">
-            <p className="font-medium">Payment received and verified successfully.</p>
-            <p className="text-[8.5px] text-muted mt-0.5">
-              This is a computer-generated payment receipt.
-            </p>
+          <div className="min-h-[115px] flex flex-col justify-end">
+            <div className="text-[9.5px] text-secondary leading-tight pb-1.5">
+              <p className="font-medium">Payment received and verified successfully.</p>
+              <p className="text-[8.5px] text-muted mt-0.5">
+                This is a computer-generated payment receipt.
+              </p>
+            </div>
           </div>
 
-          {/* Supplier Signatory & Seal: Much Bigger Seal with Signature positioned closely beside/over */}
-          <div className="relative min-h-[95px] flex flex-col justify-end">
-            <div className="relative flex items-center justify-end pr-1 pb-1 h-[85px]">
-              {/* Significantly Bigger Official Round Seal */}
+          {/* Supplier Signatory & Seal */}
+          <div className="relative min-h-[115px] flex flex-col justify-end">
+            <div className="relative flex items-end justify-end pr-1 pb-1.5 h-[100px]">
               {showSeal && (
-                <div className="pointer-events-none z-10 flex items-center justify-center w-[190px] h-[190px] relative -bottom-2">
+                <div className="pointer-events-none z-10 flex items-center justify-center w-[105px] h-[105px] shrink-0">
                   <img
                     src={sealSrc}
                     alt="Company Seal"
@@ -339,20 +337,19 @@ export const PaymentReceiptDocument: React.FC<PaymentReceiptDocumentProps> = ({
                 </div>
               )}
 
-              {/* Official Signature Image moved closer to Seal */}
               {showSignature && (
-                <div className="pointer-events-none z-20 flex items-center justify-center h-[42px] w-auto relative bottom-0 -ml-6">
+                <div className="pointer-events-none z-20 flex items-center justify-center h-[42px] w-auto mb-2 -ml-4 shrink-0">
                   <img
                     src={signatureSrc}
                     alt="Signature"
-                    className="h-full w-auto object-contain max-w-[145px]"
+                    className="h-full w-auto object-contain max-w-[140px]"
                     loading="eager"
                   />
                 </div>
               )}
             </div>
 
-            <div className="border-t border-line pt-1 text-[9.5px] text-secondary font-medium relative z-30 text-right">
+            <div className="border-t border-line pt-1.5 text-[9.5px] text-secondary font-medium relative z-30 text-right">
               For {company.companyName} — {signatoryTitle}
             </div>
           </div>

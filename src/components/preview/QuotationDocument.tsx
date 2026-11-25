@@ -183,13 +183,13 @@ export const QuotationDocument: React.FC<QuotationDocumentProps> = ({
                 <th className="py-1.5 px-2.5 text-right w-[14%]">Taxable Value</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-line text-primary">
+            <tbody className="text-primary">
               {items.map((item, idx) => (
-                <tr key={item.id || idx} className="hover:bg-page/40 transition-colors">
-                  <td className="py-1.5 px-2 text-center text-secondary border-r border-line font-medium text-[10.5px]">
+                <tr key={item.id || idx} className="border-b border-line hover:bg-page/40 transition-colors">
+                  <td className="py-1.5 px-2 text-center align-middle text-secondary border-r border-line font-medium text-[10.5px] tabular-nums">
                     {item.sNo || idx + 1}
                   </td>
-                  <td className="py-1.5 px-2.5 border-r border-line">
+                  <td className="py-1.5 px-2.5 align-middle border-r border-line">
                     <div className="font-semibold text-primary leading-tight text-[11px]">
                       {item.description}
                     </div>
@@ -197,16 +197,16 @@ export const QuotationDocument: React.FC<QuotationDocumentProps> = ({
                       <span className="text-[9px] text-brand font-medium">Included with package</span>
                     )}
                   </td>
-                  <td className="py-1.5 px-2 text-center text-secondary font-mono border-r border-line text-[10px]">
+                  <td className="py-1.5 px-2 text-center align-middle text-secondary font-mono border-r border-line text-[10px] tabular-nums">
                     {item.sacHsn || '—'}
                   </td>
-                  <td className="py-1.5 px-2 text-center text-secondary border-r border-line text-[10.5px]">
+                  <td className="py-1.5 px-2 text-center align-middle text-secondary border-r border-line text-[10.5px] tabular-nums">
                     {item.quantity || '—'}
                   </td>
-                  <td className="py-1.5 px-2.5 text-right text-secondary border-r border-line text-[10.5px] font-mono">
+                  <td className="py-1.5 px-2.5 text-right align-middle text-secondary border-r border-line text-[10.5px] font-mono tabular-nums">
                     {item.isIncluded ? '—' : formatCurrency(item.rate)}
                   </td>
-                  <td className="py-1.5 px-2.5 text-right font-bold text-primary text-[10.5px] font-mono">
+                  <td className="py-1.5 px-2.5 text-right align-middle font-bold text-primary text-[10.5px] font-mono tabular-nums">
                     {item.isIncluded ? (
                       <span className="text-secondary font-medium text-[9.5px]">Included</span>
                     ) : (
@@ -222,37 +222,37 @@ export const QuotationDocument: React.FC<QuotationDocumentProps> = ({
         {/* TOTALS & TAX BREAKDOWN */}
         <div className="mt-2 flex justify-end break-inside-avoid">
           <div className="w-[45%] space-y-0.5 text-xs">
-            <div className="flex justify-between text-secondary py-0.5 border-b border-line">
+            <div className="flex justify-between items-center text-secondary py-0.5 px-2 border-b border-line">
               <span>Taxable Subtotal</span>
-              <span className="font-semibold text-primary font-mono">
+              <span className="font-semibold text-primary font-mono tabular-nums">
                 {formatCurrency(tax.taxableValueTotal)}
               </span>
             </div>
 
             {tax.taxType === 'cgst_sgst' && (
               <>
-                <div className="flex justify-between text-secondary py-0.5 border-b border-line text-[10.5px]">
+                <div className="flex justify-between items-center text-secondary py-0.5 px-2 border-b border-line text-[10.5px]">
                   <span>CGST ({tax.cgstPercent}%)</span>
-                  <span className="font-mono">{formatCurrency(tax.cgstAmount)}</span>
+                  <span className="font-mono tabular-nums">{formatCurrency(tax.cgstAmount)}</span>
                 </div>
-                <div className="flex justify-between text-secondary py-0.5 border-b border-line text-[10.5px]">
+                <div className="flex justify-between items-center text-secondary py-0.5 px-2 border-b border-line text-[10.5px]">
                   <span>SGST ({tax.sgstPercent}%)</span>
-                  <span className="font-mono">{formatCurrency(tax.sgstAmount)}</span>
+                  <span className="font-mono tabular-nums">{formatCurrency(tax.sgstAmount)}</span>
                 </div>
               </>
             )}
 
             {tax.taxType === 'igst' && (
-              <div className="flex justify-between text-secondary py-0.5 border-b border-line text-[10.5px]">
+              <div className="flex justify-between items-center text-secondary py-0.5 px-2 border-b border-line text-[10.5px]">
                 <span>IGST ({tax.igstPercent}%)</span>
-                <span className="font-mono">{formatCurrency(tax.igstAmount)}</span>
+                <span className="font-mono tabular-nums">{formatCurrency(tax.igstAmount)}</span>
               </div>
             )}
 
             {tax.roundOff !== 0 && (
-              <div className="flex justify-between text-secondary py-0.5 border-b border-line text-[10.5px]">
+              <div className="flex justify-between items-center text-secondary py-0.5 px-2 border-b border-line text-[10.5px]">
                 <span>Round Off</span>
-                <span className="font-mono">{formatCurrency(tax.roundOff)}</span>
+                <span className="font-mono tabular-nums">{formatCurrency(tax.roundOff)}</span>
               </div>
             )}
 
@@ -260,7 +260,7 @@ export const QuotationDocument: React.FC<QuotationDocumentProps> = ({
               <span className="font-bold text-xs uppercase tracking-wider text-primary">
                 Grand Total
               </span>
-              <span className="font-bold text-sm text-brand font-mono">
+              <span className="font-bold text-sm text-brand font-mono tabular-nums">
                 {formatCurrency(tax.grandTotal)}
               </span>
             </div>
@@ -274,24 +274,28 @@ export const QuotationDocument: React.FC<QuotationDocumentProps> = ({
 
         {/* COMMERCIAL MILESTONES & PAYMENT TERMS */}
         {paymentTerms && (
-          <div className="mt-2 border border-line rounded-xs p-2 bg-page/30 text-[10px] break-inside-avoid">
-            <div className="font-bold text-primary text-[9.5px] uppercase tracking-wider mb-0.5">
+          <div className="mt-2.5 border border-line rounded-xs p-2.5 bg-page/30 text-[10px] break-inside-avoid">
+            <div className="font-bold text-primary text-[9.5px] uppercase tracking-wider mb-1">
               Commercial Milestones & Payment Terms
             </div>
             <div className="grid grid-cols-2 gap-3 text-secondary">
               <div>
                 Advance ({paymentTerms.advancePercentage}%):{' '}
-                <b className="text-brand font-mono">{formatCurrency(paymentTerms.advanceAmount)}</b>{' '}
+                <b className="text-brand font-mono tabular-nums">
+                  {formatCurrency(paymentTerms.advanceAmount)}
+                </b>{' '}
                 upon project commencement.
               </div>
               <div>
                 Balance ({paymentTerms.balancePercentage}%):{' '}
-                <b className="text-primary font-mono">{formatCurrency(paymentTerms.balanceAmount)}</b>{' '}
+                <b className="text-primary font-mono tabular-nums">
+                  {formatCurrency(paymentTerms.balanceAmount)}
+                </b>{' '}
                 upon completion.
               </div>
             </div>
             {paymentTerms.deliveryTimelineText && (
-              <div className="mt-0.5 text-[9.5px] text-secondary">
+              <div className="mt-1 text-[9.5px] text-secondary">
                 <span className="font-semibold text-primary">Timeline:</span>{' '}
                 {paymentTerms.deliveryTimelineText}
               </div>
@@ -300,38 +304,35 @@ export const QuotationDocument: React.FC<QuotationDocumentProps> = ({
         )}
 
         {/* BANK DETAILS & TERMS */}
-        <div className="grid grid-cols-2 gap-3 mt-2 text-[10px] break-inside-avoid">
+        <div className="grid grid-cols-2 gap-3 mt-2.5 text-[10px] items-stretch break-inside-avoid">
           {/* Left: Bank / Payment Info */}
-          <div>
-            <div className="font-bold text-primary text-[9.5px] uppercase tracking-wider mb-0.5">
+          <div className="flex flex-col">
+            <div className="font-bold text-primary text-[9.5px] uppercase tracking-wider mb-1">
               Settlement Details
             </div>
-            <div className="border border-line rounded-xs p-2 bg-white space-y-0.5 text-secondary leading-tight text-[9.5px]">
-              <div>
-                Account Name: <b className="text-primary">{company.accountName}</b>
-              </div>
-              <div>
-                Bank: <b className="text-primary">{company.bankName}</b>
-              </div>
-              <div>
-                Account No: <b className="font-mono text-primary">{company.accountNumber}</b>
-              </div>
-              <div>
-                IFSC Code: <b className="font-mono text-primary">{company.ifsc}</b>
-              </div>
-              <div>
-                UPI ID: <b className="text-brand font-mono">{company.upiId}</b>
+            <div className="flex-1 border border-line rounded-xs p-2.5 bg-white text-secondary leading-snug text-[9.5px] flex flex-col justify-center">
+              <div className="grid grid-cols-[84px_1fr] gap-y-1 gap-x-2 items-baseline">
+                <span>Account Name:</span>
+                <b className="text-primary">{company.accountName}</b>
+                <span>Bank:</span>
+                <b className="text-primary">{company.bankName}</b>
+                <span>Account No:</span>
+                <b className="font-mono text-primary tabular-nums">{company.accountNumber}</b>
+                <span>IFSC Code:</span>
+                <b className="font-mono text-primary tabular-nums">{company.ifsc}</b>
+                <span>UPI ID:</span>
+                <b className="text-brand font-mono">{company.upiId || '—'}</b>
               </div>
             </div>
           </div>
 
           {/* Right: Terms & Conditions */}
-          <div>
-            <div className="font-bold text-primary text-[9.5px] uppercase tracking-wider mb-0.5">
+          <div className="flex flex-col">
+            <div className="font-bold text-primary text-[9.5px] uppercase tracking-wider mb-1">
               Terms & Conditions
             </div>
-            <div className="border border-line rounded-xs p-2 bg-white text-[9.5px] leading-relaxed text-secondary">
-              <ul className="list-disc pl-3.5 space-y-0.5 m-0">
+            <div className="flex-1 border border-line rounded-xs p-2.5 bg-white text-[9.5px] leading-relaxed text-secondary">
+              <ul className="list-disc pl-3.5 space-y-1 m-0">
                 {termsAndConditions.slice(0, 4).map((term, i) => (
                   <li key={i}>{term}</li>
                 ))}
@@ -353,18 +354,17 @@ export const QuotationDocument: React.FC<QuotationDocumentProps> = ({
         {/* SIGNATURE & SEAL SECTION */}
         <div className="grid grid-cols-2 gap-8 items-end break-inside-avoid">
           {/* Customer Signatory */}
-          <div className="relative min-h-[95px] flex flex-col justify-end">
-            <div className="border-t border-line pt-1 text-[9.5px] text-secondary font-medium">
+          <div className="relative min-h-[115px] flex flex-col justify-end">
+            <div className="border-t border-line pt-1.5 text-[9.5px] text-secondary font-medium">
               {customerSignatoryTitle}
             </div>
           </div>
 
-          {/* Supplier Signatory & Seal: Much Bigger Seal with Signature positioned closely beside/over */}
-          <div className="relative min-h-[95px] flex flex-col justify-end">
-            <div className="relative flex items-center justify-end pr-1 pb-1 h-[85px]">
-              {/* Significantly Bigger Official Round Seal */}
+          {/* Supplier Signatory & Seal */}
+          <div className="relative min-h-[115px] flex flex-col justify-end">
+            <div className="relative flex items-end justify-end pr-1 pb-1.5 h-[100px]">
               {showSeal && (
-                <div className="pointer-events-none z-10 flex items-center justify-center w-[190px] h-[190px] relative -bottom-2">
+                <div className="pointer-events-none z-10 flex items-center justify-center w-[105px] h-[105px] shrink-0">
                   <img
                     src={sealSrc}
                     alt="Company Seal"
@@ -374,20 +374,19 @@ export const QuotationDocument: React.FC<QuotationDocumentProps> = ({
                 </div>
               )}
 
-              {/* Official Signature Image moved closer to Seal */}
               {showSignature && (
-                <div className="pointer-events-none z-20 flex items-center justify-center h-[42px] w-auto relative bottom-0 -ml-6">
+                <div className="pointer-events-none z-20 flex items-center justify-center h-[42px] w-auto mb-2 -ml-4 shrink-0">
                   <img
                     src={signatureSrc}
                     alt="Signature"
-                    className="h-full w-auto object-contain max-w-[145px]"
+                    className="h-full w-auto object-contain max-w-[140px]"
                     loading="eager"
                   />
                 </div>
               )}
             </div>
 
-            <div className="border-t border-line pt-1 text-[9.5px] text-secondary font-medium relative z-30 text-right">
+            <div className="border-t border-line pt-1.5 text-[9.5px] text-secondary font-medium relative z-30 text-right">
               For {company.companyName} — {signatoryTitle}
             </div>
           </div>
