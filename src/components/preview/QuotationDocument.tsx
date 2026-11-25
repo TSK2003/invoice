@@ -220,51 +220,61 @@ export const QuotationDocument: React.FC<QuotationDocumentProps> = ({
         </div>
 
         {/* TOTALS & TAX BREAKDOWN */}
-        <div className="mt-2 flex justify-end break-inside-avoid">
-          <div className="w-[45%] space-y-0.5 text-xs">
-            <div className="flex justify-between items-center text-secondary py-0.5 px-2 border-b border-line">
-              <span>Taxable Subtotal</span>
-              <span className="font-semibold text-primary font-mono tabular-nums">
-                {formatCurrency(tax.taxableValueTotal)}
-              </span>
-            </div>
+        <div className="mt-2.5 flex justify-end break-inside-avoid">
+          <table className="w-[45%] border-collapse text-xs">
+            <tbody>
+              <tr className="border-b border-line text-secondary">
+                <td className="py-1.5 px-2 text-left">Taxable Subtotal</td>
+                <td className="py-1.5 px-2 text-right font-semibold text-primary font-mono tabular-nums">
+                  {formatCurrency(tax.taxableValueTotal)}
+                </td>
+              </tr>
 
-            {tax.taxType === 'cgst_sgst' && (
-              <>
-                <div className="flex justify-between items-center text-secondary py-0.5 px-2 border-b border-line text-[10.5px]">
-                  <span>CGST ({tax.cgstPercent}%)</span>
-                  <span className="font-mono tabular-nums">{formatCurrency(tax.cgstAmount)}</span>
-                </div>
-                <div className="flex justify-between items-center text-secondary py-0.5 px-2 border-b border-line text-[10.5px]">
-                  <span>SGST ({tax.sgstPercent}%)</span>
-                  <span className="font-mono tabular-nums">{formatCurrency(tax.sgstAmount)}</span>
-                </div>
-              </>
-            )}
+              {tax.taxType === 'cgst_sgst' && (
+                <>
+                  <tr className="border-b border-line text-secondary text-[10.5px]">
+                    <td className="py-1.5 px-2 text-left">CGST ({tax.cgstPercent}%)</td>
+                    <td className="py-1.5 px-2 text-right font-mono tabular-nums">
+                      {formatCurrency(tax.cgstAmount)}
+                    </td>
+                  </tr>
+                  <tr className="border-b border-line text-secondary text-[10.5px]">
+                    <td className="py-1.5 px-2 text-left">SGST ({tax.sgstPercent}%)</td>
+                    <td className="py-1.5 px-2 text-right font-mono tabular-nums">
+                      {formatCurrency(tax.sgstAmount)}
+                    </td>
+                  </tr>
+                </>
+              )}
 
-            {tax.taxType === 'igst' && (
-              <div className="flex justify-between items-center text-secondary py-0.5 px-2 border-b border-line text-[10.5px]">
-                <span>IGST ({tax.igstPercent}%)</span>
-                <span className="font-mono tabular-nums">{formatCurrency(tax.igstAmount)}</span>
-              </div>
-            )}
+              {tax.taxType === 'igst' && (
+                <tr className="border-b border-line text-secondary text-[10.5px]">
+                  <td className="py-1.5 px-2 text-left">IGST ({tax.igstPercent}%)</td>
+                  <td className="py-1.5 px-2 text-right font-mono tabular-nums">
+                    {formatCurrency(tax.igstAmount)}
+                  </td>
+                </tr>
+              )}
 
-            {tax.roundOff !== 0 && (
-              <div className="flex justify-between items-center text-secondary py-0.5 px-2 border-b border-line text-[10.5px]">
-                <span>Round Off</span>
-                <span className="font-mono tabular-nums">{formatCurrency(tax.roundOff)}</span>
-              </div>
-            )}
+              {tax.roundOff !== 0 && (
+                <tr className="border-b border-line text-secondary text-[10.5px]">
+                  <td className="py-1.5 px-2 text-left">Round Off</td>
+                  <td className="py-1.5 px-2 text-right font-mono tabular-nums">
+                    {formatCurrency(tax.roundOff)}
+                  </td>
+                </tr>
+              )}
 
-            <div className="flex justify-between items-center bg-brand/10 border-t-2 border-brand py-1 px-2 mt-0.5 rounded-xs">
-              <span className="font-bold text-xs uppercase tracking-wider text-primary">
-                Grand Total
-              </span>
-              <span className="font-bold text-sm text-brand font-mono tabular-nums">
-                {formatCurrency(tax.grandTotal)}
-              </span>
-            </div>
-          </div>
+              <tr className="bg-brand/10 border-t-2 border-brand">
+                <td className="py-1.5 px-2 text-left font-bold text-xs uppercase tracking-wider text-primary">
+                  Grand Total
+                </td>
+                <td className="py-1.5 px-2 text-right font-bold text-sm text-brand font-mono tabular-nums">
+                  {formatCurrency(tax.grandTotal)}
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
         {/* AMOUNT IN WORDS */}
@@ -310,8 +320,8 @@ export const QuotationDocument: React.FC<QuotationDocumentProps> = ({
             <div className="font-bold text-primary text-[9.5px] uppercase tracking-wider mb-1">
               Settlement Details
             </div>
-            <div className="flex-1 border border-line rounded-xs p-2.5 bg-white text-secondary leading-snug text-[9.5px] flex flex-col justify-center">
-              <div className="grid grid-cols-[84px_1fr] gap-y-1 gap-x-2 items-baseline">
+            <div className="flex-1 border border-line rounded-xs p-2.5 bg-white text-secondary leading-snug text-[9.5px] flex flex-col justify-start">
+              <div className="grid grid-cols-[84px_1fr] gap-y-1.5 gap-x-2 items-baseline">
                 <span>Account Name:</span>
                 <b className="text-primary">{company.accountName}</b>
                 <span>Bank:</span>
@@ -354,17 +364,17 @@ export const QuotationDocument: React.FC<QuotationDocumentProps> = ({
         {/* SIGNATURE & SEAL SECTION */}
         <div className="grid grid-cols-2 gap-8 items-end break-inside-avoid">
           {/* Customer Signatory */}
-          <div className="relative min-h-[115px] flex flex-col justify-end">
+          <div className="relative min-h-[120px] flex flex-col justify-end">
             <div className="border-t border-line pt-1.5 text-[9.5px] text-secondary font-medium">
               {customerSignatoryTitle}
             </div>
           </div>
 
           {/* Supplier Signatory & Seal */}
-          <div className="relative min-h-[115px] flex flex-col justify-end">
-            <div className="relative flex items-end justify-end pr-1 pb-1.5 h-[100px]">
+          <div className="relative min-h-[120px] flex flex-col justify-end">
+            <div className="relative flex items-end justify-end pr-1 pb-1 h-[110px]">
               {showSeal && (
-                <div className="pointer-events-none z-10 flex items-center justify-center w-[105px] h-[105px] shrink-0">
+                <div className="pointer-events-none z-10 flex items-center justify-center w-[125px] h-[125px] shrink-0">
                   <img
                     src={sealSrc}
                     alt="Company Seal"
@@ -375,7 +385,7 @@ export const QuotationDocument: React.FC<QuotationDocumentProps> = ({
               )}
 
               {showSignature && (
-                <div className="pointer-events-none z-20 flex items-center justify-center h-[42px] w-auto mb-2 -ml-4 shrink-0">
+                <div className="pointer-events-none z-20 flex items-center justify-center h-[44px] w-auto mb-1 -ml-6 shrink-0">
                   <img
                     src={signatureSrc}
                     alt="Signature"

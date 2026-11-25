@@ -264,8 +264,8 @@ export const PaymentReceiptDocument: React.FC<PaymentReceiptDocumentProps> = ({
             <div className="font-bold text-primary text-[9.5px] uppercase tracking-wider mb-1">
               Deposited Into / Account Details
             </div>
-            <div className="flex-1 border border-line rounded-xs p-2.5 bg-white text-secondary leading-snug text-[9.5px] flex flex-col justify-center">
-              <div className="grid grid-cols-[84px_1fr] gap-y-1 gap-x-2 items-baseline">
+            <div className="flex-1 border border-line rounded-xs p-2.5 bg-white text-secondary leading-snug text-[9.5px] flex flex-col justify-start">
+              <div className="grid grid-cols-[84px_1fr] gap-y-1.5 gap-x-2 items-baseline">
                 <span>Account Name:</span>
                 <b className="text-primary">{company.accountName}</b>
                 <span>Bank:</span>
@@ -314,7 +314,7 @@ export const PaymentReceiptDocument: React.FC<PaymentReceiptDocumentProps> = ({
         {/* SIGNATURE & SEAL SECTION */}
         <div className="grid grid-cols-2 gap-8 items-end break-inside-avoid">
           {/* Verification Note */}
-          <div className="min-h-[115px] flex flex-col justify-end">
+          <div className="min-h-[120px] flex flex-col justify-end">
             <div className="text-[9.5px] text-secondary leading-tight pb-1.5">
               <p className="font-medium">Payment received and verified successfully.</p>
               <p className="text-[8.5px] text-muted mt-0.5">
@@ -324,10 +324,10 @@ export const PaymentReceiptDocument: React.FC<PaymentReceiptDocumentProps> = ({
           </div>
 
           {/* Supplier Signatory & Seal */}
-          <div className="relative min-h-[115px] flex flex-col justify-end">
-            <div className="relative flex items-end justify-end pr-1 pb-1.5 h-[100px]">
+          <div className="relative min-h-[120px] flex flex-col justify-end">
+            <div className="relative flex items-end justify-end pr-1 pb-1 h-[110px]">
               {showSeal && (
-                <div className="pointer-events-none z-10 flex items-center justify-center w-[105px] h-[105px] shrink-0">
+                <div className="pointer-events-none z-10 flex items-center justify-center w-[125px] h-[125px] shrink-0">
                   <img
                     src={sealSrc}
                     alt="Company Seal"
@@ -338,7 +338,7 @@ export const PaymentReceiptDocument: React.FC<PaymentReceiptDocumentProps> = ({
               )}
 
               {showSignature && (
-                <div className="pointer-events-none z-20 flex items-center justify-center h-[42px] w-auto mb-2 -ml-4 shrink-0">
+                <div className="pointer-events-none z-20 flex items-center justify-center h-[44px] w-auto mb-1 -ml-6 shrink-0">
                   <img
                     src={signatureSrc}
                     alt="Signature"
